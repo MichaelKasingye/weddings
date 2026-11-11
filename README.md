@@ -72,15 +72,15 @@ Writes the name on the *Names:* line of the guest card and greets them by name i
 | `assets/art/card.webp`, `ornament.webp` | The guest card and the heart ornament, moved down to make room for the panel and the date band |
 | `assets/couple/couple-photo-original.jpg`, `couple-cutout.png` | The couple's "London save the date" photo and a cutout of it |
 | `assets/couple/mark-and-mary-*` | Earlier placeholder couple (only used by `build-artwork-v1.js`) |
-| `assets/og-image.jpg` | WhatsApp link preview (1200×630) |
+| `assets/share-card.jpg` | Link-preview picture (1200×630) for WhatsApp, Facebook, X…: poster + names, date, time, venue |
 | `favicon.ico`, `assets/icons/favicon.svg`, `favicon-32.png` | Browser-tab icon: two gold rings on navy (the SVG is the source; the others are made from it) |
 | `assets/icons/apple-touch-icon.png` | Icon when the page is saved to an iPhone/iPad home screen |
 
-The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild the layers with `tools/poster-build/build-artwork.js` then `build-layout.js` (see its README). Then refresh `assets/og-image.jpg`.
+The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild the layers with `tools/poster-build/build-artwork.js` then `build-layout.js` (see its README). Then refresh `assets/share-card.jpg`.
 
 **Moving text on the poster:** each line in `index.html` has `style="--x:…;--y:…;--fs:…;--sx:…"`: position (poster pixels; for centred lines `--x` is the centre), font size, and horizontal squeeze. `tools/poster-build/` has the scripts that rebuilt the artwork and measured the text against the original (see its README).
 
-**WhatsApp preview:** WhatsApp needs an absolute image URL. After deploying, change `<meta property="og:image">` in `index.html` to `https://your-site/assets/og-image.jpg`.
+**Link previews:** the `<head>` of `index.html` has the preview title, description and picture (`og:*` / `twitter:*`) plus the event's date and place (schema.org Event). They use the live address `https://aaronandjosephine.onrender.com/`; if the address changes, update it there and in `share.siteUrl` (js/main.js). If the wording, date or venue change, update these tags and the share card too, as previews don't run the page's JavaScript. After changing the picture, give it a new file name so WhatsApp and Facebook don't keep showing the old cached one.
 
 ## Controls
 

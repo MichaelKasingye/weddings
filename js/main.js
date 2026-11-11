@@ -50,7 +50,7 @@ window.WEDDING_CONFIG = {
 
   // ---- Sharing ----
   share: {
-    siteUrl: null,       // your live URL, e.g. 'https://mark-and-mary.vercel.app/'. null = current page URL
+    siteUrl: 'https://aaronandjosephine.onrender.com/', // the live address (used for shared and personal links)
     message: "You're invited! 💍 Aaron & Josephine, together with their families, invite you to celebrate their wedding on 1st January 2027 at Kagga Gardens. Open your invitation:",
     personalMessage: 'Dear {name}, you are cordially invited to the wedding of Aaron & Josephine on 1st January 2027! 💍 Open your personal invitation:',
   },
