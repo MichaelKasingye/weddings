@@ -18,7 +18,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,700&family=Montserrat:wght@500;600&display=swap">
-<link rel="preload" as="image" href="assets/backgrounds/poster-background.jpg">
+<link rel="preload" as="image" href="assets/art/poster.webp" type="image/webp">
 <link rel="preload" as="image" href="assets/couple/couple-layer.webp" type="image/webp">
 <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -57,12 +57,12 @@
   <article class="poster" id="poster" aria-label="Wedding invitation">
     <!--
       Artwork layers (all cut from the original invitation, so they match it pixel for pixel):
-        poster-background.jpg  scenery, frames and gold decorations, with the wording and the couple removed
+        art/poster.webp        the invitation artwork with the wording removed
         art/*.webp             gold lettering that must stay in front of the fireworks
         couple-layer.webp      the couple (swap this file for a new photo; position it in WEDDING_CONFIG.images.coupleBox)
       All WORDING is live text below, filled in from WEDDING_CONFIG in js/main.js.
     -->
-    <img class="poster-bg" src="assets/backgrounds/poster-background.jpg" alt="" width="1065" height="1477" fetchpriority="high" decoding="async">
+    <img class="poster-bg" src="assets/art/poster.webp" alt="" width="1065" height="1477" fetchpriority="high" decoding="async">
     <video class="poster-video" id="skyVideo" muted loop playsinline preload="none" hidden></video>
     <canvas class="poster-fireworks" id="fireworksCanvas" aria-hidden="true"></canvas>
 

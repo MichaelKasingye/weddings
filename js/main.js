@@ -57,7 +57,7 @@ window.WEDDING_CONFIG = {
 
   // ---- Images (replace the files, or point these paths at new ones) ----
   images: {
-    background: 'assets/backgrounds/poster-background.jpg', // poster artwork (no wording, no couple)
+    background: 'assets/art/poster.webp', // poster artwork (wording removed)
     couple: 'assets/couple/couple-layer.webp',               // transparent image of the couple
     // where the couple sits, in poster pixels (the poster is 1065 × 1477): left, top, width
     coupleBox: { x: 95, y: 48, w: 807 },

@@ -66,7 +66,7 @@ Writes the name on the *Names:* line of the guest card and greets them by name i
 
 | File | Used for |
 |---|---|
-| `assets/backgrounds/poster-background.jpg` | The invitation design (couple included) with all wording removed |
+| `assets/art/poster.webp` | The invitation design (couple included) with all wording removed (made from `background.jpg` of the build scripts) |
 | `assets/couple/couple-layer.webp` | The couple cut from the design, layered in front of the fireworks so bursts go behind them |
 | `assets/art/title.webp`, `wedding.webp` | Gold lettering and rings, layered in front of the fireworks ("Wedding" is shown smaller, above the GROOM/BRIDE panel) |
 | `assets/art/card.webp`, `ornament.webp` | The guest card and the heart ornament, moved down to make room for the panel and the date band |
