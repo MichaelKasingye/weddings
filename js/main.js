@@ -146,7 +146,7 @@ window.WEDDING_CONFIG = {
   function applyConfig() {
     document.querySelectorAll('[data-bind]').forEach((el) => {
       const val = getPath(C, el.getAttribute('data-bind'));
-      if (val) el.textContent = val;
+      if (val) { el.textContent = val; if (el.classList.contains('gold')) el.dataset.text = val; }
     });
     $('.honorific').hidden = !C.honorific;
 
