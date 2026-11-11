@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1B2C5E"/>
+      <stop offset="1" stop-color="#07152F"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF1C2"/>
+      <stop offset=".35" stop-color="#F3C766"/>
+      <stop offset=".7" stop-color="#C98A2E"/>
+      <stop offset="1" stop-color="#F6D27A"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="62" height="62" rx="14" fill="url(#bg)"/>
+  <rect x="2.5" y="2.5" width="59" height="59" rx="12.5" fill="none" stroke="#D4AF37" stroke-opacity=".75" stroke-width="2"/>
+  <!-- two interlocking rings -->
+  <circle cx="25" cy="37" r="12.5" fill="none" stroke="url(#gold)" stroke-width="5.5"/>
+  <circle cx="39" cy="37" r="12.5" fill="none" stroke="url(#gold)" stroke-width="5.5"/>
+  <!-- left ring passes over the right one at the top crossing -->
+  <path d="M 30.6 26.2 A 12.5 12.5 0 0 1 36.6 34.0" fill="none" stroke="url(#gold)" stroke-width="5.5"/>
+  <path d="M 30.6 26.2 A 12.5 12.5 0 0 1 36.6 34.0" fill="none" stroke="#07152F" stroke-opacity=".55" stroke-width="1" transform="translate(-2.4 1.6)"/>
+  <!-- sparkle -->
+  <path d="M48 9 L49.6 14.4 L55 16 L49.6 17.6 L48 23 L46.4 17.6 L41 16 L46.4 14.4 Z" fill="#FFF7E0"/>
+</svg>

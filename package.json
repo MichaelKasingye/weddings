@@ -1,0 +1,13 @@
+{
+  "name": "mark-and-mary-wedding",
+  "private": true,
+  "description": "Interactive wedding invitation for Mr. Mark Mukasa & Mary Busingye",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/input.css -o ./css/styles.css --minify",
+    "watch:css": "tailwindcss -i ./src/input.css -o ./css/styles.css --watch",
+    "serve": "npx --yes serve ."
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}
