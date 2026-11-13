@@ -36,7 +36,11 @@ const ss = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
     for (let y = PY0; y < Math.max(PY0, top - 4); y++) pm[y * W + x] = 0;
   }
   let pa = new Float32Array(W * H); for (let i = 0; i < W * H; i++) pa[i] = pm[i]; pa = boxBlurF(pa, 1, W, H);
-  await layer('front', [120, PY0, 940, PY1], pa);
+  // The clean background draws these panels poorly (no top border, unframed tabs), so the front layer uses the
+  // crisp panels cut from the earlier render of the same design (panels-v5.webp, wording removed; same position).
+  require('fs').copyFileSync(__dirname + '/panels-v5.webp', OUT + '/front.webp');
+  console.log('front (from panels-v5.webp)', { x: 120, y: PY0, w: 820, h: 170 });
+  void pa; void layer;
   // gold title + rings
   const tBox = [722, 30, 1060, 262], tm = new Uint8Array(W * H);
   for (let y = tBox[1]; y < tBox[3]; y++) for (let x = tBox[0]; x < tBox[2]; x++) { const i = y * W + x, r = bg[i * 3], g = bg[i * 3 + 1], b = bg[i * 3 + 2]; if ((r > 100 && r - b > 45 && g > 0.5 * r) || lum(bg, i) > 190) tm[i] = 1; }
