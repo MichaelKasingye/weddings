@@ -13,30 +13,44 @@ window.WEDDING_CONFIG = {
   },
 
   // "\n" = line break, exactly as on the poster
-  intro: 'Come let’s dance\ninto the new year\nwith our beloved',
-  honorific: '',       // optional gold ribbon under the intro, e.g. 'OMUBAKA WA KABAKA E BUNGELEZA' ('' hides it)
-  inviteLine: 'together with their families, cordially invite you to their',
-  guestCard: {
-    heading: 'YOUR PRESENCE WILL BE GREATLY APPRECIATED',
-    sub: 'Kindly be our guest',
-  },
-  tagline: 'Let’s celebrate love, family and new beginnings together!',
+  intro: '“Therefore what God\nhas joined together,\nlet no one separate.”\n— Mark 10:9',   // under the title
+  honorific: '',       // optional gold ribbon under the intro ('' hides it)
 
-  // ---- Wedding details (do not guess — fill in once confirmed) ----
-  // Use "\n" to choose line breaks. Ordinals (31st, 2nd) get a raised suffix automatically.
-  date: 'Friday,\n1st January\n2027',
-  time: 'From 2:00 PM\nonwards',
-  venue: 'Kagga\nGardens',
-  location: '',                        // e.g. 'Masaka' (shown under the venue; '' = none)
-  mapsQuery: 'Kagga Gardens, Uganda',  // what Google Maps searches for
-  mapsUrl: null,                       // or paste an exact Google Maps share link (wins over mapsQuery)
-  pendingText: { date: 'Date to be\nconfirmed', time: 'Time to be\nconfirmed' },
-
-  // ---- Families panel on the poster (GROOM | BRIDE) ----  "\n" = line break
+  // ---- The families (two emerald panels) ----
   families: {
-    groom: { label: 'GROOM', lines: 'Son of\nMr. Ssimbwa Moses and\nMrs. Nabukalu Kayonga Magaret\nof Kitoma, Masaka, Buddu.' },
-    bride: { label: 'BRIDE', lines: 'Daughter of\nMr. Mawande Ronald and\nMrs. Nakatte Sanyu\nof Kingo - Lwengo, Buddu.' },
+    label: 'The Families of',
+    groom: 'Mr. Ssimbwa Moses\nand Mrs. Nabukalu Kayonga Magaret\nof Kitoma, Masaka, Buddu.',
+    bride: 'Mr. Mawande Ronald\nand Mrs. Nakatte Sanyu\nof Kingo, Lwengo, Buddu.',
   },
+  inviteLine: 'cordially invite the company of',
+  matrimonyLine: 'to the Holy Matrimony of their beloved children',
+
+  // ---- Date, church service and reception (the emerald band) ----
+  // Use "\n" to choose line breaks. Ordinals (1st, 2nd) get a raised suffix automatically.
+  date: 'Friday,\n1st January 2027',
+  pendingText: { date: 'To be\nconfirmed' },
+  church: {
+    label: 'Church Service:',
+    name: 'Rubaga Cathedral',
+    time: '12:00 PM',
+    note: '(Guests are requested\nto be seated by 11:30 AM)',
+    mapsQuery: 'St. Mary’s Cathedral Rubaga, Kampala, Uganda',   // what the map shows when the church is tapped
+    mapsUrl: null,                                                // optional exact Google Maps link
+  },
+  reception: {
+    label: 'Reception:',
+    text: 'Thereafter, guests will\nproceed to {venue}\nstarting at {time}.',  // {venue} becomes a map link
+    venue: 'Kagga Gardens',
+    time: '2:00 PM',
+    mapsQuery: 'Kagga Gardens, Uganda',
+    mapsUrl: null,
+  },
+
+  colorTheme: 'Color Theme: Emerald Green & Burgundy',
+  tagline: 'Let’s celebrate love, family and new beginnings together!',
+  rsvp: { title: 'RSVP', name: 'Nalubowa Dorothy', phone: '0771 008212' },
+  phoneCountryCode: '+256',
+  footerRibbon: 'Strictly by Invitation',
 
   // ---- Guest personalisation ----
   // Personal links: index.html?guest=John%20Mukasa
@@ -44,15 +58,15 @@ window.WEDDING_CONFIG = {
   guest: {
     param: 'guest',
     defaultName: '',     // name shown when the link has no ?guest= (leave '' for a blank dotted line)
-    label: 'Names:',
+    label: 'Mr./Mrs./Ms./Dr.',
     message: 'You are cordially invited to celebrate with us!',
   },
 
   // ---- Sharing ----
   share: {
     siteUrl: 'https://aaronandjosephine.onrender.com/', // the live address (used for shared and personal links)
-    message: "You're invited! 💍 Aaron & Josephine, together with their families, invite you to celebrate their wedding on 1st January 2027 at Kagga Gardens. Open your invitation:",
-    personalMessage: 'Dear {name}, you are cordially invited to the wedding of Aaron & Josephine on 1st January 2027! 💍 Open your personal invitation:',
+    message: "You're invited! 💍 Together with their families, Aaron & Josephine invite you to their Holy Matrimony on Friday, 1st January 2027: church service at Rubaga Cathedral, 12:00 PM, and reception at Kagga Gardens from 2:00 PM. Open your invitation:",
+    personalMessage: 'Dear {name}, you are cordially invited to the Holy Matrimony of Aaron & Josephine on Friday, 1st January 2027 (Rubaga Cathedral, 12:00 PM; reception at Kagga Gardens from 2:00 PM)! 💍 Open your personal invitation:',
   },
 
   // ---- Images (replace the files, or point these paths at new ones) ----
@@ -151,11 +165,14 @@ window.WEDDING_CONFIG = {
     $('.honorific').hidden = !C.honorific;
 
     setDetail($('#dateText'), C.date, C.pendingText.date);
-    setDetail($('#timeText'), C.time, C.pendingText.time);
-    setDetail($('#venueText'), [C.venue && (C.location ? C.venue + ',' : C.venue), C.location].filter(Boolean).join('\n'), '');
-    $('#venueText').classList.remove('is-pending');
-
-    $('#locationLink').href = mapsOpenUrl();
+    const ch = C.church || {};
+    $('#churchTime').innerHTML = ch.time ? 'Time: ' + esc(ch.time) : '';
+    $('#churchLink').href = mapsOpenUrl(ch);
+    const rc = C.reception || {};
+    $('#receptionText').innerHTML = esc(rc.text || '')
+      .replace('{venue}', '<a class="det-link det-venue" href="' + esc(mapsOpenUrl(rc)) + '" data-map="reception" aria-haspopup="dialog">' + esc(rc.venue || '') + '</a>')
+      .replace('{time}', esc(rc.time || ''));
+    if (C.rsvp) $('#rsvpPhone').href = telHref(C.rsvp.phone);
 
     const bg = $('.poster-bg');
     if (C.images.background && !bg.src.endsWith(C.images.background)) bg.src = C.images.background;
@@ -167,32 +184,42 @@ window.WEDDING_CONFIG = {
     $('#poster').setAttribute('aria-label', 'Wedding invitation of ' + C.couple.groom + ' and ' + C.couple.bride);
   }
 
-  /* ---------- venue map (modal) ---------- */
+  const telHref = (phone) => {
+    const d = String(phone || '').replace(/[^\d+]/g, '');
+    return 'tel:' + (d.startsWith('+') ? d : (C.phoneCountryCode || '') + d.replace(/^0/, ''));
+  };
+
+  /* ---------- map window (church / reception) ---------- */
   const oneLine = (t) => String(t || '').replace(/\s*\n\s*/g, ' ').trim();
-  const mapsQuery = () => C.mapsQuery || [oneLine(C.venue), oneLine(C.location)].filter(Boolean).join(', ');
-  const mapsOpenUrl = () => C.mapsUrl || 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(mapsQuery());
+  const mapsOpenUrl = (place) => (place && place.mapsUrl) || 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((place && place.mapsQuery) || '');
 
   function wireMap() {
-    const dlg = $('#mapModal'), link = $('#locationLink');
-    if (!dlg || typeof dlg.showModal !== 'function') return; // old browser: the venue link opens Google Maps
+    const dlg = $('#mapModal');
+    if (!dlg || typeof dlg.showModal !== 'function') return; // old browser: the links open Google Maps
+    let opener = null;
     const close = () => dlg.open && dlg.close();
-    link.addEventListener('click', (e) => {
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('[data-map]');
+      if (!link) return;
       e.preventDefault();
-      const venue = oneLine(C.venue) + (C.location ? ', ' + oneLine(C.location) : '');
-      $('#mapTitle').textContent = venue;
-      $('#mapSub').textContent = [oneLine(C.date), oneLine(C.time)].filter(Boolean).join(' · ');
-      $('#mapOpen').href = mapsOpenUrl();
-      $('#mapDirections').href = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(mapsQuery());
+      opener = link;
+      const which = link.dataset.map, place = which === 'church' ? C.church : C.reception;
+      const title = which === 'church' ? place.name : place.venue;
+      $('#mapKicker').textContent = which === 'church' ? 'Church service' : 'Reception';
+      $('#mapTitle').textContent = title;
+      $('#mapSub').textContent = [oneLine(C.date), place.time && (which === 'church' ? place.time : 'from ' + place.time)].filter(Boolean).join(' · ');
+      $('#mapOpen').href = mapsOpenUrl(place);
+      $('#mapDirections').href = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(place.mapsQuery || title);
       const frame = $('#mapFrame');
-      frame.title = 'Map of ' + venue;
-      const src = 'https://www.google.com/maps?q=' + encodeURIComponent(mapsQuery()) + '&z=15&output=embed';
-      if (frame.getAttribute('src') !== src) frame.src = src; // load the map only when first opened
+      frame.title = 'Map of ' + title;
+      const src = 'https://www.google.com/maps?q=' + encodeURIComponent(place.mapsQuery || title) + '&z=15&output=embed';
+      if (frame.getAttribute('src') !== src) frame.src = src; // the map loads only when opened
       document.documentElement.classList.add('modal-open');
       dlg.showModal();
     });
     $('#mapClose').addEventListener('click', close);
     dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); }); // tap outside the window
-    dlg.addEventListener('close', () => { document.documentElement.classList.remove('modal-open'); link.focus({ preventScroll: true }); });
+    dlg.addEventListener('close', () => { document.documentElement.classList.remove('modal-open'); if (opener) opener.focus({ preventScroll: true }); });
   }
 
   /* ---------- guest personalisation ---------- */
@@ -203,24 +230,20 @@ window.WEDDING_CONFIG = {
     if (!raw) return;
     guestName = raw;
     $('#guestName').textContent = raw;
+    $('#guest').classList.add('has-name');
     fitGuestName();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitGuestName);
     if ('ResizeObserver' in window) new ResizeObserver(fitGuestName).observe($('#poster'));
     document.title = 'Dear ' + raw + ' · ' + C.couple.short + ' Wedding';
   }
 
-  // long names shrink (down to 60%) so the whole name fits on the dotted line
+  // long names shrink (down to 60%) so the whole name fits on the bar
   function fitGuestName() {
     const el = $('#guestName');
-    if (!el.dataset.y) el.dataset.y = el.style.getPropertyValue('--y');
-    el.style.setProperty('--gfs', 40); el.style.setProperty('--y', el.dataset.y);
+    el.style.setProperty('--gfs', 36);
     if (!el.textContent || !el.clientWidth) return;
     const ratio = el.clientWidth / el.scrollWidth;
-    if (ratio >= 1) return;
-    const fs = Math.max(24, 40 * ratio * 0.98);
-    el.style.setProperty('--gfs', String(fs));
-    // keep the smaller name sitting on the dotted line (its baseline is ~1.18 × font size below the box top)
-    el.style.setProperty('--y', String(parseFloat(el.dataset.y) + 1.18 * (40 - fs)));
+    if (ratio < 1) el.style.setProperty('--gfs', String(Math.max(22, 36 * ratio * 0.98)));
   }
 
   /* ---------- sharing ---------- */

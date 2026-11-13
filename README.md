@@ -29,25 +29,18 @@ Everything lives in `window.WEDDING_CONFIG` at the top of **`js/main.js`**.
 
 | What | Key | Example |
 |---|---|---|
-| Date | `date` | `'Friday,\n1st January\n2027'` (`\n` = line break) |
-| Time | `time` | `'From 2:00 PM\nonwards'` |
-| Venue | `venue` | `'Kagga\nGardens'` |
-| Location (under the venue) | `location` | `''` = none |
-| Map | `mapsQuery` / `mapsUrl` | tapping the venue opens a map window; `mapsQuery` is what the map shows and gives directions to (e.g. `'Kaga Gardens, Najjera, Kampala'`); `mapsUrl` (optional) is used for the "Open in Google Maps" button |
+| Date | `date` | `'Friday,\n1st January 2027'` (`\n` = line break) |
+| Scripture under the title | `intro` | `'“Therefore what God\nhas joined together,…'` |
+| The families (two emerald panels) | `families.label`, `families.groom`, `families.bride` | `'The Families of'`, `'Mr. Ssimbwa Moses\nand Mrs. …\nof Kitoma, …'` |
+| Invitation lines | `inviteLine`, `matrimonyLine` | `'cordially invite the company of'` |
 | Couple names | `couple.groom`, `couple.bride`, `couple.short` | `'Aaron'`, `'Josephine'`, `'Aaron & Josephine'` |
-| Intro lines | `intro` | `'Come let’s dance\ninto the new year\nwith our beloved'` |
-| Gold ribbon under the intro | `honorific` | `'OMUBAKA WA KABAKA E BUNGELEZA'` (`''` hides it) |
-| Line under the names | `inviteLine` | `'together with their families, cordially invite you to their'` |
-| Guest card | `guestCard.heading`, `guestCard.sub` | `'YOUR PRESENCE WILL …'`, `'Kindly be our guest'` |
-| Bottom line | `tagline` | `'Let’s celebrate love, family and new beginnings together!'` |
-| Guest line label | `guest.label` | `'Names:'` |
-| GROOM / BRIDE panel | `families.groom`, `families.bride` | `{ label: 'GROOM', lines: 'Son of\nMr. … and\nMrs. …\nof …' }` |
-| Default guest name | `guest.defaultName` | `''` = blank dotted line |
-| Fireworks gap | `fireworks.minDelayMs` / `maxDelayMs` | `650` / `1700` |
-| Fireworks density | `fireworks.maxParticles` | `{ mobile: 380, desktop: 900 }` |
-| Confetti frequency | `confetti.intervalMs` | `5000` |
-| Confetti amount | `confetti.particleCount` | `{ mobile: 45, desktop: 90 }` |
-| Fireworks video | `fireworks.video` | `'assets/backgrounds/fireworks.mp4'` (optional) |
+| Church service | `church.name`, `church.time`, `church.note`, `church.mapsQuery` | `'Rubaga Cathedral'`, `'12:00 PM'` |
+| Reception | `reception.text`, `reception.venue`, `reception.time`, `reception.mapsQuery` | `'Thereafter, guests will\nproceed to {venue}\nstarting at {time}.'` |
+| Colour theme badge | `colorTheme` | `'Color Theme: Emerald Green & Burgundy'` |
+| Bottom line | `tagline` | `'Let’s celebrate love, …'` |
+| RSVP | `rsvp.name`, `rsvp.phone`, `phoneCountryCode` | `'Nalubowa Dorothy'`, `'0771 008212'`, `'+256'` (tap to call) |
+| Gold ribbon at the bottom | `footerRibbon` | `'Strictly by Invitation'` |
+| Guest bar placeholder | `guest.label` | `'Mr./Mrs./Ms./Dr.'` (a personal link writes the guest's name there) |
 
 `date: null` shows **"Date to be confirmed"**.
 
@@ -68,15 +61,14 @@ Writes the name on the *Names:* line of the guest card and greets them by name i
 |---|---|
 | `assets/art/poster.webp` | The invitation design (couple included) with all wording removed (made from `background.jpg` of the build scripts) |
 | `assets/couple/couple-layer.webp` | The couple cut from the design, layered in front of the fireworks so bursts go behind them |
-| `assets/art/title.webp`, `wedding.webp` | Gold lettering and rings, layered in front of the fireworks ("Wedding" is shown smaller, above the GROOM/BRIDE panel) |
-| `assets/art/card.webp`, `ornament.webp` | The guest card and the heart ornament, moved down to make room for the panel and the date band |
+| `assets/art/title.webp` | The gold "Wedding Invitation" title, layered in front of the fireworks |
 | `assets/couple/couple-photo-original.jpg`, `couple-cutout.png` | The couple's "London save the date" photo and a cutout of it |
 | `assets/couple/mark-and-mary-*` | Earlier placeholder couple (only used by `build-artwork-v1.js`) |
-| `assets/share-card.jpg` | Link-preview picture (1200×630) for WhatsApp, Facebook, X…: poster + names, date, time, venue |
+| `assets/share-card-v2.jpg` | Link-preview picture (1200×630) for WhatsApp, Facebook, X…: poster + names, date, time, venue |
 | `favicon.ico`, `assets/icons/favicon.svg`, `favicon-32.png` | Browser-tab icon: two gold rings on navy (the SVG is the source; the others are made from it) |
 | `assets/icons/apple-touch-icon.png` | Icon when the page is saved to an iPhone/iPad home screen |
 
-The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild the layers with `tools/poster-build/build-artwork.js` then `build-layout.js` (see its README). Then refresh `assets/share-card.jpg`.
+The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild the layers with `tools/poster-build/build-artwork.js`, `build-layout.js`, then `build-emerald.js` (see its README). Then refresh `assets/share-card-v2.jpg`.
 
 **Moving text on the poster:** each line in `index.html` has `style="--x:…;--y:…;--fs:…;--sx:…"`: position (poster pixels; for centred lines `--x` is the centre), font size, and horizontal squeeze. `tools/poster-build/` has the scripts that rebuilt the artwork and measured the text against the original (see its README).
 
@@ -84,7 +76,7 @@ The couple is part of the poster artwork (`tools/poster-build/reference.png`). T
 
 ## Controls
 
-No buttons over the invitation: fireworks and confetti play automatically (turn them off for everyone with `fireworks.enabled` / `confetti.enabled` in the config). Tap the sky on the poster to launch a firework; tap the venue to see the map (with directions) in a window over the invitation.
+No buttons over the invitation: fireworks and confetti play automatically (turn them off for everyone with `fireworks.enabled` / `confetti.enabled` in the config). Tap the sky on the poster to launch a firework; tap the church or the reception venue to see its map (with directions) in a window over the invitation.
 Visitors whose device asks for reduced motion get no fireworks or recurring confetti. Animations pause when the tab is hidden or the poster is off screen.
 
 ## Styling
