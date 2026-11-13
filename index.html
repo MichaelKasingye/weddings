@@ -98,6 +98,15 @@
       All WORDING is live text below, filled in from WEDDING_CONFIG in js/main.js.
     -->
     <img class="poster-bg" src="assets/art/poster.webp" alt="" width="1065" height="1598" fetchpriority="high" decoding="async">
+    <!-- Swappable scene pictures (set in WEDDING_CONFIG.scenes); the gold ribbons, RSVP box and plants stay in front -->
+    <div class="pos scene" style="--x:0;--y:1180;--w:410;--h:400" aria-hidden="true">
+      <img class="scene-base" src="assets/art/scene-left-base.webp" alt="" decoding="async">
+      <div class="scene-photo" style="-webkit-mask-image:url(assets/art/scene-left-mask.png);mask-image:url(assets/art/scene-left-mask.png)"><img id="sceneLeft" src="assets/art/scene-left.jpg" alt="" decoding="async"></div>
+    </div>
+    <div class="pos scene" style="--x:680;--y:1190;--w:385;--h:390" aria-hidden="true">
+      <img class="scene-base" src="assets/art/scene-right-base.webp" alt="" decoding="async">
+      <div class="scene-photo" style="-webkit-mask-image:url(assets/art/scene-right-mask.png);mask-image:url(assets/art/scene-right-mask.png)"><img id="sceneRight" src="assets/art/scene-right.jpg" alt="" decoding="async"></div>
+    </div>
     <video class="poster-video" id="skyVideo" muted loop playsinline preload="none" hidden></video>
     <canvas class="poster-fireworks" id="fireworksCanvas" aria-hidden="true"></canvas>
 

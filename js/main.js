@@ -78,6 +78,15 @@ window.WEDDING_CONFIG = {
     coupleBox: { x: 30, y: 0, w: 807 },
   },
 
+  // ---- The two scene pictures at the bottom of the poster ----
+  // Put any picture in assets/art/ and set its file name here. It is cropped to fill the slot.
+  //   position: which part of the picture to keep ('50% 50%' = centre, '50% 0%' = top, '0% 50%' = left …)
+  //   zoom: 1 = fit, 1.3 = 30% closer;  tone: optional CSS filter to match the poster, e.g. 'brightness(.9) saturate(1.2)'
+  scenes: {
+    left: { src: 'assets/art/scene-left.jpg', position: '50% 50%', zoom: 1, tone: '' },
+    right: { src: 'assets/art/scene-right.jpg', position: '50% 50%', zoom: 1, tone: '' },
+  },
+
   // ---- Welcome banner ----
   welcome: {
     title: 'WELCOME TO OUR CELEBRATION!',
@@ -177,6 +186,16 @@ window.WEDDING_CONFIG = {
 
     const bg = $('.poster-bg');
     if (C.images.background && !bg.src.endsWith(C.images.background)) bg.src = C.images.background;
+
+    [['left', '#sceneLeft'], ['right', '#sceneRight']].forEach(([k, sel]) => {
+      const sc = (C.scenes || {})[k], el = $(sel);
+      if (!sc || !sc.src) { el.closest('.scene').hidden = true; return; } // no picture: the design's own scene shows
+      if (!el.src.endsWith(sc.src)) el.src = sc.src;
+      el.style.objectPosition = sc.position || '50% 50%';
+      el.style.transformOrigin = sc.position || '50% 50%';
+      el.style.transform = sc.zoom && sc.zoom !== 1 ? 'scale(' + sc.zoom + ')' : '';
+      el.style.filter = sc.tone || '';
+    });
 
     const img = $('#coupleImg');
     if (C.images.couple && !img.src.endsWith(C.images.couple)) img.src = C.images.couple;
