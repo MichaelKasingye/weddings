@@ -73,8 +73,8 @@ window.WEDDING_CONFIG = {
   images: {
     background: 'assets/art/poster.webp', // poster artwork (wording removed)
     couple: 'assets/couple/couple-layer.webp',               // transparent image of the couple
-    // where the couple sits, in poster pixels (the poster is 1065 × 1477): left, top, width
-    coupleBox: { x: 95, y: 48, w: 807 },
+    // where the couple sits, in poster pixels (the poster is 1065 × 1598): left, top, width
+    coupleBox: { x: 95, y: 0, w: 807 },
   },
 
   // ---- Welcome banner ----
@@ -153,7 +153,7 @@ window.WEDDING_CONFIG = {
   const withOrdinals = (t) => esc(t).replace(/(\d)(st|nd|rd|th)\b/g, '$1<sup>$2</sup>');
 
   function setDetail(el, value, pending) {
-    el.innerHTML = withOrdinals(value || pending);
+    el.innerHTML = esc(value || pending); // ordinals stay inline ("1st"), as on the printed design
     el.classList.toggle('is-pending', !value);
   }
 

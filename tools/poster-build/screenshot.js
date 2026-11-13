@@ -3,7 +3,7 @@ const { chromium } = require('playwright');
   const out = process.argv[2] || 'shot.png';
   let browser;
   browser = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {});
-  const page = await browser.newPage({ viewport: { width: 1065, height: 1477 }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
+  const page = await browser.newPage({ viewport: { width: 1065, height: 1598 }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
   await page.addInitScript(() => { localStorage.setItem('mm-wedding:fireworks','0'); localStorage.setItem('mm-wedding:confetti','0'); });
   await page.goto((process.env.POSTER_URL || 'http://localhost:8765/index.html') + (process.argv[3] || ''), { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);

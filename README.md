@@ -2,7 +2,7 @@
 
 Static site (HTML + Tailwind + vanilla JS). No backend, no build needed to run.
 
-The page is the printed invitation brought to life: one poster on the invitation's own 1065 × 1477 grid. On phones and tablets held upright the whole invitation fits the screen edge to edge with no scrolling; on large screens it is shown framed at full size. Live fireworks burst in the sky behind the couple and confetti falls on top.
+The page is the printed invitation brought to life: one poster on the invitation's own 1065 × 1598 grid. On phones and tablets held upright the whole invitation fits the screen edge to edge with no scrolling; on large screens it is shown framed at full size. Live fireworks burst in the sky behind the couple and confetti falls on top.
 
 **How the poster is built:** the artwork (scenery, gold title, hearts, "Wedding" script, rings, the date panel frame and icons, the guest card) is cut straight from the original invitation, so it matches it pixel for pixel. Every piece of **wording** is live text on top of that artwork, so it can be changed in one place (below). Fonts and positions were measured against the original.
 
@@ -59,16 +59,17 @@ Writes the name on the *Names:* line of the guest card and greets them by name i
 
 | File | Used for |
 |---|---|
-| `assets/art/poster.webp` | The invitation design (couple included) with all wording removed (made from `background.jpg` of the build scripts) |
-| `assets/couple/couple-layer.webp` | The couple cut from the design, layered in front of the fireworks so bursts go behind them |
+| `assets/art/poster.webp` | The emerald design with all wording and the design's stand-in couple removed |
+| `assets/art/front.webp` | The "The Families of" panels, layered in front of the couple |
+| `assets/couple/couple-layer.webp` | The original couple (Aaron & Josephine), layered in front of the fireworks |
 | `assets/art/title.webp` | The gold "Wedding Invitation" title, layered in front of the fireworks |
 | `assets/couple/couple-photo-original.jpg`, `couple-cutout.png` | The couple's "London save the date" photo and a cutout of it |
 | `assets/couple/mark-and-mary-*` | Earlier placeholder couple (only used by `build-artwork-v1.js`) |
-| `assets/share-card-v2.jpg` | Link-preview picture (1200×630) for WhatsApp, Facebook, X…: poster + names, date, time, venue |
+| `assets/share-card-v3.jpg` | Link-preview picture (1200×630) for WhatsApp, Facebook, X…: poster + names, date, time, venue |
 | `favicon.ico`, `assets/icons/favicon.svg`, `favicon-32.png` | Browser-tab icon: two gold rings on navy (the SVG is the source; the others are made from it) |
 | `assets/icons/apple-touch-icon.png` | Icon when the page is saved to an iPhone/iPad home screen |
 
-The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild the layers with `tools/poster-build/build-artwork.js`, `build-layout.js`, then `build-emerald.js` (see its README). Then refresh `assets/share-card-v2.jpg`.
+The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild with `tools/poster-build/build-v5.js` and `fit-v5.js` (see its README). Then refresh `assets/share-card-v3.jpg`.
 
 **Moving text on the poster:** each line in `index.html` has `style="--x:…;--y:…;--fs:…;--sx:…"`: position (poster pixels; for centred lines `--x` is the centre), font size, and horizontal squeeze. `tools/poster-build/` has the scripts that rebuilt the artwork and measured the text against the original (see its README).
 

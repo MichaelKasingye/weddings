@@ -22,7 +22,7 @@ const T = { // selector: [x0, x1, y0, y1, lines, pitch]   (ink boxes measured on
 const ITER = +process.argv[2] || 4;
 (async () => {
   const b = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {});
-  const p = await b.newPage({ viewport: { width: 1065, height: 1477 }, reducedMotion: 'reduce' });
+  const p = await b.newPage({ viewport: { width: 1065, height: 1598 }, reducedMotion: 'reduce' });
   await p.addInitScript(() => { localStorage.setItem('mm-wedding:fireworks', '0'); localStorage.setItem('mm-wedding:confetti', '0'); });
   await p.goto(URL, { waitUntil: 'networkidle' });
   await p.evaluate(() => document.fonts.ready);
