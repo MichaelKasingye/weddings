@@ -75,7 +75,7 @@ window.WEDDING_CONFIG = {
     background: 'assets/art/poster.webp', // poster artwork (wording removed)
     couple: 'assets/couple/couple-layer.webp',               // transparent image of the couple
     // where the couple sits, in poster pixels (the poster is 1065 × 1598): left, top, width
-    coupleBox: { x: 95, y: 0, w: 807 },
+    coupleBox: { x: 30, y: 0, w: 807 },
   },
 
   // ---- Welcome banner ----
