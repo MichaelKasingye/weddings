@@ -83,8 +83,8 @@ window.WEDDING_CONFIG = {
   //   position: which part of the picture to keep ('50% 50%' = centre, '50% 0%' = top, '0% 50%' = left …)
   //   zoom: 1 = fit, 1.3 = 30% closer;  tone: optional CSS filter to match the poster, e.g. 'brightness(.9) saturate(1.2)'
   scenes: {
-    left: { src: 'assets/art/scene-left.jpg', position: '50% 50%', zoom: 1, tone: '' },
-    right: { src: 'assets/art/scene-right.jpg', position: '50% 50%', zoom: 1, tone: '' },
+    left: { src: 'assets/art/outdoor_dancing.jpg', position: '42% 50%', zoom: 1, tone: '' },
+    right: { src: 'assets/art/outdoor_dancing_day.webp', position: '56% 50%', zoom: 1, tone: 'brightness(.86) saturate(1.15) contrast(1.05)' },
   },
 
   // ---- Welcome banner ----
