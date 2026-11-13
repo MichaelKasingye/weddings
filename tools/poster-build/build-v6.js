@@ -20,6 +20,21 @@ const ss = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
     const f = pushPull(bg, hole, W, H);
     for (let i = 0; i < W * H; i++) if (hole[i]) for (let k = 0; k < 3; k++) bg[i * 3 + k] = f[i * 3 + k];
   }
+  { // remove the "Strictly by Invitation" gold ribbon, filled from the scenery around it
+    const [x0, y0, x1, y1] = [395, 1352, 690, 1436], m = new Uint8Array(W * H);
+    for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) { const i = y * W + x, r = bg[i * 3], g = bg[i * 3 + 1], b = bg[i * 3 + 2]; if ((r > 90 && r - b > 35 && g > 0.45 * r) || lum(bg, i) > 150) m[i] = 1; }
+    const hole = dilate(m, 5, W, H);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (x < x0 - 5 || x >= x1 + 5 || y < y0 - 5 || y >= y1 + 5) hole[y * W + x] = 0;
+    const f = pushPull(bg, hole, W, H);
+    for (let i = 0; i < W * H; i++) if (hole[i]) for (let k = 0; k < 3; k++) bg[i * 3 + k] = f[i * 3 + k];
+    // the ribbon sat over the RSVP frame's bottom border: redraw that border as the top border mirrored (frame is symmetric about y 1303)
+    const AX = 1303, src = Float32Array.from(bg);
+    for (let y = 1322; y < 1390; y++) for (let x = 340; x < 740; x++) {
+      const sy = 2 * AX - y, j = sy * W + x, i = y * W + x, r = src[j * 3], g = src[j * 3 + 1], b = src[j * 3 + 2];
+      const isGold = r > 120 && r - b > 45 && g > 0.5 * r;
+      if (isGold) for (let k = 0; k < 3; k++) bg[i * 3 + k] = src[j * 3 + k];
+    }
+  }
   { const b = Buffer.alloc(W * H * 3); for (let i = 0; i < b.length; i++) b[i] = Math.max(0, Math.min(255, Math.round(bg[i])));
     await sharp(b, { raw: { width: W, height: H, channels: 3 } }).webp({ quality: 90 }).toFile(OUT + '/poster.webp'); }
 

@@ -32,25 +32,24 @@ window.WEDDING_CONFIG = {
   pendingText: { date: 'To be\nconfirmed' },
   church: {
     label: 'Church Service:',
-    name: 'Rubaga Cathedral',
+    name: 'Lubaga Cathedral',
     time: '12:00 PM',
     note: '(Guests are requested\nto be seated by 11:30 AM)',
-    mapsQuery: 'St. Mary’s Cathedral Rubaga, Kampala, Uganda',   // what the map shows when the church is tapped
+    mapsQuery: 'St. Mary’s Cathedral Lubaga, Kampala, Uganda',   // what the map shows when the church is tapped
     mapsUrl: null,                                                // optional exact Google Maps link
   },
   reception: {
     label: 'Reception:',
     text: 'Thereafter, guests will\nproceed to {venue}\nstarting at {time}.',  // {venue} becomes a map link
-    venue: 'Kagga Gardens',
-    time: '2:00 PM',
-    mapsQuery: 'Kagga Gardens, Uganda',
+    venue: 'Akaama Gardens',
+    time: '4:00 PM',
+    mapsQuery: 'Akaama Gardens, Uganda',
     mapsUrl: null,
   },
 
   tagline: 'Let’s celebrate love, family and new beginnings together!',
   rsvp: { title: 'RSVP', name: 'Nalubowa Dorothy', phone: '0771 008212' },
   phoneCountryCode: '+256',
-  footerRibbon: 'Strictly by Invitation',
 
   // ---- Guest personalisation ----
   // Personal links: index.html?guest=John%20Mukasa
@@ -65,8 +64,8 @@ window.WEDDING_CONFIG = {
   // ---- Sharing ----
   share: {
     siteUrl: 'https://aaronandjosephine.onrender.com/', // the live address (used for shared and personal links)
-    message: "You're invited! 💍 Together with their families, Aaron & Josephine invite you to their Holy Matrimony on Friday, 1st January 2027: church service at Rubaga Cathedral, 12:00 PM, and reception at Kagga Gardens from 2:00 PM. Open your invitation:",
-    personalMessage: 'Dear {name}, you are cordially invited to the Holy Matrimony of Aaron & Josephine on Friday, 1st January 2027 (Rubaga Cathedral, 12:00 PM; reception at Kagga Gardens from 2:00 PM)! 💍 Open your personal invitation:',
+    message: "You're invited! 💍 Together with their families, Aaron & Josephine invite you to their Holy Matrimony on Friday, 1st January 2027: church service at Lubaga Cathedral, 12:00 PM, and reception at Akaama Gardens from 4:00 PM. Open your invitation:",
+    personalMessage: 'Dear {name}, you are cordially invited to the Holy Matrimony of Aaron & Josephine on Friday, 1st January 2027 (Lubaga Cathedral, 12:00 PM; reception at Akaama Gardens from 4:00 PM)! 💍 Open your personal invitation:',
   },
 
   // ---- Images (replace the files, or point these paths at new ones) ----

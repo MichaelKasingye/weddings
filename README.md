@@ -34,11 +34,10 @@ Everything lives in `window.WEDDING_CONFIG` at the top of **`js/main.js`**.
 | The families (two emerald panels) | `families.label`, `families.joiner`, `families.groom`, `families.bride` | `'The Family of'`, `'and'` (gold medallion between them), `'Mr. Ssimbwa Moses\nand Mrs. …\nof Kitoma, …'` |
 | Invitation lines | `inviteLine`, `matrimonyLine` | `'cordially invite the company of'` |
 | Couple names | `couple.groom`, `couple.bride`, `couple.short` | `'Aaron'`, `'Josephine'`, `'Aaron & Josephine'` |
-| Church service | `church.name`, `church.time`, `church.note`, `church.mapsQuery` | `'Rubaga Cathedral'`, `'12:00 PM'` |
+| Church service | `church.name`, `church.time`, `church.note`, `church.mapsQuery` | `'Lubaga Cathedral'`, `'12:00 PM'` |
 | Reception | `reception.text`, `reception.venue`, `reception.time`, `reception.mapsQuery` | `'Thereafter, guests will\nproceed to {venue}\nstarting at {time}.'` |
 | Bottom line | `tagline` | `'Let’s celebrate love, …'` |
 | RSVP | `rsvp.name`, `rsvp.phone`, `phoneCountryCode` | `'Nalubowa Dorothy'`, `'0771 008212'`, `'+256'` (tap to call) |
-| Gold ribbon at the bottom | `footerRibbon` | `'Strictly by Invitation'` |
 | Guest bar placeholder | `guest.label` | `'Mr./Mrs./Ms./Dr.'` (a personal link writes the guest's name there) |
 
 `date: null` shows **"Date to be confirmed"**.
@@ -78,11 +77,11 @@ The picture is cropped to fill the slot and its edges fade into the poster; the 
 | `assets/art/title.webp` | The gold "Wedding Invitation" title, layered in front of the fireworks |
 | `assets/couple/couple-photo-original.jpg`, `couple-cutout.png` | The couple's "London save the date" photo and a cutout of it |
 | `assets/couple/mark-and-mary-*` | Earlier placeholder couple (only used by `build-artwork-v1.js`) |
-| `assets/share-card-v5.jpg` | Link-preview picture (1200×630) for WhatsApp, Facebook, X…: poster + names, date, time, venue |
+| `assets/share-card-v6.jpg` | Link-preview picture (1200×630) for WhatsApp, Facebook, X…: poster + names, date, time, venue |
 | `favicon.ico`, `assets/icons/favicon.svg`, `favicon-32.png` | Browser-tab icon: two gold rings on navy (the SVG is the source; the others are made from it) |
 | `assets/icons/apple-touch-icon.png` | Icon when the page is saved to an iPhone/iPad home screen |
 
-The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild with `tools/poster-build/build-v5.js` and `fit-v5.js` (see its README). Then refresh `assets/share-card-v5.jpg`.
+The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild with `tools/poster-build/build-v5.js` and `fit-v5.js` (see its README). Then refresh `assets/share-card-v6.jpg`.
 
 **Moving text on the poster:** each line in `index.html` has `style="--x:…;--y:…;--fs:…;--sx:…"`: position (poster pixels; for centred lines `--x` is the centre), font size, and horizontal squeeze. `tools/poster-build/` has the scripts that rebuilt the artwork and measured the text against the original (see its README).
 
@@ -115,4 +114,4 @@ js/vendor/            canvas-confetti 1.9.3 (local copy, works offline)
 tools/poster-build/   scripts that cut the artwork from the original and fit the text to it
 ```
 
-Credits: fonts Google Fonts (Libre Caslon Text, Tinos, Great Vibes, Cormorant Garamond, Montserrat) · icons Lucide (ISC) · confetti canvas-confetti (ISC).
+Credits: fonts Google Fonts (Cardo, Libre Caslon Text, Playball, Great Vibes, Montserrat) · icons Lucide (ISC) · confetti canvas-confetti (ISC).
