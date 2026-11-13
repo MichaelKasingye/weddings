@@ -65,11 +65,11 @@ Writes the name on the *Names:* line of the guest card and greets them by name i
 | `assets/art/title.webp` | The gold "Wedding Invitation" title, layered in front of the fireworks |
 | `assets/couple/couple-photo-original.jpg`, `couple-cutout.png` | The couple's "London save the date" photo and a cutout of it |
 | `assets/couple/mark-and-mary-*` | Earlier placeholder couple (only used by `build-artwork-v1.js`) |
-| `assets/share-card-v3.jpg` | Link-preview picture (1200×630) for WhatsApp, Facebook, X…: poster + names, date, time, venue |
+| `assets/share-card-v4.jpg` | Link-preview picture (1200×630) for WhatsApp, Facebook, X…: poster + names, date, time, venue |
 | `favicon.ico`, `assets/icons/favicon.svg`, `favicon-32.png` | Browser-tab icon: two gold rings on navy (the SVG is the source; the others are made from it) |
 | `assets/icons/apple-touch-icon.png` | Icon when the page is saved to an iPhone/iPad home screen |
 
-The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild with `tools/poster-build/build-v5.js` and `fit-v5.js` (see its README). Then refresh `assets/share-card-v3.jpg`.
+The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild with `tools/poster-build/build-v5.js` and `fit-v5.js` (see its README). Then refresh `assets/share-card-v4.jpg`.
 
 **Moving text on the poster:** each line in `index.html` has `style="--x:…;--y:…;--fs:…;--sx:…"`: position (poster pixels; for centred lines `--x` is the centre), font size, and horizontal squeeze. `tools/poster-build/` has the scripts that rebuilt the artwork and measured the text against the original (see its README).
 
