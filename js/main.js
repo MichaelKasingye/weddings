@@ -18,7 +18,8 @@ window.WEDDING_CONFIG = {
 
   // ---- The families (two emerald panels) ----
   families: {
-    label: 'The Families of',
+    label: 'The Family of',
+    joiner: 'and',      // shown in the gold medallion between the two families
     groom: 'Mr. Ssimbwa Moses\nand Mrs. Nabukalu Kayonga Magaret\nof Kitoma, Masaka, Buddu.',
     bride: 'Mr. Mawande Ronald\nand Mrs. Nakatte Sanyu\nof Kingo, Lwengo, Buddu.',
   },
