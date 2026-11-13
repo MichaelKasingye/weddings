@@ -47,7 +47,6 @@ window.WEDDING_CONFIG = {
     mapsUrl: null,
   },
 
-  colorTheme: 'Color Theme: Emerald Green & Burgundy',
   tagline: 'Let’s celebrate love, family and new beginnings together!',
   rsvp: { title: 'RSVP', name: 'Nalubowa Dorothy', phone: '0771 008212' },
   phoneCountryCode: '+256',

@@ -36,7 +36,6 @@ Everything lives in `window.WEDDING_CONFIG` at the top of **`js/main.js`**.
 | Couple names | `couple.groom`, `couple.bride`, `couple.short` | `'Aaron'`, `'Josephine'`, `'Aaron & Josephine'` |
 | Church service | `church.name`, `church.time`, `church.note`, `church.mapsQuery` | `'Rubaga Cathedral'`, `'12:00 PM'` |
 | Reception | `reception.text`, `reception.venue`, `reception.time`, `reception.mapsQuery` | `'Thereafter, guests will\nproceed to {venue}\nstarting at {time}.'` |
-| Colour theme badge | `colorTheme` | `'Color Theme: Emerald Green & Burgundy'` |
 | Bottom line | `tagline` | `'Let’s celebrate love, …'` |
 | RSVP | `rsvp.name`, `rsvp.phone`, `phoneCountryCode` | `'Nalubowa Dorothy'`, `'0771 008212'`, `'+256'` (tap to call) |
 | Gold ribbon at the bottom | `footerRibbon` | `'Strictly by Invitation'` |

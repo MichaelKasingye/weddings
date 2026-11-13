@@ -5,14 +5,23 @@
 // usage: node build-v6.js [outDir]   -> copy poster/front/title to assets/art/, couple to assets/couple/couple-layer.webp
 const sharp = require('sharp');
 const path = require('path');
-const { lum, dilate, boxBlurF } = require('./lib');
+const { lum, dilate, boxBlurF, pushPull } = require('./lib');
 const W = 1065, H = 1598, ROOT = path.resolve(__dirname, '../..'), OUT = process.argv[2] || __dirname + '/out6';
 const ss = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
 (async () => {
   require('fs').mkdirSync(OUT, { recursive: true });
   const bgSharp = sharp(ROOT + '/assets/art/Emerald Gold Wedding Invitation.png').removeAlpha().resize(W, H, { kernel: 'lanczos3' });
   const bg = Float32Array.from(await bgSharp.clone().raw().toBuffer());
-  await bgSharp.clone().webp({ quality: 90 }).toFile(OUT + '/poster.webp');
+  { // remove the "Color Theme" badge frame (gold lines + sparkles inside its box), filled from the green around it
+    const [x0, y0, x1, y1] = [252, 1116, 816, 1186], m = new Uint8Array(W * H);
+    for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) { const i = y * W + x, r = bg[i * 3], g = bg[i * 3 + 1], b = bg[i * 3 + 2]; if ((r > 90 && r - b > 35 && g > 0.45 * r) || lum(bg, i) > 120) m[i] = 1; }
+    const hole = dilate(m, 4, W, H);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (x < x0 - 4 || x >= x1 + 4 || y < y0 - 4 || y >= y1 + 4) hole[y * W + x] = 0;
+    const f = pushPull(bg, hole, W, H);
+    for (let i = 0; i < W * H; i++) if (hole[i]) for (let k = 0; k < 3; k++) bg[i * 3 + k] = f[i * 3 + k];
+  }
+  { const b = Buffer.alloc(W * H * 3); for (let i = 0; i < b.length; i++) b[i] = Math.max(0, Math.min(255, Math.round(bg[i])));
+    await sharp(b, { raw: { width: W, height: H, channels: 3 } }).webp({ quality: 90 }).toFile(OUT + '/poster.webp'); }
 
   async function layer(name, [x0, y0, x1, y1], al) {
     const w = x1 - x0, h = y1 - y0, B = Buffer.alloc(w * h * 4);
