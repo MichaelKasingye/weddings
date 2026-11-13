@@ -24,7 +24,7 @@ window.WEDDING_CONFIG = {
     bride: 'Mr. Mawande Ronald\nand Mrs. Nakatte Sanyu\nof Kingo, Lwengo, Buddu.',
   },
   inviteLine: 'cordially invite the company of',
-  matrimonyLine: 'to the Holy Matrimony of their beloved children',
+  matrimonyLine: 'to the marriage of their beloved children',
 
   // ---- Date, church service and reception (the emerald band) ----
   // Use "\n" to choose line breaks. Ordinals (1st, 2nd) get a raised suffix automatically.
@@ -64,8 +64,8 @@ window.WEDDING_CONFIG = {
   // ---- Sharing ----
   share: {
     siteUrl: 'https://aaronandjosephine.onrender.com/', // the live address (used for shared and personal links)
-    message: "You're invited! 💍 Together with their families, Aaron & Josephine invite you to their Holy Matrimony on Friday, 1st January 2027: church service at Lubaga Cathedral, 12:00 PM, and reception at Akaama Gardens from 4:00 PM. Open your invitation:",
-    personalMessage: 'Dear {name}, you are cordially invited to the Holy Matrimony of Aaron & Josephine on Friday, 1st January 2027 (Lubaga Cathedral, 12:00 PM; reception at Akaama Gardens from 4:00 PM)! 💍 Open your personal invitation:',
+    message: "You're invited! 💍 Together with their families, Aaron & Josephine invite you to their wedding on Friday, 1st January 2027: church service at Lubaga Cathedral, 12:00 PM, and reception at Akaama Gardens from 4:00 PM. Open your invitation:",
+    personalMessage: 'Dear {name}, you are cordially invited to the wedding of Aaron & Josephine on Friday, 1st January 2027 (Lubaga Cathedral, 12:00 PM; reception at Akaama Gardens from 4:00 PM)! 💍 Open your personal invitation:',
   },
 
   // ---- Images (replace the files, or point these paths at new ones) ----
