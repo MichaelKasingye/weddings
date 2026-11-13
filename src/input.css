@@ -29,6 +29,7 @@
   --font-caslon: "Libre Caslon Text", "Times New Roman", serif;
   --font-tag: "Cormorant Garamond", Garamond, "Times New Roman", serif;
   --font-names: "Great Vibes", "Brush Script MT", cursive;
+  --font-couple: Playball, "Great Vibes", cursive; /* the couple's names: a clear, readable script */
 
   --gold-grad: linear-gradient(180deg, #FFF6D0 0%, #F5DB86 25%, #DDB648 48%, #A9831F 72%, #E9C860 100%);
   --u: calc(100cqw / 1065); /* one poster pixel */
@@ -199,11 +200,11 @@
   }
 
   .name {
-    font-family: var(--font-names); font-weight: 400; line-height: 1.25;
-    --gold-grad: linear-gradient(180deg, #FFFBE0 0%, #FFEDA0 20%, #FCDB6A 40%, #F4C443 60%, #E0A52C 80%, #F7D560 100%);
-    --gold-stroke-w: calc(var(--u) * 1.6); --gold-stroke: #F2C649;
-    --gold-base: #4A2A04; --gold-base-stroke: calc(var(--u) * 2.6); --gold-lift: calc(var(--u) * 2.4);
-    --gold-shadow: 0 0 calc(var(--u) * 2) rgba(30, 16, 0, .95), 0 calc(var(--u) * 4) calc(var(--u) * 9) rgba(0, 0, 0, .8);
+    font-family: var(--font-couple); font-weight: 400; line-height: 1.25; letter-spacing: .01em;
+    --gold-grad: linear-gradient(180deg, #FFFCE6 0%, #FFF0AE 22%, #FDDD72 45%, #F6C846 68%, #EDB436 100%);
+    --gold-stroke-w: calc(var(--u) * .5); --gold-stroke: #F6CE56;
+    --gold-base: #3E2303; --gold-base-stroke: calc(var(--u) * 1.6); --gold-lift: calc(var(--u) * 2.2);
+    --gold-shadow: 0 0 calc(var(--u) * 3) rgba(0, 0, 0, .9), 0 calc(var(--u) * 4) calc(var(--u) * 10) rgba(0, 0, 0, .85);
   }
 
   /* Tagline */
