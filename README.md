@@ -33,6 +33,7 @@ Everything lives in `window.WEDDING_CONFIG` at the top of **`js/main.js`**.
 | Scripture under the title | `intro` | `'“Therefore what God\nhas joined together,…'` |
 | The families (two emerald panels) | `families.label`, `families.joiner`, `families.groom`, `families.bride` | `'The Family of'`, `'and'` (gold medallion between them), `'Mr. Ssimbwa Moses\nand Mrs. …\nof Kitoma, …'` |
 | Invitation lines | `inviteLine`, `matrimonyLine` | `'cordially invite the company of'` |
+| Wording font | `fontStyle` | `'modern'` (Poppins) or `'classic'` (Cardo); names and title unchanged |
 | Couple names | `couple.groom`, `couple.bride`, `couple.short` | `'Aaron'`, `'Josephine'`, `'Aaron & Josephine'` |
 | Church service | `church.name`, `church.time`, `church.note`, `church.mapsQuery` | `'Lubaga Cathedral'`, `'12:00 PM'` |
 | Reception | `reception.text`, `reception.venue`, `reception.time`, `reception.mapsQuery` | `'Thereafter, guests will\nproceed to {venue}\nstarting at {time}.'` |

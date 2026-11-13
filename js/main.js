@@ -76,6 +76,11 @@ window.WEDDING_CONFIG = {
     coupleBox: { x: 30, y: 0, w: 807 },
   },
 
+  // ---- Wording font ----
+  // 'classic' = Cardo (engraved serif)   'modern' = Poppins (clean sans-serif)
+  // The couple's names and the "Wedding Invitation" title are not affected.
+  fontStyle: 'modern',
+
   // ---- The two scene pictures at the bottom of the poster ----
   // Put any picture in assets/art/ and set its file name here. It is cropped to fill the slot.
   //   position: which part of the picture to keep ('50% 50%' = centre, '50% 0%' = top, '0% 50%' = left …)
@@ -163,6 +168,37 @@ window.WEDDING_CONFIG = {
   function setDetail(el, value, pending) {
     el.innerHTML = esc(value || pending); // ordinals stay inline ("1st"), as on the printed design
     el.classList.toggle('is-pending', !value);
+  }
+
+  // Line sizes for the modern (Poppins) style; Poppins is wider than Cardo, so each line is refitted.
+  // Values are poster units: x, y, fs (font size), lh (line height), sx (horizontal scale).
+  const MODERN_LAYOUT = {
+    '[data-bind="intro"]': { y: 270, fs: 23, lh: 1.27, sx: 1 },
+    '#tabGroom': { fs: 20, sx: 1, y: 404 }, '#tabBride': { fs: 20, sx: 1, y: 405 },
+    '[data-bind="families.groom"]': { y: 441, fs: 18.5, lh: 1.17 },
+    '[data-bind="families.bride"]': { y: 452, fs: 18.5, lh: 1.17 },
+    '[data-bind="inviteLine"]': { y: 548, fs: 26 },
+    '[data-bind="matrimonyLine"]': { y: 661, fs: 26 },
+    '#labDate': { y: 963, fs: 22, sx: 1 },
+    '#dateText': { y: 994, fs: 20.5, lh: 1.3, sx: 1 },
+    '[data-bind="church.label"]': { y: 963, fs: 22, sx: 1 },
+    '#churchName': { y: 996, fs: 19.5, sx: 1 },
+    '#churchTime': { y: 1024, fs: 19.5, sx: 1 },
+    '[data-bind="church.note"]': { y: 1055, fs: 15, lh: 1.2, sx: 1 },
+    '[data-bind="reception.label"]': { x: 784, y: 966, fs: 22, sx: 1 },
+    '#receptionText': { x: 784, y: 997, fs: 16.5, lh: 1.42, sx: 1 },
+    '[data-bind="tagline"]': { y: 1150, fs: 22, sx: 1 },
+    '[data-bind="rsvp.name"]': { y: 1283, fs: 27, sx: 1 },
+    '#rsvpPhone': { x: 474, y: 1320, fs: 29, sx: 1 },
+  };
+  function applyFontStyle() {
+    const modern = C.fontStyle === 'modern';
+    document.documentElement.classList.toggle('font-modern', modern);
+    if (!modern) return;
+    for (const [sel, v] of Object.entries(MODERN_LAYOUT)) {
+      const el = $(sel); if (!el) continue;
+      for (const [k, val] of Object.entries(v)) el.style.setProperty('--' + k, String(val));
+    }
   }
 
   function applyConfig() {
@@ -361,6 +397,7 @@ window.WEDDING_CONFIG = {
     config: C,
     toast,
     boot() {
+      applyFontStyle();
       applyConfig();
       applyGuest();
       wireMap();

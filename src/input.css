@@ -25,7 +25,7 @@
   --font-script: "Great Vibes", "Brush Script MT", cursive;
   --font-serif: "Cormorant Garamond", Garamond, "Times New Roman", serif;
   --font-sans: Montserrat, "Helvetica Neue", Arial, sans-serif;
-  --font-times: Cardo, "Times New Roman", Times, serif; /* all the wording */
+  --font-times: Cardo, "Times New Roman", Times, serif; /* all the wording (classic style; see html.font-modern) */
   --font-caslon: "Libre Caslon Text", "Times New Roman", serif;
   --font-tag: Cardo, "Cormorant Garamond", Garamond, serif;
   --font-names: "Great Vibes", "Brush Script MT", cursive;
@@ -213,6 +213,19 @@
     color: #FAD97E;
     text-shadow: 0 calc(var(--u) * 1.5) 0 rgba(90, 52, 8, .9), 0 0 calc(var(--u) * 6) rgba(0, 0, 0, .95), 0 calc(var(--u) * 3) calc(var(--u) * 8) rgba(0, 0, 0, .8);
   }
+
+  /* ---------- Modern wording style (WEDDING_CONFIG.fontStyle = 'modern') ----------
+     Poppins for all the wording except the couple's names and the title. Sizes per line are set in js/main.js. */
+  html.font-modern { --font-times: Poppins, "Helvetica Neue", Arial, sans-serif; --font-tag: Poppins, "Helvetica Neue", Arial, sans-serif; }
+  html.font-modern .scripture, html.font-modern .fam-tab, html.font-modern .script-line,
+  html.font-modern .fam-text, html.font-modern .det-value, html.font-modern .rsvp-name, html.font-modern .rsvp-phone { -webkit-text-stroke: 0; }
+  html.font-modern .scripture, html.font-modern .script-line, html.font-modern .fam-tab { font-weight: 400; }
+  html.font-modern .tagline { font-weight: 500; letter-spacing: 0; }
+  html.font-modern .fam-text, html.font-modern .det-value, html.font-modern .rsvp-name, html.font-modern .rsvp-phone { font-weight: 500; }
+  html.font-modern .det-label { font-weight: 600; }
+  html.font-modern .det-note { font-weight: 500; }
+  html.font-modern .guest-label { font-weight: 600; font-size: calc(var(--u) * 23); }
+  html.font-modern .det-venue { font-style: italic; }
 
   /* ---------- Venue map modal ---------- */
   html.modal-open { overflow: hidden; }
