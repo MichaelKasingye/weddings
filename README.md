@@ -37,7 +37,7 @@ Everything lives in `window.WEDDING_CONFIG` at the top of **`js/main.js`**.
 | Church service | `church.name`, `church.time`, `church.note`, `church.mapsQuery` | `'Lubaga Cathedral'`, `'12:00 PM'` |
 | Reception | `reception.text`, `reception.venue`, `reception.time`, `reception.mapsQuery` | `'Thereafter, guests will\nproceed to {venue}\nstarting at {time}.'` |
 | Bottom line | `tagline` | `'Let’s celebrate love, …'` |
-| RSVP | `rsvp.name`, `rsvp.phone`, `phoneCountryCode` | `'Nalubowa Dorothy'`, `'0771 008212'`, `'+256'` (tap to call) |
+| RSVP | `rsvp.name`, `rsvp.phone`, `phoneCountryCode` | `'Nalubowa Doreen'`, `'0771 008212'`, `'+256'` (tap to call) |
 | Guest bar placeholder | `guest.label` | `'Mr./Mrs./Ms./Dr.'` (a personal link writes the guest's name there) |
 
 `date: null` shows **"Date to be confirmed"**.

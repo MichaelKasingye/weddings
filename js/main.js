@@ -48,7 +48,7 @@ window.WEDDING_CONFIG = {
   },
 
   tagline: 'Let’s celebrate love, family and new beginnings together!',
-  rsvp: { title: 'RSVP', name: 'Nalubowa Dorothy', phone: '0771 008212' },
+  rsvp: { title: 'RSVP', name: 'Nalubowa Doreen', phone: '0771 008212' },
   phoneCountryCode: '+256',
 
   // ---- Guest personalisation ----
