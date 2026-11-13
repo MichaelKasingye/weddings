@@ -136,8 +136,8 @@
   }
 
   /* The guest bar: the cream bar is artwork; this holds the placeholder or the guest's name */
-  .guest-bar { display: flex; align-items: center; gap: calc(var(--u) * 10); padding: 0 calc(var(--u) * 58); }
-  .guest-label { flex: none; font-family: var(--font-times); font-weight: 700; font-size: calc(var(--u) * 29); color: #1E1505; }
+  .guest-bar { display: flex; align-items: center; gap: calc(var(--u) * 14); padding: 0 calc(var(--u) * 64) 0 calc(var(--u) * 72); }
+  .guest-label { flex: none; font-family: var(--font-times); font-weight: 700; font-size: calc(var(--u) * 26); letter-spacing: .01em; color: #1E1505; }
   .guest-dots { flex: 1; align-self: center; margin-top: calc(var(--u) * 16); height: calc(var(--u) * 4);
     background: radial-gradient(circle, rgba(30, 21, 5, .9) 0 calc(var(--u) * 1), transparent calc(var(--u) * 1.45)) 0 50% / calc(var(--u) * 4.6) 100% repeat-x; }
   .guest-name {
