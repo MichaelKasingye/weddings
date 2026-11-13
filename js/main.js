@@ -20,7 +20,7 @@ window.WEDDING_CONFIG = {
   families: {
     label: 'The Family of',
     joiner: 'and',      // shown in the gold medallion between the two families
-    groom: 'Mr. Ssimbwa Moses\nand Mrs. Nabukalu Kayonga Magaret\nof Kitoma, Masaka, Buddu.',
+    groom: 'Mr. Ssimbwa Moses\nand Mrs. Nabukalu\nKayonga Magaret\nof Kitoma, Masaka, Buddu.',
     bride: 'Mr. Mawande Ronald\nand Mrs. Nakatte Sanyu\nof Kingo, Lwengo, Buddu.',
   },
   inviteLine: 'cordially invite the company of',
