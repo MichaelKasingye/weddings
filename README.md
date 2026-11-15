@@ -34,11 +34,12 @@ Everything lives in `window.WEDDING_CONFIG` at the top of **`js/main.js`**.
 | The families (two emerald panels) | `families.label`, `families.joiner`, `families.groom`, `families.bride` | `'The Family of'`, `'and'` (gold medallion between them), `'Mr. Ssimbwa Moses\nand Mrs. …\nof Kitoma, …'` |
 | Invitation lines | `inviteLine`, `matrimonyLine` | `'cordially invite the company of'` |
 | Wording font | `fontStyle` | `'modern'` (Poppins) or `'classic'` (Cardo); names and title unchanged |
-| Couple names | `couple.groom`, `couple.bride`, `couple.short` | `'Aaron'`, `'Josephine'`, `'Aaron & Josephine'` |
+| Couple names | `couple.groom`, `couple.bride`, `couple.short` | `'Aaron Mutumba'`, `'Josephine Nagadya'`, `'Aaron & Josephine'` |
 | Church service | `church.name`, `church.time`, `church.note`, `church.mapsQuery` | `'Lubaga Cathedral'`, `'12:00 PM'` |
 | Reception | `reception.text`, `reception.venue`, `reception.time`, `reception.mapsQuery` | `'Thereafter, guests will\nproceed to {venue}\nstarting at {time}.'` |
+| Line under the tagline | `note` | `'Children are loved but not invited.'` (`''` hides it) |
 | Bottom line | `tagline` | `'Let’s celebrate love, …'` |
-| RSVP | `rsvp.name`, `rsvp.phone`, `phoneCountryCode` | `'Nalubowa Doreen'`, `'0771 008212'`, `'+256'` (tap to call) |
+| RSVP | `rsvp.name`, `rsvp.phone`, `phoneCountryCode` | `'Mr. Mwesigye Brian'`, `'0702 988061'`, `'+256'` (tap to call) |
 | Guest bar placeholder | `guest.label` | `'Mr./Mrs./Ms./Dr.'` (a personal link writes the guest's name there) |
 
 `date: null` shows **"Date to be confirmed"**.
@@ -50,7 +51,7 @@ Longer wording is fine: each line has a maximum width (`data-maxw` in `index.htm
 ```
 https://your-site/?guest=John%20Mukasa
 ```
-Writes the name on the *Names:* line of the guest card and greets them by name in the welcome banner.
+Writes the guest's name on the cream bar, with "Invite for (1)" beside it (add `&invites=2` for two people) and greets them by name in the welcome banner.
 
 **Link generator for the hosts:** open `https://your-site/?host` — a form appears at the bottom of the page that creates a personal link and a WhatsApp send button for each guest.
 

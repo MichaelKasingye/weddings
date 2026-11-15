@@ -146,6 +146,9 @@
   }
   .guest-bar.has-name .guest-label, .guest-bar.has-name .guest-dots { display: none; }
   .guest-bar.has-name .guest-name { display: block; }
+  .guest-count { display: none; flex: none; font-family: var(--font-times); font-weight: 600; font-size: calc(var(--u) * 20); color: #5A1020; white-space: nowrap; }
+  .guest-bar.has-name .guest-count { display: block; }
+  .note-line { color: #F5D6A8; font-style: italic; }
 
   /* Artwork layers */
   .twinkles i {

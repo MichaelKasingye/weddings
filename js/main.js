@@ -7,8 +7,8 @@
    ========================================================================= */
 window.WEDDING_CONFIG = {
   couple: {
-    groom: 'Aaron',
-    bride: 'Josephine',
+    groom: 'Aaron Mutumba',
+    bride: 'Josephine Nagadya',
     short: 'Aaron & Josephine',
   },
 
@@ -48,7 +48,8 @@ window.WEDDING_CONFIG = {
   },
 
   tagline: 'Let’s celebrate love, family and new beginnings together!',
-  rsvp: { title: 'RSVP', name: 'Nalubowa Doreen', phone: '0771 008212' },
+  note: 'Children are loved but not invited.',   // line under the tagline ('' hides it)
+  rsvp: { title: 'RSVP', name: 'Mr. Mwesigye Brian', phone: '0702 988061' },
   phoneCountryCode: '+256',
 
   // ---- Guest personalisation ----
@@ -56,6 +57,9 @@ window.WEDDING_CONFIG = {
   // Link generator for the hosts: index.html?host
   guest: {
     param: 'guest',
+    countParam: 'invites',      // ?guest=Name&invites=2 → "Invite for (2)"
+    defaultCount: 1,
+    countLabel: 'Invite for ({n})',
     defaultName: '',     // name shown when the link has no ?guest= (leave '' for a blank dotted line)
     label: 'Mr./Mrs./Ms./Dr.',
     message: 'You are cordially invited to celebrate with us!',
@@ -64,8 +68,8 @@ window.WEDDING_CONFIG = {
   // ---- Sharing ----
   share: {
     siteUrl: 'https://aaronandjosephine.onrender.com/', // the live address (used for shared and personal links)
-    message: "You're invited! 💍 Together with their families, Aaron & Josephine invite you to their wedding on Friday, 1st January 2027: church service at Lubaga Cathedral, 12:00 PM, and reception at Akaama Gardens from 4:00 PM. Open your invitation:",
-    personalMessage: 'Dear {name}, you are cordially invited to the wedding of Aaron & Josephine on Friday, 1st January 2027 (Lubaga Cathedral, 12:00 PM; reception at Akaama Gardens from 4:00 PM)! 💍 Open your personal invitation:',
+    message: "You're invited! 💍 Together with their families, Aaron Mutumba & Josephine Nagadya invite you to their wedding on Friday, 1st January 2027: church service at Lubaga Cathedral, 12:00 PM, and reception at Akaama Gardens from 4:00 PM. Open your invitation:",
+    personalMessage: 'Dear {name}, you are cordially invited to the wedding of Aaron Mutumba & Josephine Nagadya on Friday, 1st January 2027 (Lubaga Cathedral, 12:00 PM; reception at Akaama Gardens from 4:00 PM)! 💍 Open your personal invitation:',
   },
 
   // ---- Images (replace the files, or point these paths at new ones) ----
@@ -187,7 +191,8 @@ window.WEDDING_CONFIG = {
     '[data-bind="church.note"]': { y: 1055, fs: 15, lh: 1.2, sx: 1 },
     '[data-bind="reception.label"]': { x: 784, y: 966, fs: 22, sx: 1 },
     '#receptionText': { x: 784, y: 997, fs: 16.5, lh: 1.42, sx: 1 },
-    '[data-bind="tagline"]': { y: 1150, fs: 22, sx: 1 },
+    '[data-bind="tagline"]': { y: 1142, fs: 22, sx: 1 },
+    '[data-bind="note"]': { y: 1176, fs: 17, sx: 1 },
     '[data-bind="rsvp.name"]': { y: 1283, fs: 27, sx: 1 },
     '#rsvpPhone': { x: 474, y: 1320, fs: 29, sx: 1 },
   };
@@ -207,6 +212,7 @@ window.WEDDING_CONFIG = {
       if (val) { el.textContent = val; if (el.classList.contains('gold')) el.dataset.text = val; }
     });
     $('.honorific').hidden = !C.honorific;
+    $('.note-line').hidden = !C.note;
 
     setDetail($('#dateText'), C.date, C.pendingText.date);
     const ch = C.church || {};
@@ -285,6 +291,9 @@ window.WEDDING_CONFIG = {
     guestName = raw;
     $('#guestName').textContent = raw;
     $('#guest').classList.add('has-name');
+    // "Invite for (1)": number of people this invitation is for (link: ?guest=Name&invites=2; default 1)
+    const n = parseInt(params.get(C.guest.countParam || 'invites'), 10) || C.guest.defaultCount || 1;
+    $('#guestCount').textContent = (C.guest.countLabel || 'Invite for ({n})').replace('{n}', n);
     fitGuestName();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitGuestName);
     if ('ResizeObserver' in window) new ResizeObserver(fitGuestName).observe($('#poster'));
