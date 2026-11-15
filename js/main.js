@@ -76,7 +76,7 @@ window.WEDDING_CONFIG = {
   images: {
     background: 'assets/art/poster.webp', // poster artwork (wording removed)
     couple: 'assets/couple/couple-layer.webp',               // transparent image of the couple
-    // where the couple sits, in poster pixels (the poster is 1065 × 1598): left, top, width
+    // where the couple sits, in poster pixels (the poster is 1065 × 1420): left, top, width
     coupleBox: { x: 30, y: 0, w: 807 },
   },
 
@@ -84,15 +84,6 @@ window.WEDDING_CONFIG = {
   // 'classic' = Cardo (engraved serif)   'modern' = Poppins (clean sans-serif)
   // The couple's names and the "Wedding Invitation" title are not affected.
   fontStyle: 'modern',
-
-  // ---- The two scene pictures at the bottom of the poster ----
-  // Put any picture in assets/art/ and set its file name here. It is cropped to fill the slot.
-  //   position: which part of the picture to keep ('50% 50%' = centre, '50% 0%' = top, '0% 50%' = left …)
-  //   zoom: 1 = fit, 1.3 = 30% closer;  tone: optional CSS filter to match the poster, e.g. 'brightness(.9) saturate(1.2)'
-  scenes: {
-    left: { src: '', position: '42% 50%', zoom: 1, tone: '' },    // '' = no picture (calm emerald)
-    right: { src: '', position: '56% 50%', zoom: 1, tone: '' },
-  },
 
   // ---- Welcome banner ----
   welcome: {
@@ -226,16 +217,6 @@ window.WEDDING_CONFIG = {
 
     const bg = $('.poster-bg');
     if (C.images.background && !bg.src.endsWith(C.images.background)) bg.src = C.images.background;
-
-    [['left', '#sceneLeft'], ['right', '#sceneRight']].forEach(([k, sel]) => {
-      const sc = (C.scenes || {})[k], el = $(sel);
-      if (!sc || !sc.src) { el.closest('.scene').hidden = true; return; } // no picture: the design's own scene shows
-      if (!el.src.endsWith(sc.src)) el.src = sc.src;
-      el.style.objectPosition = sc.position || '50% 50%';
-      el.style.transformOrigin = sc.position || '50% 50%';
-      el.style.transform = sc.zoom && sc.zoom !== 1 ? 'scale(' + sc.zoom + ')' : '';
-      el.style.filter = sc.tone || '';
-    });
 
     const img = $('#coupleImg');
     if (C.images.couple && !img.src.endsWith(C.images.couple)) img.src = C.images.couple;

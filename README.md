@@ -2,7 +2,7 @@
 
 Static site (HTML + Tailwind + vanilla JS). No backend, no build needed to run.
 
-The page is the printed invitation brought to life: one poster on the invitation's own 1065 × 1598 grid. On phones and tablets held upright the whole invitation fits the screen edge to edge with no scrolling; on large screens it is shown framed at full size. Live fireworks burst in the sky behind the couple and confetti falls on top.
+The page is the printed invitation brought to life: one poster on the invitation's own 1065 × 1420 grid. On phones and tablets held upright the whole invitation fits the screen edge to edge with no scrolling; on large screens it is shown framed at full size. Live fireworks burst in the sky behind the couple and confetti falls on top.
 
 **How the poster is built:** the artwork (scenery, gold title, hearts, "Wedding" script, rings, the date panel frame and icons, the guest card) is cut straight from the original invitation, so it matches it pixel for pixel. Every piece of **wording** is live text on top of that artwork, so it can be changed in one place (below). Fonts and positions were measured against the original.
 
@@ -54,20 +54,6 @@ https://your-site/?guest=John%20Mukasa
 Writes the guest's name on the cream bar, with "Invite for (1)" beside it (add `&invites=2` for two people) and greets them by name in the welcome banner.
 
 **Link generator for the hosts:** open `https://your-site/?host` — a form appears at the bottom of the page that creates a personal link and a WhatsApp send button for each guest.
-
-## The two scene slots at the bottom (currently empty: calm emerald)
-
-1. Put your picture in `assets/art/` (JPG, PNG or WebP; around 800 px wide or more is plenty).
-2. In `js/main.js`, under `scenes`, set the file name:
-   ```js
-   scenes: {
-     left:  { src: 'assets/art/my-party.jpg',   position: '50% 50%', zoom: 1, tone: '' },
-     right: { src: 'assets/art/my-dancers.jpg', position: '50% 30%', zoom: 1.2, tone: 'brightness(.9) saturate(1.15)' },
-   },
-   ```
-   `position` picks which part of the picture shows, `zoom` moves closer, and `tone` (optional) adjusts brightness/colour to suit the poster. `src: ''` (the current setting) leaves the slot as plain emerald.
-
-The picture is cropped to fill the slot and its edges fade into the poster; the gold ribbons, RSVP box and plants stay in front. Evening or warm-lit photos blend best. The slot shapes come from `tools/poster-build/build-scenes.js`.
 
 ## Change photos
 

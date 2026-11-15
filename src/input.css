@@ -2,7 +2,7 @@
    Mark & Mary — Wedding Invitation
    Source stylesheet (Tailwind). Compiled to css/styles.css — see README.
 
-   Layout: one poster, built on the 1065 × 1598 grid of the printed invitation.
+   Layout: one poster, built on the 1065 × 1420 grid of the printed invitation.
    Each element sets --x / --y / --w (/ --h) in poster pixels; --u is one poster
    pixel, so all type scales with the poster on every screen.
    ========================================================================= */
@@ -69,7 +69,7 @@
 
   /* ---------- Poster ---------- */
   .poster {
-    position: relative; width: var(--poster-w); aspect-ratio: 1065 / 1598;
+    position: relative; width: var(--poster-w); aspect-ratio: 1065 / 1420;
     overflow: hidden; flex: none;
     container-type: inline-size;
     background: var(--navy-900);
@@ -82,16 +82,11 @@
   .pos {
     position: absolute;
     left: calc(var(--x) * 100% / 1065);
-    top: calc(var(--y) * 100% / 1598);
+    top: calc(var(--y) * 100% / 1420);
     width: calc(var(--w) * 100% / 1065);
   }
-  .twinkles, .guest-bar { height: calc(var(--h) * 100% / 1598); }
+  .twinkles, .guest-bar { height: calc(var(--h) * 100% / 1420); }
   .art, .couple { height: auto; max-width: none; pointer-events: none; }
-  /* Swappable scene pictures: soft-edged slots at the bottom of the poster */
-  .scene { height: calc(var(--h) * 100% / 1598); pointer-events: none; }
-  .scene-base, .scene-photo { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; }
-  .scene-photo { overflow: hidden; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
-  .scene-photo img { width: 100%; height: 100%; max-width: none; object-fit: cover; }
 
   /* ---------- Wording on the emerald design ---------- */
   .scripture, .fam-tab, .script-line {
@@ -161,7 +156,7 @@
      .tx  = a line (or block) of text on the poster grid.  .c = centred on --x, .l = starts at --x */
   .tx {
     position: absolute; margin: 0; white-space: pre; width: max-content;
-    top: calc(var(--y) * 100% / 1598);
+    top: calc(var(--y) * 100% / 1420);
     left: calc(var(--x) * 100% / 1065);
     font-size: calc(var(--u) * var(--fs));
     line-height: var(--lh, 1.15);
@@ -331,7 +326,7 @@
 
 /* Phones and tablets held upright: the whole invitation fills the screen, edge to edge, no scrolling */
 @media (orientation: portrait) {
-  .page { --poster-w: min(100%, 1065px, calc(100vh * 1065 / 1598)); --poster-w: min(100%, 1065px, calc(100svh * 1065 / 1598)); }
+  .page { --poster-w: min(100%, 1065px, calc(100vh * 1065 / 1420)); --poster-w: min(100%, 1065px, calc(100svh * 1065 / 1420)); }
 }
 
 /* Large screens: frame the poster */
