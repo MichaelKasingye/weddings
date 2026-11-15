@@ -55,7 +55,7 @@ Writes the guest's name on the cream bar, with "Invite for (1)" beside it (add `
 
 **Link generator for the hosts:** open `https://your-site/?host` — a form appears at the bottom of the page that creates a personal link and a WhatsApp send button for each guest.
 
-## Swap the two scene pictures (bottom left and bottom right)
+## The two scene slots at the bottom (currently empty: calm emerald)
 
 1. Put your picture in `assets/art/` (JPG, PNG or WebP; around 800 px wide or more is plenty).
 2. In `js/main.js`, under `scenes`, set the file name:
@@ -65,7 +65,7 @@ Writes the guest's name on the cream bar, with "Invite for (1)" beside it (add `
      right: { src: 'assets/art/my-dancers.jpg', position: '50% 30%', zoom: 1.2, tone: 'brightness(.9) saturate(1.15)' },
    },
    ```
-   `position` picks which part of the picture shows, `zoom` moves closer, and `tone` (optional) adjusts brightness/colour to suit the poster. `src: ''` shows the design's own picture.
+   `position` picks which part of the picture shows, `zoom` moves closer, and `tone` (optional) adjusts brightness/colour to suit the poster. `src: ''` (the current setting) leaves the slot as plain emerald.
 
 The picture is cropped to fill the slot and its edges fade into the poster; the gold ribbons, RSVP box and plants stay in front. Evening or warm-lit photos blend best. The slot shapes come from `tools/poster-build/build-scenes.js`.
 
