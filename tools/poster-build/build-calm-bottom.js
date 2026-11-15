@@ -42,14 +42,17 @@ const ss = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
       <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF1B8"/><stop offset=".35" stop-color="#F3C85A"/><stop offset=".7" stop-color="#C9962E"/><stop offset="1" stop-color="#F7DA7A"/></linearGradient>
       <filter id="glow" x="-10%" y="-20%" width="120%" height="140%"><feGaussianBlur stdDeviation="5"/></filter>
     </defs>
-    <path id="fr" d="M444 1224 H630 Q640 1224 640 1232 V1240 H690 Q700 1240 702 1250 H720 V1360 H702 Q700 1366 690 1366 H640 Q640 1374 630 1382 H444 Q434 1374 434 1366 H384 Q374 1366 372 1360 H353 V1250 H372 Q374 1240 384 1240 H434 Q434 1232 444 1224 Z" fill="none"/>
-    <use href="#fr" stroke="#F6D27A" stroke-opacity=".55" stroke-width="12" filter="url(#glow)"/>
-    <use href="#fr" stroke="#5A3A08" stroke-width="6"/>
-    <use href="#fr" stroke="url(#g)" stroke-width="3.6"/>
-    <use href="#fr" stroke="#FFF6D0" stroke-opacity=".6" stroke-width="1"/>
+    <!-- the badge: a filled emerald panel with notched corners (the design's "Color Theme" style), thick gold border -->
+    <path id="fr" d="M372 1224 H702 Q710 1224 712 1232 L722 1242 Q730 1246 730 1256 V1350 Q730 1360 722 1364 L712 1374 Q710 1382 702 1382 H372 Q364 1382 362 1374 L352 1364 Q344 1360 344 1350 V1256 Q344 1246 352 1242 L362 1232 Q364 1224 372 1224 Z" fill="none"/>
+    <use href="#fr" stroke="#F6D27A" stroke-opacity=".55" stroke-width="18" filter="url(#glow)"/>
+    <use href="#fr" fill="#0B4A2A" stroke="none"/>
+    <path d="M352 1240 H722 V1366 H352 Z" fill="#0C5431" opacity=".85"/>
+    <use href="#fr" stroke="#5A3A08" stroke-width="7"/>
+    <use href="#fr" stroke="url(#g)" stroke-width="4.5"/>
+    <use href="#fr" stroke="#FFF6D0" stroke-opacity=".55" stroke-width="1"/>
+    <path d="M372 1231 H702 M372 1375 H702" stroke="#F3C85A" stroke-opacity=".45" stroke-width="1.2"/>
     <g transform="translate(424 1318) scale(1.55)" fill="none" stroke="#5A3A08" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></g>
     <g transform="translate(424 1318) scale(1.55)" fill="url(#g)" stroke="#F7DA7A" stroke-width=".8" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></g>
-    <g fill="#F3C85A"><circle cx="537" cy="1224" r="3.2"/><circle cx="537" cy="1382" r="3.2"/><circle cx="353" cy="1305" r="3"/><circle cx="720" cy="1305" r="3"/></g>
   </svg>`;
   await sharp(b, { raw: { width: W, height: H, channels: 3 } }).composite([{ input: Buffer.from(F) }]).webp({ quality: 90 }).toFile(OUT + '/poster.webp');
   await sharp(OUT + '/poster.webp').extract({ left: 0, top: 1120, width: W, height: 478 }).png().toFile(OUT + '/bottom.png');
