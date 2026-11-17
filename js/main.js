@@ -169,9 +169,9 @@ window.WEDDING_CONFIG = {
   // Values are poster units: x, y, fs (font size), lh (line height), sx (horizontal scale).
   const MODERN_LAYOUT = {
     '[data-bind="intro"]': { fs: 24, lh: 1.22, sx: 1 },
-    '#tabGroom': { fs: 20, sx: 1 }, '#tabBride': { fs: 20, sx: 1 },
-    '[data-bind="families.groom"]': { fs: 18, lh: 1.15 },
-    '[data-bind="families.bride"]': { fs: 18.5, lh: 1.17 },
+    '#tabGroom': { fs: 21, sx: 1 }, '#tabBride': { fs: 21, sx: 1 },
+    '[data-bind="families.groom"]': { fs: 21.5, lh: 1.12, y: 504 },
+    '[data-bind="families.bride"]': { fs: 21.5, lh: 1.15, y: 517 },
     '[data-bind="inviteLine"]': { fs: 27 },
     '[data-bind="matrimonyLine"]': { fs: 27 },
     '#labDate': { fs: 24, sx: 1 },
