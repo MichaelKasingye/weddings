@@ -202,6 +202,12 @@ to be seated by 11:30 AM)</p>
     <a class="btn btn-ghost" id="mapOpen" href="#" target="_blank" rel="noopener"><svg class="btn-ico" aria-hidden="true"><use href="#i-external-link"/></svg> Open in Google Maps</a>
   </div>
 </dialog>
+<!-- Background music (WEDDING_CONFIG.music) -->
+<audio id="bgMusic" preload="auto" playsinline></audio>
+<button class="music-btn" id="musicToggle" type="button" aria-pressed="false" aria-label="Play music" hidden>
+  <svg class="music-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>
+  <svg class="music-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /><path d="M3 3l18 18" /></svg>
+</button>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script src="js/vendor/confetti.browser.min.js"></script>

@@ -85,6 +85,15 @@ window.WEDDING_CONFIG = {
   // The couple's names and the "Wedding Invitation" title are not affected.
   fontStyle: 'modern',
 
+  // ---- Background music ----
+  // Plays when the page opens. Browsers block sound until the visitor interacts, so if that happens
+  // it starts on the first tap / click / scroll / key press. The small button (bottom right) pauses it.
+  music: {
+    src: 'assets/art/IMG_1161.mp3',   // '' = no music
+    volume: 0.8,                       // 0 – 1
+    loop: true,
+  },
+
   // ---- Welcome banner ----
   welcome: {
     title: 'WELCOME TO OUR CELEBRATION!',
@@ -261,6 +270,29 @@ window.WEDDING_CONFIG = {
     dlg.addEventListener('close', () => { document.documentElement.classList.remove('modal-open'); if (opener) opener.focus({ preventScroll: true }); });
   }
 
+  /* ---------- background music ---------- */
+  function startMusic() {
+    const M = C.music || {}, audio = $('#bgMusic'), btn = $('#musicToggle');
+    if (!M.src || !audio) { if (btn) btn.hidden = true; return; }
+    audio.src = M.src; audio.loop = M.loop !== false; audio.volume = M.volume != null ? M.volume : 0.8;
+    btn.hidden = false;
+    let wanted = true;                       // the visitor hasn't paused it
+    const show = () => { const on = !audio.paused; btn.setAttribute('aria-pressed', String(on)); btn.setAttribute('aria-label', on ? 'Pause music' : 'Play music'); btn.classList.toggle('is-on', on); };
+    const tryPlay = () => audio.play().then(show).catch(show);
+    const events = ['pointerdown', 'touchstart', 'keydown', 'scroll', 'wheel'];
+    const onFirst = (e) => {
+      if (e && e.target && e.target.closest && e.target.closest('#musicToggle')) return; // the button handles itself
+      events.forEach((ev) => window.removeEventListener(ev, onFirst, true));
+      if (wanted && audio.paused) tryPlay();
+    };
+    audio.addEventListener('play', show); audio.addEventListener('pause', show);
+    btn.addEventListener('click', () => { if (audio.paused) { wanted = true; tryPlay(); } else { wanted = false; audio.pause(); } });
+    // try right away; if the browser blocks it, start on the first interaction
+    audio.play().then(show).catch(() => { show(); events.forEach((ev) => window.addEventListener(ev, onFirst, { capture: true, passive: true })); });
+    // pause when the tab is hidden, resume when it comes back (if the visitor wanted it)
+    document.addEventListener('visibilitychange', () => { if (document.hidden) audio.pause(); else if (wanted && audio.played.length) tryPlay(); });
+  }
+
   /* ---------- guest personalisation ---------- */
   let guestName = '';
   function applyGuest() {
@@ -395,6 +427,7 @@ window.WEDDING_CONFIG = {
       if ('ResizeObserver' in window) new ResizeObserver(() => fitText()).observe($('#poster'));
       wireSharing();
       if (!reduceMotion.matches) document.documentElement.classList.add('anim-in');
+      startMusic();
       const state = startEffects();
       // Welcome: banner always; confetti burst only when confetti is on
       showWelcome();
