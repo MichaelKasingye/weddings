@@ -89,7 +89,7 @@ window.WEDDING_CONFIG = {
   // Plays when the page opens. Browsers block sound until the visitor interacts, so if that happens
   // it starts on the first tap / click / scroll / key press. The small button (bottom right) pauses it.
   music: {
-    src: 'assets/art/IMG_1161.mp3',   // '' = no music
+    src: 'assets/art/wedding-song.mp3',   // '' = no music
     volume: 0.8,                       // 0 – 1
     loop: true,
   },
