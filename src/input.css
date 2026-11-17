@@ -316,7 +316,7 @@
   .music-btn[hidden] { display: none; }
   .music-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .music-btn .music-on { display: none; } .music-btn.is-on .music-on { display: block; } .music-btn.is-on .music-off { display: none; }
-  .music-btn.is-on { animation: musicPulse 2.4s ease-in-out infinite; }
+  .music-btn.is-playing { animation: musicPulse 2.4s ease-in-out infinite; }
   .music-btn:hover { background: rgba(31, 63, 138, .9); }
   .music-hint {
     position: absolute; right: calc(100% + 10px); top: 50%; transform: translateY(-50%); white-space: nowrap; pointer-events: none;

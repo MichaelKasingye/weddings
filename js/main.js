@@ -276,8 +276,19 @@ window.WEDDING_CONFIG = {
     if (!M.src || !audio) { if (btn) btn.hidden = true; return; }
     audio.src = M.src; audio.loop = M.loop !== false; audio.volume = M.volume != null ? M.volume : 0.8;
     btn.hidden = false;
-    let wanted = true;                       // the visitor hasn't paused it
-    const show = () => { const on = !audio.paused; btn.setAttribute('aria-pressed', String(on)); btn.setAttribute('aria-label', on ? 'Pause music' : 'Play music'); btn.classList.toggle('is-on', on); if (on) btn.classList.remove('needs-tap'); };
+    // Music is ON by default; it is off only if this visitor chose to mute it (remembered in this browser).
+    const KEY = 'mm-wedding:music';
+    const saved = (() => { try { return localStorage.getItem(KEY); } catch (e) { return null; } })();
+    const remember = (v) => { try { localStorage.setItem(KEY, v); } catch (e) { /* storage unavailable */ } };
+    let wanted = saved !== 'off';
+    // the button shows the visitor's choice (on = note, muted = crossed note); it pulses while sound is playing
+    const show = () => {
+      const playing = !audio.paused;
+      btn.classList.toggle('is-on', wanted); btn.classList.toggle('is-playing', playing);
+      btn.setAttribute('aria-pressed', String(wanted)); btn.setAttribute('aria-label', wanted ? 'Mute music' : 'Play music');
+      // browser blocked the sound and the visitor hasn't tapped yet → show the hint
+      btn.classList.toggle('needs-tap', wanted && !playing && !audio.played.length);
+    };
     const tryPlay = () => audio.play().then(show).catch(show);
     const events = ['pointerdown', 'touchstart', 'keydown', 'scroll', 'wheel'];
     const onFirst = (e) => {
@@ -286,11 +297,17 @@ window.WEDDING_CONFIG = {
       if (wanted && audio.paused) tryPlay();
     };
     audio.addEventListener('play', show); audio.addEventListener('pause', show);
-    btn.addEventListener('click', () => { if (audio.paused) { wanted = true; tryPlay(); } else { wanted = false; audio.pause(); } });
-    // try right away; if the browser blocks it, start on the first interaction
-    // (blocked → the button shows "Tap to play music" until the music starts)
-    audio.play().then(show).catch(() => { show(); btn.classList.add('needs-tap'); events.forEach((ev) => window.addEventListener(ev, onFirst, { capture: true, passive: true })); });
-    // pause when the tab is hidden, resume when it comes back (if the visitor wanted it)
+    btn.addEventListener('click', () => {
+      if (wanted && !audio.paused) { wanted = false; remember('off'); audio.pause(); }       // mute
+      else if (wanted) { tryPlay(); }                                                        // on, but blocked: this tap starts it
+      else { wanted = true; remember('on'); tryPlay(); }                                     // un-mute
+      show();
+    });
+    show();
+    if (!wanted) return;
+    // try right away; browsers that block sound until a tap get it on the visitor's first interaction
+    audio.play().then(show).catch(() => { show(); events.forEach((ev) => window.addEventListener(ev, onFirst, { capture: true, passive: true })); });
+    // pause while the tab is hidden, resume when it comes back (unless muted)
     document.addEventListener('visibilitychange', () => { if (document.hidden) audio.pause(); else if (wanted && audio.played.length) tryPlay(); });
   }
 
