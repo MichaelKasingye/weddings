@@ -2,7 +2,7 @@
    Mark & Mary — Wedding Invitation
    Source stylesheet (Tailwind). Compiled to css/styles.css — see README.
 
-   Layout: one poster, built on the 1065 × 1420 grid of the printed invitation.
+   Layout: one poster, built on the 1065 × 1598 grid of the printed invitation.
    Each element sets --x / --y / --w (/ --h) in poster pixels; --u is one poster
    pixel, so all type scales with the poster on every screen.
    ========================================================================= */
@@ -69,7 +69,7 @@
 
   /* ---------- Poster ---------- */
   .poster {
-    position: relative; width: var(--poster-w); aspect-ratio: 1065 / 1420;
+    position: relative; width: var(--poster-w); aspect-ratio: 1065 / 1598;
     overflow: hidden; flex: none;
     container-type: inline-size;
     background: var(--navy-900);
@@ -82,10 +82,10 @@
   .pos {
     position: absolute;
     left: calc(var(--x) * 100% / 1065);
-    top: calc(var(--y) * 100% / 1420);
+    top: calc(var(--y) * 100% / 1598);
     width: calc(var(--w) * 100% / 1065);
   }
-  .twinkles, .guest-bar { height: calc(var(--h) * 100% / 1420); }
+  .twinkles, .guest-bar, .rsvp-bar { height: calc(var(--h) * 100% / 1598); }
   .art, .couple { height: auto; max-width: none; pointer-events: none; }
 
   /* ---------- Wording on the emerald design ---------- */
@@ -112,6 +112,12 @@
   .det-venue { font-style: italic; }
   .det-link:hover, .rsvp-phone:hover { color: var(--gold-light); }
   .rsvp-phone { text-decoration: none; }
+  /* RSVP bar: one row inside the gold-framed bar — RSVP | ☎ name | number */
+  .rsvp-bar { display: flex; align-items: center; justify-content: space-evenly; margin: 0; }
+  .rsvp-bar .rsvp-title { margin: 0; font-size: calc(var(--u) * 40); line-height: 1; }
+  .rsvp-bar .rsvp-name, .rsvp-bar .rsvp-phone { margin: 0; display: inline-flex; align-items: center; gap: calc(var(--u) * 12); font-size: calc(var(--u) * 29); line-height: 1; white-space: nowrap; }
+  .rsvp-ico { width: calc(var(--u) * 32); height: calc(var(--u) * 32); flex: none; color: #F6C64E; filter: drop-shadow(0 0 calc(var(--u) * 3) rgba(255, 210, 120, .5)); }
+  .rsvp-div { width: calc(var(--u) * 2); height: 70%; background: linear-gradient(180deg, rgba(217, 174, 79, 0), #E8BC55 25%, #FFE7A3 50%, #E8BC55 75%, rgba(217, 174, 79, 0)); }
   .ribbon-text {
     font-family: var(--font-times); font-weight: 700; color: #3A2507; -webkit-text-stroke: calc(var(--u) * .3) #3A2507;
     transform: translateX(-50%) rotate(3.6deg); transform-origin: 50% 50%;
@@ -120,18 +126,18 @@
   /* "and" medallion between the two families, sitting on the gold centre line */
   .fam-and {
     aspect-ratio: 1; margin: 0; display: grid; place-items: center; border-radius: 50%; pointer-events: none;
-    background: radial-gradient(circle at 50% 38%, #11774B 0%, #08532F 55%, #043A20 100%);
-    box-shadow: 0 0 0 calc(var(--u) * 2.4) #F2C65A, 0 0 0 calc(var(--u) * 4.4) #063A21, 0 0 0 calc(var(--u) * 5.6) rgba(243, 210, 120, .85),
+    background: radial-gradient(circle at 50% 38%, #1F3F8A 0%, #142C66 55%, #0B1B45 100%);
+    box-shadow: 0 0 0 calc(var(--u) * 2.4) #F2C65A, 0 0 0 calc(var(--u) * 4.4) #0B1B45, 0 0 0 calc(var(--u) * 5.6) rgba(243, 210, 120, .85),
                 0 0 calc(var(--u) * 16) rgba(255, 210, 110, .55), 0 calc(var(--u) * 4) calc(var(--u) * 10) rgba(0, 0, 0, .55);
   }
   .fam-and span {
-    font-family: var(--font-names); font-size: calc(var(--u) * 33); line-height: 1; margin-top: calc(var(--u) * -4);
+    font-family: var(--font-names); font-size: calc(var(--u) * 28); line-height: 1; margin-top: calc(var(--u) * -4);
     color: #F8D46E; -webkit-text-stroke: calc(var(--u) * .6) #F8D46E;
     text-shadow: 0 calc(var(--u) * 1.5) 0 #4A2A04, 0 0 calc(var(--u) * 8) rgba(255, 214, 120, .55);
   }
 
   /* The guest bar: the cream bar is artwork; this holds the placeholder or the guest's name */
-  .guest-bar { display: flex; align-items: center; gap: calc(var(--u) * 14); padding: 0 calc(var(--u) * 64) 0 calc(var(--u) * 72); }
+  .guest-bar { display: flex; align-items: center; gap: calc(var(--u) * 14); padding: 0 calc(var(--u) * 62) 0 calc(var(--u) * 58); }
   .guest-label { flex: none; font-family: var(--font-times); font-weight: 700; font-size: calc(var(--u) * 26); letter-spacing: .01em; color: #1E1505; }
   .guest-dots { flex: 1; align-self: center; margin-top: calc(var(--u) * 16); height: calc(var(--u) * 4);
     background: radial-gradient(circle, rgba(30, 21, 5, .9) 0 calc(var(--u) * 1), transparent calc(var(--u) * 1.45)) 0 50% / calc(var(--u) * 4.6) 100% repeat-x; }
@@ -156,7 +162,7 @@
      .tx  = a line (or block) of text on the poster grid.  .c = centred on --x, .l = starts at --x */
   .tx {
     position: absolute; margin: 0; white-space: pre; width: max-content;
-    top: calc(var(--y) * 100% / 1420);
+    top: calc(var(--y) * 100% / 1598);
     left: calc(var(--x) * 100% / 1065);
     font-size: calc(var(--u) * var(--fs));
     line-height: var(--lh, 1.15);
@@ -326,7 +332,7 @@
 
 /* Phones and tablets held upright: the whole invitation fills the screen, edge to edge, no scrolling */
 @media (orientation: portrait) {
-  .page { --poster-w: min(100%, 1065px, calc(100vh * 1065 / 1420)); --poster-w: min(100%, 1065px, calc(100svh * 1065 / 1420)); }
+  .page { --poster-w: min(100%, 1065px, calc(100vh * 1065 / 1598)); --poster-w: min(100%, 1065px, calc(100svh * 1065 / 1598)); }
 }
 
 /* Large screens: frame the poster */

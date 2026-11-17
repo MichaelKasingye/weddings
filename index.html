@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Together with their families, Aaron Mutumba and Josephine Nagadya invite you to their wedding on Friday, 1st January 2027: church service at Lubaga Cathedral, 12:00 PM, and reception at Akaama Gardens from 4:00 PM.">
 <link rel="canonical" href="https://aaronandjosephine.onrender.com/">
-<meta name="theme-color" content="#07152F">
+<meta name="theme-color" content="#0B1B45">
 <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="assets/icons/favicon-32.png" type="image/png" sizes="32x32">
@@ -90,76 +90,79 @@
   <div class="screen">
   <article class="poster" id="poster" aria-label="Wedding invitation">
     <!--
-      Artwork layers (all cut from the original invitation, so they match it pixel for pixel):
-        art/poster.webp        the invitation artwork with the wording removed
+      Layers (blue design; rebuilt with tools/poster-build/build-blue.js):
+        art/poster.webp        lake background (assets/art/lake-background.png), toned, with the gold frames and bars
+        art/title.webp         the gold title + rings, in front of the fireworks
         art/front.webp         the families panels, in front of the couple
-        art/title.webp         the gold title, in front of the fireworks
-        couple-layer.webp      the couple (swap this file for a new photo; position it in WEDDING_CONFIG.images.coupleBox)
+        art/bouquet.webp       the bouquet (assets/art/bouquet.png)
+        couple-layer.webp      the couple (assets/couple/couple-walking.png)
       All WORDING is live text below, filled in from WEDDING_CONFIG in js/main.js.
     -->
-    <img class="poster-bg" src="assets/art/poster.webp" alt="" width="1065" height="1420" fetchpriority="high" decoding="async">
+    <img class="poster-bg" src="assets/art/poster.webp" alt="" width="1065" height="1598" fetchpriority="high" decoding="async">
     <video class="poster-video" id="skyVideo" muted loop playsinline preload="none" hidden></video>
     <canvas class="poster-fireworks" id="fireworksCanvas" aria-hidden="true"></canvas>
 
-    <!-- Couple (the original photo), then the families panels and the title in front of it -->
-    <img id="coupleImg" class="pos couple" style="--x:30;--y:0;--w:807" src="assets/couple/couple-layer.webp" alt="The couple smiling side by side: the groom in a black tuxedo and bow tie, the bride in a black dress with leopard-print earrings" width="807" height="542" decoding="async">
-    <img class="pos art" style="--x:0;--y:395;--w:150" src="assets/art/glasses.webp" alt="" width="150" height="230" decoding="async">
-    <img class="pos art" style="--x:120;--y:392;--w:820" src="assets/art/front.webp" alt="" width="820" height="170" decoding="async">
-    <img class="pos art" style="--x:722;--y:30;--w:338" src="assets/art/title.webp" alt="" width="338" height="232" decoding="async">
+    <img id="coupleImg" class="pos couple" style="--x:84;--y:0;--w:683" src="assets/couple/couple-layer.webp" alt="The couple walking hand in hand: the groom in a black tuxedo and bow tie, the bride in a white off-shoulder outfit" width="683" height="500" decoding="async">
+    <img class="pos art" style="--x:120;--y:455;--w:825" src="assets/art/front.webp" alt="" width="825" height="170" decoding="async">
+    <img class="pos art" style="--x:728;--y:40;--w:332" src="assets/art/title.webp" alt="" width="332" height="272" decoding="async">
+    <img class="pos art" style="--x:-125;--y:588;--w:311" src="assets/art/bouquet.webp" alt="" width="311" height="396" decoding="async">
 
     <h1 class="sr-only">Wedding Invitation</h1>
 
     <!--
-      WORDING. Each line is placed on the invitation's 1065 × 1420 grid:
+      WORDING. Each line is placed on the invitation's 1065 × 1598 grid:
         --x  left edge (or centre, for .c)   --y  top   --fs  font size   --sx  horizontal squeeze   --lh  line height
-      Panels, frames, icons and ribbons are part of the artwork; only the words are live text.
+      (with fontStyle 'modern' the sizes come from MODERN_LAYOUT in js/main.js)
     -->
-    <p class="tx c scripture" style="--x:900;--y:266;--fs:29.09;--sx:0.903;--lh:1.134" data-bind="intro" data-maxw="250">“Therefore what God
+    <p class="tx c scripture" style="--x:893;--y:312;--fs:26;--lh:1.13" data-bind="intro" data-maxw="250">“Therefore what God
 has joined together,
 let no one separate.”
 — Mark 10:9</p>
-    <p class="tx c honorific" style="--x:905;--y:410;--fs:12.5" hidden><span data-bind="honorific"></span></p>
+    <p class="tx c honorific" style="--x:893;--y:440;--fs:12.5" hidden><span data-bind="honorific"></span></p>
 
     <section aria-label="The families of the couple">
-      <p class="tx c fam-tab" id="tabGroom" style="--x:324;--y:401;--fs:24.18;--sx:0.954" data-bind="families.label">The Family of</p>
-      <p class="tx c fam-tab" id="tabBride" style="--x:727;--y:402;--fs:24.18;--sx:0.941" data-bind="families.label">The Family of</p>
-      <p class="pos fam-and" style="--x:503;--y:446;--w:62" aria-hidden="true"><span data-bind="families.joiner">and</span></p>
-      <p class="tx c fam-text" style="--x:326;--y:436;--fs:22.5;--sx:1;--lh:1.08" data-bind="families.groom" data-maxw="330">Mr. Ssimbwa Moses</p>
-      <p class="tx c fam-text" style="--x:727;--y:450;--fs:22.5;--sx:1;--lh:1.08" data-bind="families.bride" data-maxw="330">Mr. Mawande Ronald</p>
+      <p class="tx c fam-tab" id="tabGroom" style="--x:330;--y:470;--fs:22" data-bind="families.label">The Family of</p>
+      <p class="tx c fam-tab" id="tabBride" style="--x:736;--y:470;--fs:22" data-bind="families.label">The Family of</p>
+      <p class="pos fam-and" style="--x:507;--y:528;--w:52" aria-hidden="true"><span data-bind="families.joiner">and</span></p>
+      <p class="tx c fam-text" style="--x:322;--y:508;--fs:21;--lh:1.08" data-bind="families.groom" data-maxw="330">Mr. Ssimbwa Moses</p>
+      <p class="tx c fam-text" style="--x:742;--y:520;--fs:21;--lh:1.08" data-bind="families.bride" data-maxw="330">Mr. Mawande Ronald</p>
     </section>
 
-    <p class="tx c script-line" style="--x:532;--y:540;--fs:33;--sx:1" data-bind="inviteLine" data-maxw="560">cordially invite the company of</p>
+    <p class="tx c script-line" style="--x:533;--y:634;--fs:30" data-bind="inviteLine" data-maxw="560">cordially invite the company of</p>
     <!-- the guest: a personal link (?guest=Name) writes the name on this bar -->
-    <div class="pos guest-bar" style="--x:150;--y:592;--w:765;--h:56" id="guest">
+    <div class="pos guest-bar" style="--x:178;--y:670;--w:724;--h:64" id="guest">
       <span class="guest-label" data-bind="guest.label">Mr./Mrs./Ms./Dr.</span><span class="guest-dots" aria-hidden="true"></span>
       <span class="guest-name" id="guestName"></span><span class="guest-count" id="guestCount"></span>
     </div>
-    <p class="tx c script-line" style="--x:532;--y:658;--fs:33;--sx:1" data-bind="matrimonyLine" data-maxw="700">to the marriage of their beloved children</p>
+    <p class="tx c script-line" style="--x:533;--y:746;--fs:30" data-bind="matrimonyLine" data-maxw="700">to the marriage of their beloved children</p>
 
-    <p class="tx c name gold" style="--x:548;--y:694;--fs:80;--sx:1" data-bind="couple.groom" data-text="Aaron Mutumba" data-maxw="760">Aaron Mutumba</p>
-    <p class="tx c name gold" style="--x:548;--y:836;--fs:80;--sx:1" data-bind="couple.bride" data-text="Josephine Nagadya" data-maxw="760">Josephine Nagadya</p>
+    <p class="tx c name gold" style="--x:540;--y:776;--fs:84;--sx:1" data-bind="couple.groom" data-text="Aaron Mutumba" data-maxw="760">Aaron Mutumba</p>
+    <p class="tx c name gold" style="--x:540;--y:904;--fs:84;--sx:1" data-bind="couple.bride" data-text="Josephine Nagadya" data-maxw="760">Josephine Nagadya</p>
 
-    <!-- Date | Church service | Reception (the band, icons and dividers are artwork) -->
+    <!-- Date | Church service | Reception (the icons and dividers are artwork) -->
     <section aria-label="Date, church service and reception">
-      <p class="tx l det-label" id="labDate" style="--x:167;--y:962;--fs:29.56;--sx:0.81">Date:</p>
-      <p class="tx l det-value" style="--x:167;--y:995;--fs:25.31;--sx:0.976;--lh:1.225" id="dateText" data-maxw="185" aria-label="Date">To be confirmed</p>
+      <p class="tx l det-label" id="labDate" style="--x:160;--y:1068;--fs:26">Date:</p>
+      <p class="tx l det-value" style="--x:160;--y:1102;--fs:23;--lh:1.25" id="dateText" data-maxw="185" aria-label="Date">To be confirmed</p>
 
-      <p class="tx l det-label" style="--x:465;--y:964;--fs:26.39;--sx:0.848" data-bind="church.label">Church Service:</p>
-      <p class="tx l det-value" id="churchName" style="--x:465;--y:1005.5;--fs:25;--sx:0.933" data-maxw="195"><a class="det-link" id="churchLink" href="#" data-map="church" aria-haspopup="dialog" data-bind="church.name">Lubaga Cathedral</a></p>
-      <p class="tx l det-value" style="--x:466;--y:1036;--fs:26.47;--sx:0.843" id="churchTime" data-maxw="195">Time: 12:00 PM</p>
-      <p class="tx c det-note" style="--x:531;--y:1066;--fs:21.85;--sx:0.884;--lh:0.961" data-bind="church.note" data-maxw="215">(Guests are requested
+      <p class="tx l det-label" style="--x:466;--y:1068;--fs:26" data-bind="church.label">Church Service:</p>
+      <p class="tx l det-value" id="churchName" style="--x:466;--y:1104;--fs:23" data-maxw="200"><a class="det-link" id="churchLink" href="#" data-map="church" aria-haspopup="dialog" data-bind="church.name">Lubaga Cathedral</a></p>
+      <p class="tx l det-value" style="--x:466;--y:1136;--fs:23" id="churchTime" data-maxw="200">Time: 12:00 PM</p>
+      <p class="tx c det-note" style="--x:525;--y:1178;--fs:18;--lh:1.12" data-bind="church.note" data-maxw="230">(Guests are requested
 to be seated by 11:30 AM)</p>
 
-      <p class="tx l det-label" style="--x:790;--y:968;--fs:27.17;--sx:0.855" data-bind="reception.label">Reception:</p>
-      <p class="tx l det-value" style="--x:789;--y:997;--fs:24.21;--sx:0.916;--lh:1.218" id="receptionText" data-maxw="242">Thereafter, guests will proceed to Akaama Gardens starting at 4:00 PM.</p>
+      <p class="tx l det-label" style="--x:800;--y:1068;--fs:26" data-bind="reception.label">Reception:</p>
+      <p class="tx l det-value" style="--x:800;--y:1102;--fs:21;--lh:1.3" id="receptionText" data-maxw="235">Thereafter, guests will proceed to Akaama Gardens starting at 4:00 PM.</p>
     </section>
-    <p class="tx c script-line tagline" style="--x:531;--y:1144;--fs:29.92;--sx:0.87" data-bind="tagline" data-maxw="560">Let’s celebrate love, family and new beginnings together!</p>
-    <p class="tx c script-line note-line" style="--x:531;--y:1176;--fs:20;--sx:1" data-bind="note" data-maxw="560">Children are loved but not invited.</p>
+    <p class="tx c script-line tagline" style="--x:533;--y:1262;--fs:28" data-bind="tagline" data-maxw="640">Let’s celebrate love, family and new beginnings together!</p>
+    <p class="tx c script-line note-line" style="--x:533;--y:1306;--fs:21" data-bind="note" data-maxw="560">Children are loved but not invited.</p>
 
-    <section aria-label="RSVP">
-      <p class="tx c rsvp-title" style="--x:541;--y:1223;--fs:54.93;--sx:0.933" data-bind="rsvp.title">RSVP</p>
-      <p class="tx c rsvp-name" style="--x:537.5;--y:1277;--fs:34.19;--sx:0.961" data-bind="rsvp.name" data-maxw="300">Mr. Mwesigye Brian</p>
-      <a class="tx l rsvp-phone" style="--x:482;--y:1317;--fs:39;--sx:0.864" id="rsvpPhone" href="tel:+256702988061"><span data-bind="rsvp.phone">0702 988061</span></a>
+    <!-- RSVP: one line in the gold-framed bar (the bar is artwork) -->
+    <section class="pos rsvp-bar" style="--x:48;--y:1392;--w:970;--h:60" aria-label="RSVP">
+      <p class="rsvp-title" data-bind="rsvp.title">RSVP</p>
+      <span class="rsvp-div" aria-hidden="true"></span>
+      <p class="rsvp-name"><svg class="rsvp-ico" aria-hidden="true"><use href="#i-phone"/></svg><span data-bind="rsvp.name">Mr. Mwesigye Brian</span></p>
+      <span class="rsvp-div" aria-hidden="true"></span>
+      <a class="rsvp-phone" id="rsvpPhone" href="tel:+256702988061"><span data-bind="rsvp.phone">0702 988061</span></a>
     </section>
   </article>
   </div>

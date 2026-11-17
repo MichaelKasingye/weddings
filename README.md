@@ -2,7 +2,7 @@
 
 Static site (HTML + Tailwind + vanilla JS). No backend, no build needed to run.
 
-The page is the printed invitation brought to life: one poster on the invitation's own 1065 × 1420 grid. On phones and tablets held upright the whole invitation fits the screen edge to edge with no scrolling; on large screens it is shown framed at full size. Live fireworks burst in the sky behind the couple and confetti falls on top.
+The page is the printed invitation brought to life: one poster on the invitation's own 1065 × 1598 grid. On phones and tablets held upright the whole invitation fits the screen edge to edge with no scrolling; on large screens it is shown framed at full size. Live fireworks burst in the sky behind the couple and confetti falls on top.
 
 **How the poster is built:** the artwork (scenery, gold title, hearts, "Wedding" script, rings, the date panel frame and icons, the guest card) is cut straight from the original invitation, so it matches it pixel for pixel. Every piece of **wording** is live text on top of that artwork, so it can be changed in one place (below). Fonts and positions were measured against the original.
 

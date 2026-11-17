@@ -76,8 +76,8 @@ window.WEDDING_CONFIG = {
   images: {
     background: 'assets/art/poster.webp', // poster artwork (wording removed)
     couple: 'assets/couple/couple-layer.webp',               // transparent image of the couple
-    // where the couple sits, in poster pixels (the poster is 1065 × 1420): left, top, width
-    coupleBox: { x: 30, y: 0, w: 807 },
+    // where the couple sits, in poster pixels (the poster is 1065 × 1598): left, top, width
+    coupleBox: { x: 84, y: 0, w: 683 },
   },
 
   // ---- Wording font ----
@@ -168,24 +168,22 @@ window.WEDDING_CONFIG = {
   // Line sizes for the modern (Poppins) style; Poppins is wider than Cardo, so each line is refitted.
   // Values are poster units: x, y, fs (font size), lh (line height), sx (horizontal scale).
   const MODERN_LAYOUT = {
-    '[data-bind="intro"]': { y: 270, fs: 23, lh: 1.27, sx: 1 },
-    '#tabGroom': { fs: 20, sx: 1, y: 404 }, '#tabBride': { fs: 20, sx: 1, y: 405 },
-    '[data-bind="families.groom"]': { y: 441, fs: 18.5, lh: 1.17 },
-    '[data-bind="families.bride"]': { y: 452, fs: 18.5, lh: 1.17 },
-    '[data-bind="inviteLine"]': { y: 548, fs: 26 },
-    '[data-bind="matrimonyLine"]': { y: 661, fs: 26 },
-    '#labDate': { y: 963, fs: 22, sx: 1 },
-    '#dateText': { y: 994, fs: 20.5, lh: 1.3, sx: 1 },
-    '[data-bind="church.label"]': { y: 963, fs: 22, sx: 1 },
-    '#churchName': { y: 996, fs: 19.5, sx: 1 },
-    '#churchTime': { y: 1024, fs: 19.5, sx: 1 },
-    '[data-bind="church.note"]': { y: 1055, fs: 15, lh: 1.2, sx: 1 },
-    '[data-bind="reception.label"]': { x: 784, y: 966, fs: 22, sx: 1 },
-    '#receptionText': { x: 784, y: 997, fs: 16.5, lh: 1.42, sx: 1 },
-    '[data-bind="tagline"]': { y: 1142, fs: 22, sx: 1 },
-    '[data-bind="note"]': { y: 1176, fs: 17, sx: 1 },
-    '[data-bind="rsvp.name"]': { y: 1283, fs: 27, sx: 1 },
-    '#rsvpPhone': { x: 474, y: 1320, fs: 29, sx: 1 },
+    '[data-bind="intro"]': { fs: 24, lh: 1.22, sx: 1 },
+    '#tabGroom': { fs: 20, sx: 1 }, '#tabBride': { fs: 20, sx: 1 },
+    '[data-bind="families.groom"]': { fs: 18, lh: 1.15 },
+    '[data-bind="families.bride"]': { fs: 18.5, lh: 1.17 },
+    '[data-bind="inviteLine"]': { fs: 27 },
+    '[data-bind="matrimonyLine"]': { fs: 27 },
+    '#labDate': { fs: 24, sx: 1 },
+    '#dateText': { fs: 21.5, lh: 1.32, sx: 1 },
+    '[data-bind="church.label"]': { fs: 24, sx: 1 },
+    '#churchName': { fs: 21, sx: 1 },
+    '#churchTime': { fs: 21, sx: 1 },
+    '[data-bind="church.note"]': { fs: 16, lh: 1.25, sx: 1 },
+    '[data-bind="reception.label"]': { fs: 24, sx: 1 },
+    '#receptionText': { fs: 18, lh: 1.4, sx: 1 },
+    '[data-bind="tagline"]': { fs: 25, sx: 1 },
+    '[data-bind="note"]': { fs: 19, sx: 1 },
   };
   function applyFontStyle() {
     const modern = C.fontStyle === 'modern';

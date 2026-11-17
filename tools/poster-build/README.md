@@ -2,6 +2,8 @@
 
 Not needed to run the site.
 
+**Current design (blue):** `build-blue.js` builds the poster from the shared assets — `assets/art/lake-background.png`, `assets/art/bouquet.png`, `assets/couple/couple-walking.png` — plus the gold frames, panels, guest bar and RSVP bar cut from `reference-blue.png` with their wording removed. Writes `poster.webp`, `front.webp`, `title.webp`, `bouquet.webp` (→ `assets/art/`) and `couple.webp` (→ `assets/couple/couple-layer.webp`). Poster grid 1065 × 1598.
+
 **Current build:** `build-v6.js` makes the poster from the clean background `assets/art/Emerald Gold Wedding Invitation.png` (no couple, no wording) and the couple cut-out `assets/couple/new_couple_background removed.png`: `poster.webp`, `front.webp` (families panels), `title.webp` and `couple.webp` (faded behind the panels). No inpainting, so nothing is blurred. The wording positions from `fit-v5.js` still apply (same design).
 
 **Previous build (emerald):** `build-v5.js` builds everything from `reference-v5.png` (the emerald design, 1065 × 1598) and keeps the original couple (`couple-original.webp`): it wipes the wording, removes the design's stand-in couple (`couple-mask-v5.png`) and fills the scenery behind them, and writes `poster.webp`, `front.webp` (families panels), `title.webp` and `couple.webp` → copy into `assets/art/` (couple to `assets/couple/couple-layer.webp`). `fit-v5.js` then sizes and places every line of wording to the design's lettering.
