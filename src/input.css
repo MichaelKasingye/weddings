@@ -109,7 +109,6 @@
   .det-value sup { font-size: .55em; vertical-align: top; position: relative; top: .05em; line-height: 1; }
   .det-value.is-pending { font-style: italic; color: var(--rose); -webkit-text-stroke: 0; }
   .det-link { color: inherit; text-decoration: none; border-bottom: calc(var(--u) * 1.5) dotted rgba(244, 197, 83, .7); }
-  .det-venue { font-style: italic; }
   .det-link:hover, .rsvp-phone:hover { color: var(--gold-light); }
   .rsvp-phone { text-decoration: none; }
   /* RSVP bar: one row inside the gold-framed bar — RSVP | ☎ name | number */
@@ -229,7 +228,6 @@
   html.font-modern .det-label { font-weight: 600; }
   html.font-modern .det-note { font-weight: 500; }
   html.font-modern .guest-label { font-weight: 600; font-size: calc(var(--u) * 23); }
-  html.font-modern .det-venue { font-style: italic; }
 
   /* ---------- Venue map modal ---------- */
   html.modal-open { overflow: hidden; }

@@ -40,7 +40,7 @@ window.WEDDING_CONFIG = {
   },
   reception: {
     label: 'Reception:',
-    text: 'Thereafter, guests will\nproceed to {venue}\nstarting at {time}.',  // {venue} becomes a map link
+    text: 'Thereafter, guests\nwill proceed to\n{venue}\nstarting at {time}.',  // {venue} becomes a map link
     venue: 'Akaama Gardens',
     time: '4:00 PM',
     mapsQuery: 'Akaama Gardens, Uganda',
@@ -177,11 +177,11 @@ window.WEDDING_CONFIG = {
     '#labDate': { fs: 24, sx: 1 },
     '#dateText': { fs: 21.5, lh: 1.32, sx: 1 },
     '[data-bind="church.label"]': { fs: 24, sx: 1 },
-    '#churchName': { fs: 21, sx: 1 },
-    '#churchTime': { fs: 21, sx: 1 },
+    '#churchName': { fs: 21.5, sx: 1 },
+    '#churchTime': { fs: 21.5, sx: 1 },
     '[data-bind="church.note"]': { fs: 16, lh: 1.25, sx: 1 },
     '[data-bind="reception.label"]': { fs: 24, sx: 1 },
-    '#receptionText': { fs: 18, lh: 1.4, sx: 1 },
+    '#receptionText': { fs: 21.5, lh: 1.32, sx: 1 },   // same as the date and church text
     '[data-bind="tagline"]': { fs: 25, sx: 1 },
     '[data-bind="note"]': { fs: 19, sx: 1 },
   };
