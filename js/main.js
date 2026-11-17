@@ -179,18 +179,18 @@ window.WEDDING_CONFIG = {
   const MODERN_LAYOUT = {
     '[data-bind="intro"]': { fs: 24, lh: 1.22, sx: 1 },
     '#tabGroom': { fs: 21, sx: 1 }, '#tabBride': { fs: 21, sx: 1 },
-    '[data-bind="families.groom"]': { fs: 21.5, lh: 1.12, y: 504 },
-    '[data-bind="families.bride"]': { fs: 21.5, lh: 1.15, y: 517 },
+    '[data-bind="families.groom"]': { fs: 21.5, lh: 1.2, y: 500 },
+    '[data-bind="families.bride"]': { fs: 21.5, lh: 1.2, y: 513 },
     '[data-bind="inviteLine"]': { fs: 27 },
     '[data-bind="matrimonyLine"]': { fs: 27 },
     '#labDate': { fs: 24, sx: 1 },
-    '#dateText': { fs: 21.5, lh: 1.32, sx: 1 },
+    '#dateText': { fs: 21.5, lh: 1.2, sx: 1 },
     '[data-bind="church.label"]': { fs: 24, sx: 1 },
     '#churchName': { fs: 21.5, sx: 1 },
     '#churchTime': { fs: 21.5, sx: 1 },
     '[data-bind="church.note"]': { fs: 16, lh: 1.25, sx: 1 },
     '[data-bind="reception.label"]': { fs: 24, sx: 1 },
-    '#receptionText': { fs: 21.5, lh: 1.32, sx: 1 },   // same as the date and church text
+    '#receptionText': { fs: 21.5, lh: 1.2, sx: 1 },    // same font, size and spacing as the families text
     '[data-bind="tagline"]': { fs: 25, sx: 1 },
     '[data-bind="note"]': { fs: 19, sx: 1 },
   };
