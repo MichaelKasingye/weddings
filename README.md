@@ -51,7 +51,7 @@ Longer wording is fine: each line has a maximum width (`data-maxw` in `index.htm
 ```
 https://your-site/?guest=John%20Mukasa
 ```
-Writes the guest's name on the cream bar, with "Invite for (1)" beside it (add `&invites=2` for two people) and greets them by name in the welcome banner.
+Writes the guest's name on the cream bar, with "Invite for (1)" beside it — "Invite for (2)" automatically when the name has "Mr & Mrs" / "Mr. and Mrs.", and any number with `&invites=3` and greets them by name in the welcome banner.
 
 **Link generator for the hosts:** open `https://your-site/?host` — a form appears at the bottom of the page that creates a personal link and a WhatsApp send button for each guest.
 

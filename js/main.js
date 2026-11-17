@@ -270,8 +270,10 @@ window.WEDDING_CONFIG = {
     guestName = raw;
     $('#guestName').textContent = raw;
     $('#guest').classList.add('has-name');
-    // "Invite for (1)": number of people this invitation is for (link: ?guest=Name&invites=2; default 1)
-    const n = parseInt(params.get(C.guest.countParam || 'invites'), 10) || C.guest.defaultCount || 1;
+    // "Invite for (n)": number of people this invitation is for.
+    //   &invites=3 in the link wins; otherwise a couple ("Mr & Mrs …", "Mr. and Mrs. …") is 2; else 1.
+    const isCouple = /\bmr\.?\s*(&|and|\+)\s*mrs\b/i.test(raw);
+    const n = parseInt(params.get(C.guest.countParam || 'invites'), 10) || (isCouple ? 2 : C.guest.defaultCount || 1);
     $('#guestCount').textContent = (C.guest.countLabel || 'Invite for ({n})').replace('{n}', n);
     fitGuestName();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitGuestName);
