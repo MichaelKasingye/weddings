@@ -286,8 +286,6 @@ window.WEDDING_CONFIG = {
       const playing = !audio.paused;
       btn.classList.toggle('is-on', wanted); btn.classList.toggle('is-playing', playing);
       btn.setAttribute('aria-pressed', String(wanted)); btn.setAttribute('aria-label', wanted ? 'Mute music' : 'Play music');
-      // browser blocked the sound and the visitor hasn't tapped yet → show the hint
-      btn.classList.toggle('needs-tap', wanted && !playing && !audio.played.length);
     };
     const tryPlay = () => audio.play().then(show).catch(show);
     const events = ['pointerdown', 'touchstart', 'keydown', 'scroll', 'wheel'];
@@ -305,7 +303,7 @@ window.WEDDING_CONFIG = {
     });
     show();
     if (!wanted) return;
-    // try right away; browsers that block sound until a tap get it on the visitor's first interaction
+    // play right away; browsers that hold sound back until the visitor's first touch start it on that touch (no message shown)
     audio.play().then(show).catch(() => { show(); events.forEach((ev) => window.addEventListener(ev, onFirst, { capture: true, passive: true })); });
     // pause while the tab is hidden, resume when it comes back (unless muted)
     document.addEventListener('visibilitychange', () => { if (document.hidden) audio.pause(); else if (wanted && audio.played.length) tryPlay(); });
