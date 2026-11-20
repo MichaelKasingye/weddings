@@ -7,7 +7,7 @@ const { chromium } = require('playwright');
   await page.addInitScript(() => { localStorage.setItem('mm-wedding:fireworks','0'); localStorage.setItem('mm-wedding:confetti','0'); });
   await page.goto((process.env.POSTER_URL || 'http://localhost:8765/index.html') + (process.argv[3] || ''), { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
-  await page.addStyleTag({ content: '.welcome,.dock,.toast{display:none!important} .poster{border-radius:0!important;box-shadow:none!important} .page{padding:0!important}' });
+  await page.addStyleTag({ content: '.welcome,.dock,.toast,.music-btn{display:none!important} .poster{border-radius:0!important;box-shadow:none!important} .page{padding:0!important}' });
   await page.waitForTimeout(1600);
   await page.locator('#poster').screenshot({ path: out });
   await browser.close();

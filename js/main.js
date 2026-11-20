@@ -7,8 +7,8 @@
    ========================================================================= */
 window.WEDDING_CONFIG = {
   couple: {
-    groom: 'Aaron',
-    bride: 'Josephine',
+    groom: 'Aaron Mutumba',
+    bride: 'Josephine Nagadya',
     short: 'Aaron & Josephine',
   },
 
@@ -40,7 +40,7 @@ window.WEDDING_CONFIG = {
   },
   reception: {
     label: 'Reception:',
-    text: 'Thereafter, guests will\nproceed to {venue}\nstarting at {time}.',  // {venue} becomes a map link
+    text: '{venue}\nTime: {time}',  // {venue} becomes a map link
     venue: 'Akaama Gardens',
     time: '4:00 PM',
     mapsQuery: 'Akaama Gardens, Uganda',
@@ -48,7 +48,16 @@ window.WEDDING_CONFIG = {
   },
 
   tagline: 'Let’s celebrate love, family and new beginnings together!',
-  rsvp: { title: 'RSVP', name: 'Nalubowa Doreen', phone: '0771 008212' },
+  note: 'Children are loved but not invited.',   // line under the tagline ('' hides it)
+  confirmNote: 'Please confirm attendance by 20th December to aid better organisation of the event.',   // line under the note ('' hides it)
+  rsvp: {
+    title: 'RSVP',
+    // one row per contact in the RSVP bar (two fit)
+    contacts: [
+      { name: 'Nalubowa Doreen', phone: '+256 771 008212' },
+      { name: 'John Paul', phone: '+256 782 871428' },
+    ],
+  },
   phoneCountryCode: '+256',
 
   // ---- Guest personalisation ----
@@ -56,6 +65,9 @@ window.WEDDING_CONFIG = {
   // Link generator for the hosts: index.html?host
   guest: {
     param: 'guest',
+    countParam: 'invites',      // ?guest=Name&invites=2 → "Invite for (2)"
+    defaultCount: 1,
+    countLabel: 'Invite for ({n})',
     defaultName: '',     // name shown when the link has no ?guest= (leave '' for a blank dotted line)
     label: 'Mr./Mrs./Ms./Dr.',
     message: 'You are cordially invited to celebrate with us!',
@@ -64,8 +76,8 @@ window.WEDDING_CONFIG = {
   // ---- Sharing ----
   share: {
     siteUrl: 'https://aaronandjosephine.onrender.com/', // the live address (used for shared and personal links)
-    message: "You're invited! 💍 Together with their families, Aaron & Josephine invite you to their wedding on Friday, 1st January 2027: church service at Lubaga Cathedral, 12:00 PM, and reception at Akaama Gardens from 4:00 PM. Open your invitation:",
-    personalMessage: 'Dear {name}, you are cordially invited to the wedding of Aaron & Josephine on Friday, 1st January 2027 (Lubaga Cathedral, 12:00 PM; reception at Akaama Gardens from 4:00 PM)! 💍 Open your personal invitation:',
+    message: "You're invited! 💍 Together with their families, Aaron Mutumba & Josephine Nagadya invite you to their wedding on Friday, 1st January 2027: church service at Lubaga Cathedral, 12:00 PM, and reception at Akaama Gardens from 4:00 PM. Open your invitation:",
+    personalMessage: 'Dear {name}, you are cordially invited to the wedding of Aaron Mutumba & Josephine Nagadya on Friday, 1st January 2027 (Lubaga Cathedral, 12:00 PM; reception at Akaama Gardens from 4:00 PM)! 💍 Open your personal invitation:',
   },
 
   // ---- Images (replace the files, or point these paths at new ones) ----
@@ -73,7 +85,7 @@ window.WEDDING_CONFIG = {
     background: 'assets/art/poster.webp', // poster artwork (wording removed)
     couple: 'assets/couple/couple-layer.webp',               // transparent image of the couple
     // where the couple sits, in poster pixels (the poster is 1065 × 1598): left, top, width
-    coupleBox: { x: 30, y: 0, w: 807 },
+    coupleBox: { x: 84, y: 0, w: 683 },
   },
 
   // ---- Wording font ----
@@ -81,13 +93,13 @@ window.WEDDING_CONFIG = {
   // The couple's names and the "Wedding Invitation" title are not affected.
   fontStyle: 'modern',
 
-  // ---- The two scene pictures at the bottom of the poster ----
-  // Put any picture in assets/art/ and set its file name here. It is cropped to fill the slot.
-  //   position: which part of the picture to keep ('50% 50%' = centre, '50% 0%' = top, '0% 50%' = left …)
-  //   zoom: 1 = fit, 1.3 = 30% closer;  tone: optional CSS filter to match the poster, e.g. 'brightness(.9) saturate(1.2)'
-  scenes: {
-    left: { src: 'assets/art/outdoor_dancing.jpg', position: '42% 50%', zoom: 1, tone: '' },
-    right: { src: 'assets/art/outdoor_dancing_day.webp', position: '56% 50%', zoom: 1, tone: 'brightness(.86) saturate(1.15) contrast(1.05)' },
+  // ---- Background music ----
+  // Plays when the page opens. Browsers block sound until the visitor interacts, so if that happens
+  // it starts on the first tap / click / scroll / key press. The small button (bottom right) pauses it.
+  music: {
+    src: 'assets/art/wedding-song.mp3',   // '' = no music
+    volume: 0.8,                       // 0 – 1
+    loop: true,
   },
 
   // ---- Welcome banner ----
@@ -173,23 +185,23 @@ window.WEDDING_CONFIG = {
   // Line sizes for the modern (Poppins) style; Poppins is wider than Cardo, so each line is refitted.
   // Values are poster units: x, y, fs (font size), lh (line height), sx (horizontal scale).
   const MODERN_LAYOUT = {
-    '[data-bind="intro"]': { y: 270, fs: 23, lh: 1.27, sx: 1 },
-    '#tabGroom': { fs: 20, sx: 1, y: 404 }, '#tabBride': { fs: 20, sx: 1, y: 405 },
-    '[data-bind="families.groom"]': { y: 441, fs: 18.5, lh: 1.17 },
-    '[data-bind="families.bride"]': { y: 452, fs: 18.5, lh: 1.17 },
-    '[data-bind="inviteLine"]': { y: 548, fs: 26 },
-    '[data-bind="matrimonyLine"]': { y: 661, fs: 26 },
-    '#labDate': { y: 963, fs: 22, sx: 1 },
-    '#dateText': { y: 994, fs: 20.5, lh: 1.3, sx: 1 },
-    '[data-bind="church.label"]': { y: 963, fs: 22, sx: 1 },
-    '#churchName': { y: 996, fs: 19.5, sx: 1 },
-    '#churchTime': { y: 1024, fs: 19.5, sx: 1 },
-    '[data-bind="church.note"]': { y: 1055, fs: 15, lh: 1.2, sx: 1 },
-    '[data-bind="reception.label"]': { x: 784, y: 966, fs: 22, sx: 1 },
-    '#receptionText': { x: 784, y: 997, fs: 16.5, lh: 1.42, sx: 1 },
-    '[data-bind="tagline"]': { y: 1150, fs: 22, sx: 1 },
-    '[data-bind="rsvp.name"]': { y: 1283, fs: 27, sx: 1 },
-    '#rsvpPhone': { x: 474, y: 1320, fs: 29, sx: 1 },
+    '[data-bind="intro"]': { fs: 24, lh: 1.22, sx: 1 },
+    '#tabGroom': { fs: 21, sx: 1 }, '#tabBride': { fs: 21, sx: 1 },
+    '[data-bind="families.groom"]': { fs: 21.5, lh: 1.2, y: 500 },
+    '[data-bind="families.bride"]': { fs: 21.5, lh: 1.2, y: 513 },
+    '[data-bind="inviteLine"]': { fs: 27 },
+    '[data-bind="matrimonyLine"]': { fs: 27 },
+    '#labDate': { fs: 24, sx: 1 },
+    '#dateText': { fs: 21.5, lh: 1.2, sx: 1 },
+    '[data-bind="church.label"]': { fs: 24, sx: 1 },
+    '#churchName': { fs: 21.5, sx: 1 },
+    '#churchTime': { fs: 21.5, sx: 1 },
+    '[data-bind="church.note"]': { fs: 16, lh: 1.25, sx: 1 },
+    '[data-bind="reception.label"]': { fs: 24, sx: 1 },
+    '#receptionText': { fs: 21.5, lh: 1.49, y: 1100, sx: 1 },    // venue + time lines sit level with the church's name + time
+    '[data-bind="tagline"]': { fs: 25, sx: 1 },
+    '[data-bind="note"]': { fs: 19, sx: 1 },
+    '[data-bind="confirmNote"]': { fs: 17, sx: 1 },
   };
   function applyFontStyle() {
     const modern = C.fontStyle === 'modern';
@@ -207,6 +219,8 @@ window.WEDDING_CONFIG = {
       if (val) { el.textContent = val; if (el.classList.contains('gold')) el.dataset.text = val; }
     });
     $('.honorific').hidden = !C.honorific;
+    $('[data-bind="note"]').hidden = !C.note;
+    $('[data-bind="confirmNote"]').hidden = !C.confirmNote;
 
     setDetail($('#dateText'), C.date, C.pendingText.date);
     const ch = C.church || {};
@@ -216,20 +230,12 @@ window.WEDDING_CONFIG = {
     $('#receptionText').innerHTML = esc(rc.text || '')
       .replace('{venue}', '<a class="det-link det-venue" href="' + esc(mapsOpenUrl(rc)) + '" data-map="reception" aria-haspopup="dialog">' + esc(rc.venue || '') + '</a>')
       .replace('{time}', esc(rc.time || ''));
-    if (C.rsvp) $('#rsvpPhone').href = telHref(C.rsvp.phone);
+    const contacts = (C.rsvp && C.rsvp.contacts) || [];
+    $('#rsvpNames').innerHTML = contacts.map((c) => '<p class="rsvp-name"><svg class="rsvp-ico" aria-hidden="true"><use href="#i-phone"/></svg><span>' + esc(c.name) + '</span></p>').join('');
+    $('#rsvpPhones').innerHTML = contacts.map((c) => '<a class="rsvp-phone" href="' + esc(telHref(c.phone)) + '" aria-label="Call ' + esc(c.name) + ', ' + esc(c.phone) + '">' + esc(c.phone) + '</a>').join('');
 
     const bg = $('.poster-bg');
     if (C.images.background && !bg.src.endsWith(C.images.background)) bg.src = C.images.background;
-
-    [['left', '#sceneLeft'], ['right', '#sceneRight']].forEach(([k, sel]) => {
-      const sc = (C.scenes || {})[k], el = $(sel);
-      if (!sc || !sc.src) { el.closest('.scene').hidden = true; return; } // no picture: the design's own scene shows
-      if (!el.src.endsWith(sc.src)) el.src = sc.src;
-      el.style.objectPosition = sc.position || '50% 50%';
-      el.style.transformOrigin = sc.position || '50% 50%';
-      el.style.transform = sc.zoom && sc.zoom !== 1 ? 'scale(' + sc.zoom + ')' : '';
-      el.style.filter = sc.tone || '';
-    });
 
     const img = $('#coupleImg');
     if (C.images.couple && !img.src.endsWith(C.images.couple)) img.src = C.images.couple;
@@ -276,6 +282,45 @@ window.WEDDING_CONFIG = {
     dlg.addEventListener('close', () => { document.documentElement.classList.remove('modal-open'); if (opener) opener.focus({ preventScroll: true }); });
   }
 
+  /* ---------- background music ---------- */
+  function startMusic() {
+    const M = C.music || {}, audio = $('#bgMusic'), btn = $('#musicToggle');
+    if (!M.src || !audio) { if (btn) btn.hidden = true; return; }
+    audio.src = M.src; audio.loop = M.loop !== false; audio.volume = M.volume != null ? M.volume : 0.8;
+    btn.hidden = false;
+    // Music is ON by default; it is off only if this visitor chose to mute it (remembered in this browser).
+    const KEY = 'mm-wedding:music';
+    const saved = (() => { try { return localStorage.getItem(KEY); } catch (e) { return null; } })();
+    const remember = (v) => { try { localStorage.setItem(KEY, v); } catch (e) { /* storage unavailable */ } };
+    let wanted = saved !== 'off';
+    // the button shows the visitor's choice (on = note, muted = crossed note); it pulses while sound is playing
+    const show = () => {
+      const playing = !audio.paused;
+      btn.classList.toggle('is-on', wanted); btn.classList.toggle('is-playing', playing);
+      btn.setAttribute('aria-pressed', String(wanted)); btn.setAttribute('aria-label', wanted ? 'Mute music' : 'Play music');
+    };
+    const tryPlay = () => audio.play().then(show).catch(show);
+    const events = ['pointerdown', 'touchstart', 'keydown', 'scroll', 'wheel'];
+    const onFirst = (e) => {
+      if (e && e.target && e.target.closest && e.target.closest('#musicToggle')) return; // the button handles itself
+      events.forEach((ev) => window.removeEventListener(ev, onFirst, true));
+      if (wanted && audio.paused) tryPlay();
+    };
+    audio.addEventListener('play', show); audio.addEventListener('pause', show);
+    btn.addEventListener('click', () => {
+      if (wanted && !audio.paused) { wanted = false; remember('off'); audio.pause(); }       // mute
+      else if (wanted) { tryPlay(); }                                                        // on, but blocked: this tap starts it
+      else { wanted = true; remember('on'); tryPlay(); }                                     // un-mute
+      show();
+    });
+    show();
+    if (!wanted) return;
+    // play right away; browsers that hold sound back until the visitor's first touch start it on that touch (no message shown)
+    audio.play().then(show).catch(() => { show(); events.forEach((ev) => window.addEventListener(ev, onFirst, { capture: true, passive: true })); });
+    // pause while the tab is hidden, resume when it comes back (unless muted)
+    document.addEventListener('visibilitychange', () => { if (document.hidden) audio.pause(); else if (wanted && audio.played.length) tryPlay(); });
+  }
+
   /* ---------- guest personalisation ---------- */
   let guestName = '';
   function applyGuest() {
@@ -285,6 +330,11 @@ window.WEDDING_CONFIG = {
     guestName = raw;
     $('#guestName').textContent = raw;
     $('#guest').classList.add('has-name');
+    // "Invite for (n)": number of people this invitation is for.
+    //   &invites=3 in the link wins; otherwise a couple ("Mr & Mrs …", "Mr. and Mrs. …") is 2; else 1.
+    const isCouple = /\bmr\.?\s*(&|and|\+)\s*mrs\b/i.test(raw);
+    const n = parseInt(params.get(C.guest.countParam || 'invites'), 10) || (isCouple ? 2 : C.guest.defaultCount || 1);
+    $('#guestCount').textContent = (C.guest.countLabel || 'Invite for ({n})').replace('{n}', n);
     fitGuestName();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitGuestName);
     if ('ResizeObserver' in window) new ResizeObserver(fitGuestName).observe($('#poster'));
@@ -405,6 +455,7 @@ window.WEDDING_CONFIG = {
       if ('ResizeObserver' in window) new ResizeObserver(() => fitText()).observe($('#poster'));
       wireSharing();
       if (!reduceMotion.matches) document.documentElement.classList.add('anim-in');
+      startMusic();
       const state = startEffects();
       // Welcome: banner always; confetti burst only when confetti is on
       showWelcome();

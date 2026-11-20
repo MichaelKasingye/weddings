@@ -34,11 +34,12 @@ Everything lives in `window.WEDDING_CONFIG` at the top of **`js/main.js`**.
 | The families (two emerald panels) | `families.label`, `families.joiner`, `families.groom`, `families.bride` | `'The Family of'`, `'and'` (gold medallion between them), `'Mr. Ssimbwa Moses\nand Mrs. …\nof Kitoma, …'` |
 | Invitation lines | `inviteLine`, `matrimonyLine` | `'cordially invite the company of'` |
 | Wording font | `fontStyle` | `'modern'` (Poppins) or `'classic'` (Cardo); names and title unchanged |
-| Couple names | `couple.groom`, `couple.bride`, `couple.short` | `'Aaron'`, `'Josephine'`, `'Aaron & Josephine'` |
+| Couple names | `couple.groom`, `couple.bride`, `couple.short` | `'Aaron Mutumba'`, `'Josephine Nagadya'`, `'Aaron & Josephine'` |
 | Church service | `church.name`, `church.time`, `church.note`, `church.mapsQuery` | `'Lubaga Cathedral'`, `'12:00 PM'` |
-| Reception | `reception.text`, `reception.venue`, `reception.time`, `reception.mapsQuery` | `'Thereafter, guests will\nproceed to {venue}\nstarting at {time}.'` |
+| Reception | `reception.text`, `reception.venue`, `reception.time`, `reception.mapsQuery` | `'Thereafter, guests\nwill proceed to\n{venue}\nstarting at {time}.'` |
+| Line under the tagline | `note` | `'Children are loved but not invited.'` (`''` hides it) |
 | Bottom line | `tagline` | `'Let’s celebrate love, …'` |
-| RSVP | `rsvp.name`, `rsvp.phone`, `phoneCountryCode` | `'Nalubowa Doreen'`, `'0771 008212'`, `'+256'` (tap to call) |
+| RSVP | `rsvp.contacts` (one `{ name, phone }` per row), `phoneCountryCode` | `'Nalubowa Doreen' +256 771 008212`, `'John Paul' +256 782 871428` (tap to call) |
 | Guest bar placeholder | `guest.label` | `'Mr./Mrs./Ms./Dr.'` (a personal link writes the guest's name there) |
 
 `date: null` shows **"Date to be confirmed"**.
@@ -50,23 +51,9 @@ Longer wording is fine: each line has a maximum width (`data-maxw` in `index.htm
 ```
 https://your-site/?guest=John%20Mukasa
 ```
-Writes the name on the *Names:* line of the guest card and greets them by name in the welcome banner.
+Writes the guest's name on the cream bar, with "Invite for (1)" beside it — "Invite for (2)" automatically when the name has "Mr & Mrs" / "Mr. and Mrs.", and any number with `&invites=3` and greets them by name in the welcome banner.
 
 **Link generator for the hosts:** open `https://your-site/?host` — a form appears at the bottom of the page that creates a personal link and a WhatsApp send button for each guest.
-
-## Swap the two scene pictures (bottom left and bottom right)
-
-1. Put your picture in `assets/art/` (JPG, PNG or WebP; around 800 px wide or more is plenty).
-2. In `js/main.js`, under `scenes`, set the file name:
-   ```js
-   scenes: {
-     left:  { src: 'assets/art/my-party.jpg',   position: '50% 50%', zoom: 1, tone: '' },
-     right: { src: 'assets/art/my-dancers.jpg', position: '50% 30%', zoom: 1.2, tone: 'brightness(.9) saturate(1.15)' },
-   },
-   ```
-   `position` picks which part of the picture shows, `zoom` moves closer, and `tone` (optional) adjusts brightness/colour to suit the poster. `src: ''` shows the design's own picture.
-
-The picture is cropped to fill the slot and its edges fade into the poster; the gold ribbons, RSVP box and plants stay in front. Evening or warm-lit photos blend best. The slot shapes come from `tools/poster-build/build-scenes.js`.
 
 ## Change photos
 
@@ -78,11 +65,11 @@ The picture is cropped to fill the slot and its edges fade into the poster; the 
 | `assets/art/title.webp` | The gold "Wedding Invitation" title, layered in front of the fireworks |
 | `assets/couple/couple-photo-original.jpg`, `couple-cutout.png` | The couple's "London save the date" photo and a cutout of it |
 | `assets/couple/mark-and-mary-*` | Earlier placeholder couple (only used by `build-artwork-v1.js`) |
-| `assets/share-card-v6.jpg` | Link-preview picture (1200×630) for WhatsApp, Facebook, X…: poster + names, date, time, venue |
+| `assets/share-card-v7.jpg` | Link-preview picture (1200×630) for WhatsApp, Facebook, X…: poster + names, date, time, venue |
 | `favicon.ico`, `assets/icons/favicon.svg`, `favicon-32.png` | Browser-tab icon: two gold rings on navy (the SVG is the source; the others are made from it) |
 | `assets/icons/apple-touch-icon.png` | Icon when the page is saved to an iPhone/iPad home screen |
 
-The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild with `tools/poster-build/build-v5.js` and `fit-v5.js` (see its README). Then refresh `assets/share-card-v6.jpg`.
+The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild with `tools/poster-build/build-v5.js` and `fit-v5.js` (see its README). Then refresh `assets/share-card-v7.jpg`.
 
 **Moving text on the poster:** each line in `index.html` has `style="--x:…;--y:…;--fs:…;--sx:…"`: position (poster pixels; for centred lines `--x` is the centre), font size, and horizontal squeeze. `tools/poster-build/` has the scripts that rebuilt the artwork and measured the text against the original (see its README).
 
