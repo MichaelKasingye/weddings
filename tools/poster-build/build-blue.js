@@ -13,7 +13,7 @@ const load = async (f) => Float32Array.from(await sharp(f).removeAlpha().resize(
 (async () => {
   require('fs').mkdirSync(OUT, { recursive: true });
   const ref = await load(__dirname + '/reference-blue.png');
-  const lake = await load(ROOT + '/assets/art/lake-background.png');
+  const lake = await load(ROOT + '/public/assets/art/lake-background.png');
   const L = (img, i) => lum(img, i);
   const goldA = (img, i) => { const r = img[i * 3], g = img[i * 3 + 1], b = img[i * 3 + 2]; return ss((r - b - 35) / 55) * ss((r - 95) / 70) * (g > 0.45 * r ? 1 : 0); };
   const isNavy = (img, i) => { const r = img[i * 3], g = img[i * 3 + 1], b = img[i * 3 + 2]; return b > r + 25 && b > 55; };
@@ -109,7 +109,7 @@ const load = async (f) => Float32Array.from(await sharp(f).removeAlpha().resize(
   await layer('title', [728, 40, 1060, 312], ta, ref);
 
   // couple: placed as in the design (scale .555 at 84,-14), fading out just above the families panels
-  { const s = 0.555, CX = 84, CY = -14, src = sharp(ROOT + '/assets/couple/couple-walking.png').ensureAlpha(); const m = await src.metadata();
+  { const s = 0.555, CX = 84, CY = -14, src = sharp(ROOT + '/public/assets/couple/couple-walking.png').ensureAlpha(); const m = await src.metadata();
     const cw = Math.round(m.width * s), ch = Math.round(m.height * s);
     const { data } = await src.resize(cw, ch).raw().toBuffer({ resolveWithObject: true });
     const top = Math.max(0, -CY), hh = Math.min(ch - top, 500 - (CY + top)), C = Buffer.alloc(cw * hh * 4);
@@ -118,7 +118,7 @@ const load = async (f) => Float32Array.from(await sharp(f).removeAlpha().resize(
     await sharp(C, { raw: { width: cw, height: hh, channels: 4 } }).webp({ quality: 92, alphaQuality: 100 }).toFile(OUT + '/couple.webp');
     console.log('couple', { x: CX, y: CY + top, w: cw, h: hh }); }
   // bouquet (resized, web-ready)
-  { const s = +(process.env.BQ_S || 0.33), src = sharp(ROOT + '/assets/art/bouquet.png').ensureAlpha(); const m = await src.metadata();
+  { const s = +(process.env.BQ_S || 0.33), src = sharp(ROOT + '/public/assets/art/bouquet.png').ensureAlpha(); const m = await src.metadata();
     const info = await src.resize(Math.round(m.width * s)).webp({ quality: 90, alphaQuality: 100 }).toFile(OUT + '/bouquet.webp');
     console.log('bouquet', { w: info.width, h: info.height }); }
 })();

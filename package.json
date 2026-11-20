@@ -1,13 +1,34 @@
 {
-  "name": "mark-and-mary-wedding",
+  "name": "aaron-and-josephine-wedding",
   "private": true,
-  "description": "Interactive wedding invitation for Mr. Mark Mukasa & Mary Busingye",
+  "description": "Wedding invitations for Aaron Mutumba & Josephine Nagadya: personal guest links, admin dashboard, WhatsApp and SMS sending",
   "scripts": {
-    "build:css": "tailwindcss -i ./src/input.css -o ./css/styles.css --minify",
-    "watch:css": "tailwindcss -i ./src/input.css -o ./css/styles.css --watch",
-    "serve": "npx --yes serve ."
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "libphonenumber-js": "^1.13.17",
+    "mongodb": "^7.9.1",
+    "next": "^16.4.6",
+    "papaparse": "^5.7.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "read-excel-file": "^9.3.20",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
-    "tailwindcss": "3.4.17"
+    "@types/node": "^22.20.5",
+    "@types/papaparse": "^5.5.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.7.0",
+    "postcss": "^8.5.33",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.9.3"
   }
 }

@@ -1,105 +1,108 @@
-# Aaron & Josephine — Interactive Wedding Invitation
+# Aaron & Josephine: Wedding Invitations
 
-Static site (HTML + Tailwind + vanilla JS). No backend, no build needed to run.
+A Next.js (TypeScript) app with MongoDB.
 
-The page is the printed invitation brought to life: one poster on the invitation's own 1065 × 1598 grid. On phones and tablets held upright the whole invitation fits the screen edge to edge with no scrolling; on large screens it is shown framed at full size. Live fireworks burst in the sky behind the couple and confetti falls on top.
+- **Guests** each get a personal link, e.g. `/i/mr-mrs-john-doe-k3x9pqr`. It opens the animated invitation poster with their name on the guest bar and "Invite for (n)". Guests don't log in.
+- **Admins** log in to a dashboard. They upload the guest list, see totals, copy each guest's link, and send the invitations on WhatsApp or by SMS.
 
-**How the poster is built:** the artwork (scenery, gold title, hearts, "Wedding" script, rings, the date panel frame and icons, the guest card) is cut straight from the original invitation, so it matches it pixel for pixel. Every piece of **wording** is live text on top of that artwork, so it can be changed in one place (below). Fonts and positions were measured against the original.
+Made-up or mistyped links show **"Invitation not found"** with the RSVP contacts. The bare address (`/`) shows **"This is a private invitation"**.
 
-## Run it
+## Run it locally
 
-```bash
-# any static server works
-npx serve .
-# or
-python3 -m http.server 8080
-```
+Needs Node 20+ and MongoDB.
 
-Opening `index.html` directly also works, but share/copy links will be `file://` paths until it is hosted.
-
-## Deploy (free)
-
-**Vercel:** `npx vercel --prod` from this folder (no framework, output dir `.`).
-**Netlify:** drag the folder onto app.netlify.com/drop.
-After deploying, set `share.siteUrl` in `js/main.js` to the live URL.
-
-## Edit wedding details — one place
-
-Everything lives in `window.WEDDING_CONFIG` at the top of **`js/main.js`**.
-
-| What | Key | Example |
-|---|---|---|
-| Date | `date` | `'Friday,\n1st January 2027'` (`\n` = line break) |
-| Scripture under the title | `intro` | `'“Therefore what God\nhas joined together,…'` |
-| The families (two emerald panels) | `families.label`, `families.joiner`, `families.groom`, `families.bride` | `'The Family of'`, `'and'` (gold medallion between them), `'Mr. Ssimbwa Moses\nand Mrs. …\nof Kitoma, …'` |
-| Invitation lines | `inviteLine`, `matrimonyLine` | `'cordially invite the company of'` |
-| Wording font | `fontStyle` | `'modern'` (Poppins) or `'classic'` (Cardo); names and title unchanged |
-| Couple names | `couple.groom`, `couple.bride`, `couple.short` | `'Aaron Mutumba'`, `'Josephine Nagadya'`, `'Aaron & Josephine'` |
-| Church service | `church.name`, `church.time`, `church.note`, `church.mapsQuery` | `'Lubaga Cathedral'`, `'12:00 PM'` |
-| Reception | `reception.text`, `reception.venue`, `reception.time`, `reception.mapsQuery` | `'Thereafter, guests\nwill proceed to\n{venue}\nstarting at {time}.'` |
-| Line under the tagline | `note` | `'Children are loved but not invited.'` (`''` hides it) |
-| Bottom line | `tagline` | `'Let’s celebrate love, …'` |
-| RSVP | `rsvp.contacts` (one `{ name, phone }` per row), `phoneCountryCode` | `'Nalubowa Doreen' +256 771 008212`, `'John Paul' +256 782 871428` (tap to call) |
-| Guest bar placeholder | `guest.label` | `'Mr./Mrs./Ms./Dr.'` (a personal link writes the guest's name there) |
-
-`date: null` shows **"Date to be confirmed"**.
-
-Longer wording is fine: each line has a maximum width (`data-maxw` in `index.html`) and shrinks automatically to stay inside its space.
-
-## Personal guest links
-
-```
-https://your-site/?guest=John%20Mukasa
-```
-Writes the guest's name on the cream bar, with "Invite for (1)" beside it — "Invite for (2)" automatically when the name has "Mr & Mrs" / "Mr. and Mrs.", and any number with `&invites=3` and greets them by name in the welcome banner.
-
-**Link generator for the hosts:** open `https://your-site/?host` — a form appears at the bottom of the page that creates a personal link and a WhatsApp send button for each guest.
-
-## Change photos
-
-| File | Used for |
-|---|---|
-| `assets/art/poster.webp` | The emerald design with all wording and the design's stand-in couple removed |
-| `assets/art/front.webp` | The "The Families of" panels, layered in front of the couple |
-| `assets/couple/couple-layer.webp` | The original couple (Aaron & Josephine), layered in front of the fireworks |
-| `assets/art/title.webp` | The gold "Wedding Invitation" title, layered in front of the fireworks |
-| `assets/couple/couple-photo-original.jpg`, `couple-cutout.png` | The couple's "London save the date" photo and a cutout of it |
-| `assets/couple/mark-and-mary-*` | Earlier placeholder couple (only used by `build-artwork-v1.js`) |
-| `assets/share-card-v7.jpg` | Link-preview picture (1200×630) for WhatsApp, Facebook, X…: poster + names, date, time, venue |
-| `favicon.ico`, `assets/icons/favicon.svg`, `favicon-32.png` | Browser-tab icon: two gold rings on navy (the SVG is the source; the others are made from it) |
-| `assets/icons/apple-touch-icon.png` | Icon when the page is saved to an iPhone/iPad home screen |
-
-The couple is part of the poster artwork (`tools/poster-build/reference.png`). To change the artwork, put the new design in `reference.png` and rebuild with `tools/poster-build/build-v5.js` and `fit-v5.js` (see its README). Then refresh `assets/share-card-v7.jpg`.
-
-**Moving text on the poster:** each line in `index.html` has `style="--x:…;--y:…;--fs:…;--sx:…"`: position (poster pixels; for centred lines `--x` is the centre), font size, and horizontal squeeze. `tools/poster-build/` has the scripts that rebuilt the artwork and measured the text against the original (see its README).
-
-**Link previews:** the `<head>` of `index.html` has the preview title, description and picture (`og:*` / `twitter:*`) plus the event's date and place (schema.org Event). They use the live address `https://aaronandjosephine.onrender.com/`; if the address changes, update it there and in `share.siteUrl` (js/main.js). If the wording, date or venue change, update these tags and the share card too, as previews don't run the page's JavaScript. After changing the picture, give it a new file name so WhatsApp and Facebook don't keep showing the old cached one.
-
-## Controls
-
-No buttons over the invitation: fireworks and confetti play automatically (turn them off for everyone with `fireworks.enabled` / `confetti.enabled` in the config). Tap the sky on the poster to launch a firework; tap the church or the reception venue to see its map (with directions) in a window over the invitation.
-Visitors whose device asks for reduced motion get no fireworks or recurring confetti. Animations pause when the tab is hidden or the poster is off screen.
-
-## Styling
-
-Edit `src/input.css`, then rebuild `css/styles.css`:
 ```bash
 npm install
-npm run build:css      # or: npm run watch:css
+cp .env.example .env.local     # then edit: MONGODB_URI, APP_URL, SUPER_ADMIN_USERNAME
+npm run dev                    # http://localhost:3000
 ```
+
+The first time, open **http://localhost:3000/setup** and choose the super admin's password. The username comes from `SUPER_ADMIN_USERNAME`. After that, `/setup` is closed and you log in at `/login`.
+
+## Roles
+
+| | Super admin | Admin |
+|---|---|---|
+| See the dashboard and guest list | ✅ | ✅ |
+| Send on WhatsApp / SMS, copy links, download CSV | ✅ | ✅ |
+| Change own username and password (My account) | ✅ | ✅ |
+| Upload the list; add, edit, delete guests | ✅ | — |
+| Invite admins, reset their passwords, remove them (Team) | ✅ | — |
+| RSVP contacts, message wording, SMS on/off (Settings) | ✅ | — |
+
+**Adding an admin:** Team → *Create invite link*. Send the link any way you like (WhatsApp, SMS, email). It works **once** and expires after **24 hours**. The person opens it and chooses a username and password.
+
+**Forgotten password:** Team → *Reset password* gives a new one-time 24-hour link for that admin. There's no email reset.
+
+## The guest list
+
+Upload an Excel (`.xlsx`) or CSV file (Upload list), or paste the list.
+
+| Name | Phone | Seats |
+|---|---|---|
+| Mr. & Mrs. John Doe | 0772 123456 | 2 |
+| Dr. Sarah Kato | +256 701 234567 | |
+
+- **Name** is shown exactly as written on the invitation. A separate *Title* column (Mr./Mrs./Dr.) is joined onto the name.
+- **Phone** can be written any way. Numbers without a country code are read as Ugandan.
+- **Seats** is optional. If it's empty, it's 2 when the name has "Mr. & Mrs.", otherwise 1.
+
+Before anything is saved, you see a preview with bad numbers and duplicates marked. Uploading again only adds new guests. Renaming a guest keeps their link working: an old link moves to the new name.
+
+## Sending
+
+- **WhatsApp:** each guest's *WhatsApp* button opens WhatsApp with their number and the message ready, and the admin presses send. *Send on WhatsApp* for ticked guests goes through them one by one. The guest is then marked "sent".
+- **SMS (Africa's Talking):**
+  1. Set `AT_USERNAME`, `AT_API_KEY` and, once approved, `AT_SENDER_ID`.
+  2. Switch SMS on in Settings. Tick guests and press *Send SMS*.
+  3. For delivery reports, set the callback in Africa's Talking to `https://<site>/api/sms?key=<AT_CALLBACK_KEY>`.
+
+  With `AT_USERNAME=sandbox`, messages go to their simulator instead of real phones.
+- **Opened:** counted when the invite loads in a real browser. WhatsApp's link-preview robot doesn't count, and neither do logged-in admins previewing an invite.
+
+The message wording (with `{name}` and `{link}`) is edited in Settings.
+
+## Deploy to Vercel
+
+1. Create a free **MongoDB Atlas** cluster. Under Network Access allow `0.0.0.0/0` (Vercel has no fixed IP). Copy the connection string and add a database name, e.g. `…mongodb.net/wedding_invites`.
+2. Import the GitHub repo into Vercel. The framework is detected as Next.js.
+3. Add environment variables:
+   - `MONGODB_URI`
+   - `APP_URL` (e.g. `https://aaronandjosephine.vercel.app`)
+   - `SUPER_ADMIN_USERNAME`
+   - `SETUP_CODE` (any secret; required on Vercel so nobody else can claim `/setup`)
+   - the `AT_*` values for SMS
+4. Deploy, then open `/setup` and enter the setup code and your password.
+
+## Changing the invitation
+
+- **Wording, date, venues, families:** `src/lib/wedding.ts`.
+- **RSVP contacts:** Dashboard → Settings (stored in MongoDB, shown immediately).
+- **Positions and sizes of the text:** `src/components/poster/Poster.tsx`. Each line has `--x / --y / --fs / --lh / --sx` in poster pixels (the poster is a 1065 × 1598 grid).
+- **Styles:** `src/styles/poster.css` (invitation) and `src/styles/admin.css` (dashboard).
+- **Artwork:** `public/assets/art/*.webp`, rebuilt by the scripts in `tools/poster-build/` (see its README).
+- **Link preview:** each guest's preview picture is drawn by `src/app/(invite)/i/[slug]/opengraph-image.tsx` from `src/og/share-card.jpg` plus their name. If the poster changes, refresh that card. Its left half still shows an older version of the poster.
+
+Fireworks and confetti are `public/js/fireworks.js` and `public/js/confetti.js` (settings in `src/lib/wedding.ts`).
 
 ## Files
 
 ```
-index.html            page markup (Lucide icons inlined as an SVG sprite)
-css/styles.css        compiled Tailwind + custom styles
-src/input.css         stylesheet source
-js/main.js            CONFIG + page wiring (guest, share, toggles)
-js/fireworks.js       canvas fireworks inside the poster
-js/confetti.js        welcome + recurring confetti
-js/vendor/            canvas-confetti 1.9.3 (local copy, works offline)
-
-tools/poster-build/   scripts that cut the artwork from the original and fit the text to it
+src/app/(invite)/          guest side: / (private notice), /i/[slug] (the invitation + its preview image)
+src/app/(admin)/           /login, /setup, /join/[token], /dashboard/*
+src/app/(admin)/dashboard/actions.ts   every dashboard change (each checks the role on the server)
+src/app/api/open           records "opened";  src/app/api/sms: SMS delivery reports
+src/components/poster/     the poster (markup + browser behaviour)
+src/components/admin/      dashboard pieces (guest list, uploader, team…)
+src/lib/                   database, login/sessions, guests, phone numbers, SMS, wedding details
+public/                    artwork, music, icons, fireworks/confetti scripts
+tools/poster-build/        scripts that built the artwork
 ```
 
-Credits: fonts Google Fonts (Cardo, Libre Caslon Text, Playball, Great Vibes, Montserrat) · icons Lucide (ISC) · confetti canvas-confetti (ISC).
+**Security:**
+- Admin passwords are stored as scrypt hashes, and sessions are httpOnly cookies.
+- Join and reset links are stored only as hashes.
+- Guest link codes are 7 random characters (about 27 billion possibilities).
+- After about 30 wrong invitation links in 15 minutes, a visitor is paused. The same goes for repeated wrong passwords.
+
+Credits: fonts Google Fonts (Poppins, Playball, Great Vibes, Cardo, Libre Caslon Text, Montserrat, Cormorant Garamond) · icons Lucide (ISC) · confetti canvas-confetti (ISC).

@@ -8,7 +8,7 @@ const W = 1065, H = 1598, ROOT = path.resolve(__dirname, '../..'), OUT = process
 const ss = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
 (async () => {
   require('fs').mkdirSync(OUT, { recursive: true });
-  const bg = Float32Array.from(await sharp(ROOT + '/assets/art/poster.webp').removeAlpha().raw().toBuffer());
+  const bg = Float32Array.from(await sharp(ROOT + '/public/assets/art/poster.webp').removeAlpha().raw().toBuffer());
   // the area to calm: below the ribbons (y > ~1200), outside the RSVP frame and the central plants
   const a = new Float32Array(W * H);
   // keep-outs: the RSVP frame (its outline: notched corners, so the bottom row is narrower than the middle)

@@ -1,0 +1,146 @@
+/* Admin dashboard styles (Tailwind): a light, minimal UI in the style of Resend's dashboard, set in Inter.
+   The invitation itself uses src/styles/poster.css. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #FFFFFF;          /* page */
+  --sidebar: #FAFAFA;     /* left menu */
+  --panel: #FFFFFF;       /* cards, tables */
+  --hover: #F4F4F5;       /* hovered rows / nav items */
+  --active: #EDEDEF;      /* current nav item */
+  --line: #E8E8EA;        /* borders */
+  --line-strong: #D9D9DD;
+  --ink: #18181B;         /* text */
+  --muted: #63636B;       /* secondary text */
+  --subtle: #8E8E96;      /* hints */
+  --gold: #A9831F;        /* the couple's brand touch */
+  --ok: #18794E;   --ok-bg: #E9F7EF;
+  --warn: #A35C00; --warn-bg: #FFF4D6;
+  --bad: #CE2C31;  --bad-bg: #FFEBEC;
+  --info: #0D74CE; --info-bg: #E8F3FD;
+  --wa: #128C4A;   --wa-bg: #E8F8EE;
+  --sidebar-w: 248px;
+  color-scheme: light;
+}
+
+@layer base {
+  html, body { background: var(--bg); }
+  body {
+    color: var(--ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 14px; line-height: 1.5;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  }
+  h1 { font-size: 1.5rem; line-height: 2rem; font-weight: 600; letter-spacing: -0.025em; }
+  h2 { letter-spacing: -0.01em; }
+  ::selection { background: rgba(13, 116, 206, .18); }
+  :focus-visible { outline: 2px solid rgba(24, 24, 27, .55); outline-offset: 2px; border-radius: 6px; }
+  input[type="checkbox"] { accent-color: #18181B; }
+}
+
+@layer components {
+  /* ---------- shell ---------- */
+  .sidebar {
+    position: fixed; inset: 0 auto 0 0; width: var(--sidebar-w); z-index: 40;
+    display: flex; flex-direction: column; background: var(--sidebar); border-right: 1px solid var(--line);
+  }
+  .shell-main { min-height: 100vh; }
+  @media (min-width: 1024px) { .shell-main { padding-left: var(--sidebar-w); } }
+  @media (max-width: 1023.98px) {
+    .sidebar { transform: translateX(-100%); transition: transform .2s ease; box-shadow: none; }
+    .sidebar.is-open { transform: none; box-shadow: 0 0 0 100vmax rgba(24, 24, 27, .35); }
+  }
+  .topbar {
+    position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    height: 56px; padding: 0 16px; background: rgba(255, 255, 255, .88); border-bottom: 1px solid var(--line);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+
+  .nav-link {
+    display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 10px; border-radius: 6px;
+    font-weight: 500; font-size: 14px; color: var(--muted); transition: background .12s, color .12s;
+  }
+  .nav-link svg { width: 16px; height: 16px; flex: none; opacity: .9; }
+  .nav-link:hover { color: var(--ink); background: var(--hover); }
+  .nav-link[aria-current="page"] { color: var(--ink); background: var(--active); }
+  .nav-section { padding: 0 10px; margin: 18px 0 6px; font-size: 12px; font-weight: 500; color: var(--subtle); }
+
+  /* ---------- surfaces & text ---------- */
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, .03); }
+  .muted { color: var(--muted); }
+  .subtle { color: var(--subtle); }
+  .divide > * + * { border-top: 1px solid var(--line); }
+  .page-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+  .page-head p { color: var(--muted); margin-top: 2px; }
+  .brand { font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+
+  /* ---------- forms ---------- */
+  .label { display: block; font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 6px; }
+  .input {
+    width: 100%; height: 36px; padding: 0 12px; border-radius: 6px; border: 1px solid var(--line-strong);
+    background: #FFFFFF; color: var(--ink); font: inherit; font-size: 14px; box-shadow: 0 1px 2px rgba(0, 0, 0, .03);
+    transition: border-color .12s, box-shadow .12s;
+  }
+  textarea.input { height: auto; padding: 8px 12px; line-height: 1.55; }
+  .input::placeholder { color: var(--subtle); }
+  .input:hover { border-color: #C4C4CA; }
+  .input:focus { outline: none; border-color: #A1A1AA; box-shadow: 0 0 0 3px rgba(24, 24, 27, .07); }
+  .input[readonly] { color: var(--muted); }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 0 12px;
+    border-radius: 6px; font-weight: 500; font-size: 13px; white-space: nowrap; cursor: pointer;
+    border: 1px solid var(--line-strong); background: #FFFFFF; color: var(--ink); box-shadow: 0 1px 2px rgba(0, 0, 0, .04);
+    transition: background .12s, border-color .12s, color .12s;
+  }
+  .btn:hover { background: var(--hover); border-color: #C4C4CA; }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn:disabled:hover { background: #FFFFFF; }
+  .btn svg { width: 15px; height: 15px; flex: none; }
+  .btn-primary { background: #18181B; color: #FFFFFF; border-color: #18181B; }
+  .btn-primary:hover { background: #2E2E33; border-color: #2E2E33; }
+  .btn-primary:disabled:hover { background: #18181B; }
+  .btn-wa { color: var(--wa); border-color: #B5E6C8; background: var(--wa-bg); }
+  .btn-wa:hover { background: #D6F3E1; border-color: #8FD8AC; }
+  .btn-wa:disabled:hover { background: var(--wa-bg); }
+  .btn-danger { color: var(--bad); }
+  .btn-danger:hover { background: var(--bad-bg); border-color: #F5B5B8; }
+  .btn-sm { height: 28px; padding: 0 10px; font-size: 12.5px; }
+  .btn-lg { height: 38px; padding: 0 16px; font-size: 14px; }
+  .btn-ghost { border-color: transparent; background: transparent; box-shadow: none; }
+
+  /* ---------- badges ---------- */
+  .chip { display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 6px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .chip-ok { background: var(--ok-bg); color: var(--ok); }
+  .chip-warn { background: var(--warn-bg); color: var(--warn); }
+  .chip-bad { background: var(--bad-bg); color: var(--bad); }
+  .chip-info { background: var(--info-bg); color: var(--info); }
+  .chip-muted { background: #F1F1F3; color: var(--muted); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+
+  /* ---------- notices ---------- */
+  .alert { padding: 10px 12px; border-radius: 6px; font-size: 13.5px; border: 1px solid transparent; }
+  .alert-ok { background: var(--ok-bg); color: var(--ok); border-color: #BFE7CF; }
+  .alert-bad { background: var(--bad-bg); color: var(--bad); border-color: #F8C7C9; }
+  .alert-warn { background: var(--warn-bg); color: var(--warn); border-color: #F5DE9C; }
+
+  /* ---------- tabs (segmented) ---------- */
+  .tabs { display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: 8px; background: #F7F7F8; max-width: 100%; overflow-x: auto; }
+  .tab { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 6px; font-size: 13px; font-weight: 500; color: var(--muted); white-space: nowrap; }
+  .tab:hover { color: var(--ink); }
+  .tab[aria-selected="true"] { background: #FFFFFF; color: var(--ink); box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgba(0, 0, 0, .06); }
+  .tab .count { color: var(--subtle); font-variant-numeric: tabular-nums; }
+
+  /* ---------- tables ---------- */
+  .table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .table th { text-align: left; font-size: 12px; color: var(--muted); font-weight: 500; padding: 10px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; background: #FAFAFA; }
+  .table td { padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  .table tr:last-child td { border-bottom: 0; }
+  .table tbody tr:hover td { background: #FAFAFA; }
+
+  code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .92em; padding: 1px 5px; border-radius: 4px; background: #F1F1F3; }
+}

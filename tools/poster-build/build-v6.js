@@ -10,7 +10,7 @@ const W = 1065, H = 1598, ROOT = path.resolve(__dirname, '../..'), OUT = process
 const ss = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
 (async () => {
   require('fs').mkdirSync(OUT, { recursive: true });
-  const bgSharp = sharp(ROOT + '/assets/art/Emerald Gold Wedding Invitation.png').removeAlpha().resize(W, H, { kernel: 'lanczos3' });
+  const bgSharp = sharp(ROOT + '/public/assets/art/Emerald Gold Wedding Invitation.png').removeAlpha().resize(W, H, { kernel: 'lanczos3' });
   const bg = Float32Array.from(await bgSharp.clone().raw().toBuffer());
   { // remove the "Color Theme" badge frame (gold lines + sparkles inside its box), filled from the green around it
     const [x0, y0, x1, y1] = [252, 1116, 816, 1186], m = new Uint8Array(W * H);
@@ -71,7 +71,7 @@ const ss = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t));
   let ta = new Float32Array(W * H); const tmd = dilate(tm, 3, W, H); for (let i = 0; i < W * H; i++) ta[i] = tmd[i]; ta = boxBlurF(ta, 1, W, H);
   await layer('title', tBox, ta);
   // the couple: placed at x 95, y 0, 807 wide; fades out behind the panels (poster y 470 → 545)
-  const CW = 807, src = sharp(ROOT + '/assets/couple/new_couple_background removed.png').ensureAlpha().resize(CW);
+  const CW = 807, src = sharp(ROOT + '/public/assets/couple/new_couple_background removed.png').ensureAlpha().resize(CW);
   const { data, info } = await src.raw().toBuffer({ resolveWithObject: true });
   const C = Buffer.from(data), ch = info.height;
   for (let y = 0; y < ch; y++) { const f = 1 - ss((y - 470) / 75); for (let x = 0; x < CW; x++) C[(y * CW + x) * 4 + 3] = Math.round(C[(y * CW + x) * 4 + 3] * f); }

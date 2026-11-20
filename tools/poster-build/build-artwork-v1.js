@@ -54,7 +54,7 @@ const save = (img, file, ch = 3, q) => {
 
   // ---------- 2. Couple silhouette (cutout aligned to the reference couple) ----------
   const S = 0.71, CX = 216, CY = 86, cw = Math.round(760 * S), chh = Math.round(1203 * S);
-  const a = await sharp(P + 'assets/couple/mark-and-mary-cutout.webp').resize(cw, chh).ensureAlpha().extractChannel(3).raw().toBuffer();
+  const a = await sharp(P + 'public/assets/couple/mark-and-mary-cutout.webp').resize(cw, chh).ensureAlpha().extractChannel(3).raw().toBuffer();
   const sil = new Uint8Array(W * H);
   for (let j = 0; j < chh; j++) for (let i = 0; i < cw; i++) if (a[j * cw + i] > 100 && CY + j < H && CX + i < W) sil[(CY + j) * W + CX + i] = 1;
   const HALO = 9, FILL = 6;

@@ -1,6 +1,6 @@
 /* =========================================================================
-   Mark & Mary — Wedding Invitation
-   Source stylesheet (Tailwind). Compiled to css/styles.css — see README.
+   Aaron & Josephine — Wedding Invitation
+   Source stylesheet (Tailwind). Imported by src/app/(invite)/layout.tsx.
 
    Layout: one poster, built on the 1065 × 1598 grid of the printed invitation.
    Each element sets --x / --y / --w (/ --h) in poster pixels; --u is one poster
@@ -365,4 +365,40 @@
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+
+/* =========================================================================
+   Notice pages in the poster's style: the private home page ("/"),
+   "Invitation not found" and "Too many attempts".
+   ========================================================================= */
+@layer components {
+  .notice-page {
+    min-height: 100vh; min-height: 100dvh; display: grid; place-items: center;
+    padding: max(24px, env(safe-area-inset-top, 0px)) 16px max(24px, env(safe-area-inset-bottom, 0px));
+    background: radial-gradient(120% 70% at 50% 0%, #1F3F8A 0%, #10234B 45%, #07152F 100%);
+  }
+  .notice-card {
+    width: min(100%, 520px); text-align: center; padding: 36px 24px 28px; border-radius: 22px;
+    background: radial-gradient(120% 80% at 50% 0%, rgba(31, 63, 138, .85) 0%, rgba(20, 44, 102, .9) 55%, rgba(11, 27, 69, .95) 100%);
+    border: 1.5px solid rgba(212, 175, 55, .8);
+    box-shadow: inset 0 0 0 5px rgba(11, 27, 69, .95), inset 0 0 0 6px rgba(243, 217, 139, .3), 0 30px 80px rgba(0, 0, 0, .6);
+    font-family: var(--font-times);
+  }
+  .notice-rings { width: 132px; height: auto; margin: 0 auto 6px; display: block; }
+  .notice-names {
+    font-family: var(--font-couple); font-size: clamp(2.3rem, 10vw, 3.2rem); line-height: 1.15; color: #F8D46E;
+    text-shadow: 0 2px 0 #4A2A04, 0 0 14px rgba(255, 214, 120, .35);
+  }
+  .notice-date { margin-top: 4px; font-weight: 500; color: #FFF8EC; letter-spacing: .02em; }
+  .notice-rule { width: 64%; height: 1.5px; margin: 20px auto; background: linear-gradient(90deg, transparent, #E8BC55 30%, #FFE7A3 50%, #E8BC55 70%, transparent); }
+  .notice-title { font-weight: 600; font-size: 1.15rem; color: #F4C553; }
+  .notice-text { margin-top: 8px; color: #FFF8EC; line-height: 1.55; }
+  .notice-contacts { margin-top: 18px; display: grid; gap: 12px; justify-items: center; }
+  .notice-contact { display: inline-flex; align-items: center; gap: 10px; color: #FFF8EC; text-decoration: none; font-weight: 500; }
+  .notice-contact:hover { color: var(--gold-light); }
+  .notice-contact svg { width: 18px; height: 18px; flex: none; color: #F6C64E; }
+  .notice-contact-text { display: flex; flex-direction: column; text-align: left; line-height: 1.3; }
+  .notice-contact-phone { white-space: nowrap; color: var(--gold-light); }
+  .notice-admin { display: inline-block; margin-top: 26px; font-family: var(--font-sans); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: rgba(255, 241, 214, .55); text-decoration: none; }
+  .notice-admin:hover { color: var(--gold-light); }
 }
