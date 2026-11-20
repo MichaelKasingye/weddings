@@ -54,7 +54,7 @@ window.WEDDING_CONFIG = {
     title: 'RSVP',
     // one row per contact in the RSVP bar (two fit)
     contacts: [
-      { name: 'Mr. Mwesigye Brian', phone: '0702 988061' },
+      { name: 'Nalubowa Doreen', phone: '+256 771 008212' },
       { name: 'John Paul', phone: '+256 782 871428' },
     ],
   },

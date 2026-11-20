@@ -39,7 +39,7 @@ Everything lives in `window.WEDDING_CONFIG` at the top of **`js/main.js`**.
 | Reception | `reception.text`, `reception.venue`, `reception.time`, `reception.mapsQuery` | `'Thereafter, guests\nwill proceed to\n{venue}\nstarting at {time}.'` |
 | Line under the tagline | `note` | `'Children are loved but not invited.'` (`''` hides it) |
 | Bottom line | `tagline` | `'Let’s celebrate love, …'` |
-| RSVP | `rsvp.name`, `rsvp.phone`, `phoneCountryCode` | `'Mr. Mwesigye Brian'`, `'0702 988061'`, `'+256'` (tap to call) |
+| RSVP | `rsvp.contacts` (one `{ name, phone }` per row), `phoneCountryCode` | `'Nalubowa Doreen' +256 771 008212`, `'John Paul' +256 782 871428` (tap to call) |
 | Guest bar placeholder | `guest.label` | `'Mr./Mrs./Ms./Dr.'` (a personal link writes the guest's name there) |
 
 `date: null` shows **"Date to be confirmed"**.
