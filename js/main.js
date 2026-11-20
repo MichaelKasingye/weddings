@@ -40,7 +40,7 @@ window.WEDDING_CONFIG = {
   },
   reception: {
     label: 'Reception:',
-    text: 'Thereafter, guests\nwill proceed to\n{venue}\nstarting at {time}.',  // {venue} becomes a map link
+    text: '{venue}\nTime: {time}',  // {venue} becomes a map link
     venue: 'Akaama Gardens',
     time: '4:00 PM',
     mapsQuery: 'Akaama Gardens, Uganda',
@@ -49,7 +49,15 @@ window.WEDDING_CONFIG = {
 
   tagline: 'Let’s celebrate love, family and new beginnings together!',
   note: 'Children are loved but not invited.',   // line under the tagline ('' hides it)
-  rsvp: { title: 'RSVP', name: 'Mr. Mwesigye Brian', phone: '0702 988061' },
+  confirmNote: 'Please confirm attendance by 20th December to aid better organisation of the event.',   // line under the note ('' hides it)
+  rsvp: {
+    title: 'RSVP',
+    // one row per contact in the RSVP bar (two fit)
+    contacts: [
+      { name: 'Mr. Mwesigye Brian', phone: '0702 988061' },
+      { name: 'John Paul', phone: '+256 782 871428' },
+    ],
+  },
   phoneCountryCode: '+256',
 
   // ---- Guest personalisation ----
@@ -190,9 +198,10 @@ window.WEDDING_CONFIG = {
     '#churchTime': { fs: 21.5, sx: 1 },
     '[data-bind="church.note"]': { fs: 16, lh: 1.25, sx: 1 },
     '[data-bind="reception.label"]': { fs: 24, sx: 1 },
-    '#receptionText': { fs: 21.5, lh: 1.2, sx: 1 },    // same font, size and spacing as the families text
+    '#receptionText': { fs: 21.5, lh: 1.49, y: 1100, sx: 1 },    // venue + time lines sit level with the church's name + time
     '[data-bind="tagline"]': { fs: 25, sx: 1 },
     '[data-bind="note"]': { fs: 19, sx: 1 },
+    '[data-bind="confirmNote"]': { fs: 17, sx: 1 },
   };
   function applyFontStyle() {
     const modern = C.fontStyle === 'modern';
@@ -210,7 +219,8 @@ window.WEDDING_CONFIG = {
       if (val) { el.textContent = val; if (el.classList.contains('gold')) el.dataset.text = val; }
     });
     $('.honorific').hidden = !C.honorific;
-    $('.note-line').hidden = !C.note;
+    $('[data-bind="note"]').hidden = !C.note;
+    $('[data-bind="confirmNote"]').hidden = !C.confirmNote;
 
     setDetail($('#dateText'), C.date, C.pendingText.date);
     const ch = C.church || {};
@@ -220,7 +230,9 @@ window.WEDDING_CONFIG = {
     $('#receptionText').innerHTML = esc(rc.text || '')
       .replace('{venue}', '<a class="det-link det-venue" href="' + esc(mapsOpenUrl(rc)) + '" data-map="reception" aria-haspopup="dialog">' + esc(rc.venue || '') + '</a>')
       .replace('{time}', esc(rc.time || ''));
-    if (C.rsvp) $('#rsvpPhone').href = telHref(C.rsvp.phone);
+    const contacts = (C.rsvp && C.rsvp.contacts) || [];
+    $('#rsvpNames').innerHTML = contacts.map((c) => '<p class="rsvp-name"><svg class="rsvp-ico" aria-hidden="true"><use href="#i-phone"/></svg><span>' + esc(c.name) + '</span></p>').join('');
+    $('#rsvpPhones').innerHTML = contacts.map((c) => '<a class="rsvp-phone" href="' + esc(telHref(c.phone)) + '" aria-label="Call ' + esc(c.name) + ', ' + esc(c.phone) + '">' + esc(c.phone) + '</a>').join('');
 
     const bg = $('.poster-bg');
     if (C.images.background && !bg.src.endsWith(C.images.background)) bg.src = C.images.background;

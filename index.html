@@ -151,18 +151,26 @@ let no one separate.”
 to be seated by 11:30 AM)</p>
 
       <p class="tx l det-label" style="--x:800;--y:1068;--fs:26" data-bind="reception.label">Reception:</p>
-      <p class="tx l det-value" style="--x:800;--y:1102;--fs:23;--lh:1.25" id="receptionText" data-maxw="245">Thereafter, guests will proceed to Akaama Gardens starting at 4:00 PM.</p>
+      <p class="tx l det-value" style="--x:800;--y:1102;--fs:23;--lh:1.25" id="receptionText" data-maxw="245">Akaama Gardens
+Time: 4:00 PM</p>
     </section>
     <p class="tx c script-line tagline" style="--x:533;--y:1262;--fs:28" data-bind="tagline" data-maxw="640">Let’s celebrate love, family and new beginnings together!</p>
     <p class="tx c script-line note-line" style="--x:533;--y:1306;--fs:21" data-bind="note" data-maxw="560">Children are loved but not invited.</p>
+    <p class="tx c script-line note-line" style="--x:533;--y:1336;--fs:18" data-bind="confirmNote" data-maxw="660">Please confirm attendance by 20th December to aid better organisation of the event.</p>
 
-    <!-- RSVP: one line in the gold-framed bar (the bar is artwork) -->
+    <!-- RSVP: the gold-framed bar (artwork) — RSVP | ☎ names | numbers, one row per contact (filled from the config) -->
     <section class="pos rsvp-bar" style="--x:48;--y:1392;--w:970;--h:60" aria-label="RSVP">
       <p class="rsvp-title" data-bind="rsvp.title">RSVP</p>
       <span class="rsvp-div" aria-hidden="true"></span>
-      <p class="rsvp-name"><svg class="rsvp-ico" aria-hidden="true"><use href="#i-phone"/></svg><span data-bind="rsvp.name">Mr. Mwesigye Brian</span></p>
+      <div class="rsvp-col" id="rsvpNames">
+        <p class="rsvp-name"><svg class="rsvp-ico" aria-hidden="true"><use href="#i-phone"/></svg><span>Mr. Mwesigye Brian</span></p>
+        <p class="rsvp-name"><svg class="rsvp-ico" aria-hidden="true"><use href="#i-phone"/></svg><span>John Paul</span></p>
+      </div>
       <span class="rsvp-div" aria-hidden="true"></span>
-      <a class="rsvp-phone" id="rsvpPhone" href="tel:+256702988061"><span data-bind="rsvp.phone">0702 988061</span></a>
+      <div class="rsvp-col" id="rsvpPhones">
+        <a class="rsvp-phone" href="tel:+256702988061">0702 988061</a>
+        <a class="rsvp-phone" href="tel:+256782871428">+256 782 871428</a>
+      </div>
     </section>
   </article>
   </div>

@@ -114,8 +114,9 @@
   /* RSVP bar: one row inside the gold-framed bar — RSVP | ☎ name | number */
   .rsvp-bar { display: flex; align-items: center; justify-content: space-evenly; margin: 0; }
   .rsvp-bar .rsvp-title { margin: 0; font-size: calc(var(--u) * 40); line-height: 1; }
-  .rsvp-bar .rsvp-name, .rsvp-bar .rsvp-phone { margin: 0; display: inline-flex; align-items: center; gap: calc(var(--u) * 12); font-size: calc(var(--u) * 29); line-height: 1; white-space: nowrap; }
-  .rsvp-ico { width: calc(var(--u) * 32); height: calc(var(--u) * 32); flex: none; color: #F6C64E; filter: drop-shadow(0 0 calc(var(--u) * 3) rgba(255, 210, 120, .5)); }
+  .rsvp-col { display: flex; flex-direction: column; justify-content: center; gap: calc(var(--u) * 7); }
+  .rsvp-bar .rsvp-name, .rsvp-bar .rsvp-phone { margin: 0; display: flex; align-items: center; gap: calc(var(--u) * 10); font-size: calc(var(--u) * 23); line-height: 1; white-space: nowrap; }
+  .rsvp-ico { width: calc(var(--u) * 24); height: calc(var(--u) * 24); flex: none; color: #F6C64E; filter: drop-shadow(0 0 calc(var(--u) * 3) rgba(255, 210, 120, .5)); }
   .rsvp-div { width: calc(var(--u) * 2); height: 70%; background: linear-gradient(180deg, rgba(217, 174, 79, 0), #E8BC55 25%, #FFE7A3 50%, #E8BC55 75%, rgba(217, 174, 79, 0)); }
   .ribbon-text {
     font-family: var(--font-times); font-weight: 700; color: #3A2507; -webkit-text-stroke: calc(var(--u) * .3) #3A2507;
