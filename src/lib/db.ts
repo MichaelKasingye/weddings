@@ -62,7 +62,10 @@ export type GuestDoc = {
   updatedAt: Date;
   whatsapp?: SendRecord | null;
   sms?: SmsRecord | null;
+  /** "Viewed": the invitation loaded on the guest's screen (counted from the browser, see /api/open) */
   opens?: { count: number; firstAt: Date; lastAt: Date } | null;
+  /** the invitation downloaded as a PDF (see /i/<link>/pdf) */
+  pdf?: { count: number; firstAt: Date; lastAt: Date } | null;
 };
 
 export type SettingsDoc = {
@@ -85,6 +88,15 @@ export type ActivityDoc = {
 };
 
 export type RateDoc = { _id: string; count: number; expiresAt: Date };
+
+/** One thing a guest did with their invitation, for the history on their page in the dashboard. */
+export type GuestEventDoc = {
+  _id?: ObjectId;
+  guestId: ObjectId;
+  type: 'view' | 'pdf';
+  at: Date;
+  device: string; // e.g. "Android phone", "iPhone", "Windows computer"
+};
 
 /** One document, rewritten by every /api/health call, so the check is a real write + read. */
 export type HealthDoc = { _id: 'heartbeat'; count: number; lastAt: Date; firstAt: Date };
@@ -127,7 +139,7 @@ function client(): Promise<MongoClient> {
 }
 
 /** Bump this after changing the list below, so every server creates the new indexes once. */
-const INDEXES_VERSION = 1;
+const INDEXES_VERSION = 2;
 
 async function ensureIndexes(db: Db) {
   // one quick read instead of 8 createIndex calls on every cold start
@@ -142,6 +154,8 @@ async function ensureIndexes(db: Db) {
     db.collection('guests').createIndex({ phone: 1 }),
     db.collection('activity').createIndex({ at: -1 }),
     db.collection('rate_limits').createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
+    db.collection('guest_events').createIndex({ guestId: 1, at: -1 }),
+    db.collection('guest_events').createIndex({ at: -1 }),
   ]);
   await meta.updateOne({ _id: 'indexes' }, { $set: { version: INDEXES_VERSION, at: new Date() } }, { upsert: true });
 }
@@ -172,5 +186,6 @@ type Collections = {
   settings: SettingsDoc;
   activity: ActivityDoc;
   rate_limits: RateDoc;
+  guest_events: GuestEventDoc;
   health: HealthDoc;
 };

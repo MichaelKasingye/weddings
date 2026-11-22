@@ -19,7 +19,7 @@ async function getJson<T>(url: string): Promise<T> {
 
 /**
  * The guest list. Refreshes in the background every minute and whenever you come back to the tab
- * (e.g. from WhatsApp), so "Opened" and SMS delivery reports show up without reloading the page.
+ * (e.g. from WhatsApp), so new views, PDF downloads and SMS delivery reports show up without reloading the page.
  */
 export function useGuests() {
   return useQuery({

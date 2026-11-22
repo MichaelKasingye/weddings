@@ -10,15 +10,27 @@ export default async function Overview() {
   const user = await requireUser();
   const guests = await col('guests');
   const [totals] = await guests
-    .aggregate<{ invitations: number; people: number }>([{ $group: { _id: null, invitations: { $sum: 1 }, people: { $sum: '$seats' } } }])
+    .aggregate<{ invitations: number; people: number; views: number; downloads: number }>([
+      { $group: { _id: null, invitations: { $sum: 1 }, people: { $sum: '$seats' }, views: { $sum: { $ifNull: ['$opens.count', 0] } }, downloads: { $sum: { $ifNull: ['$pdf.count', 0] } } } },
+    ])
     .toArray();
-  const [sent, opened, sentNotOpened] = await Promise.all([
+  const [sent, viewed, sentNotViewed, downloaded] = await Promise.all([
     guests.countDocuments(SENT),
     guests.countDocuments({ opens: { $ne: null } }),
     guests.countDocuments({ $and: [SENT, { opens: null }] }),
+    guests.countDocuments({ pdf: { $ne: null } }),
   ]);
   const invitations = totals?.invitations ?? 0;
   const people = totals?.people ?? 0;
+  const views = totals?.views ?? 0;
+  const downloads = totals?.downloads ?? 0;
+
+  // the latest views and downloads, with the guest's name
+  const recent = await (await col('guest_events')).find({}).sort({ at: -1 }).limit(12).toArray();
+  const recentIds = [...new Map(recent.map((e) => [e.guestId.toHexString(), e.guestId])).values()];
+  const recentGuests = new Map(
+    (await guests.find({ _id: { $in: recentIds } }, { projection: { name: 1 } }).toArray()).map((g) => [g._id.toHexString(), g.name]),
+  );
   const activity = await (await col('activity')).find({}).sort({ at: -1 }).limit(12).toArray();
   const pct = (n: number) => (invitations ? Math.round((n / invitations) * 100) : 0);
 
@@ -27,8 +39,10 @@ export default async function Overview() {
     { label: 'People invited', value: people, note: 'couples count as 2', href: '/dashboard/guests' },
     { label: 'Sent', value: sent, note: `${pct(sent)}% of invitations`, href: '/dashboard/guests?filter=sent', tone: 'var(--ok)' },
     { label: 'Not sent yet', value: invitations - sent, note: 'waiting to be sent', href: '/dashboard/guests?filter=unsent' },
-    { label: 'Opened', value: opened, note: `${pct(opened)}% viewed their invite`, href: '/dashboard/guests?filter=opened', tone: 'var(--info)' },
-    { label: 'Sent, not opened', value: sentNotOpened, note: 'maybe follow up', href: '/dashboard/guests?filter=unopened', tone: 'var(--warn)' },
+    { label: 'Viewed', value: viewed, note: `${pct(viewed)}% of guests viewed their invite`, href: '/dashboard/guests?filter=viewed', tone: 'var(--info)' },
+    { label: 'Sent, not viewed', value: sentNotViewed, note: 'maybe follow up', href: '/dashboard/guests?filter=unviewed', tone: 'var(--warn)' },
+    { label: 'Downloaded PDF', value: downloaded, note: `${downloads.toLocaleString('en-GB')} downloads in total`, href: '/dashboard/guests?filter=pdf', tone: 'var(--info)' },
+    { label: 'Views in total', value: views, note: 'every time an invite was viewed', href: '/dashboard/guests?filter=viewed' },
   ];
 
   return (
@@ -43,7 +57,7 @@ export default async function Overview() {
         )}
       </div>
 
-      <div className="panel grid grid-cols-2 lg:grid-cols-3 overflow-hidden" style={{ gap: 1, background: 'var(--line)' }}>
+      <div className="panel grid grid-cols-2 lg:grid-cols-4 overflow-hidden" style={{ gap: 1, background: 'var(--line)' }}>
         {tiles.map((t) => (
           <Link key={t.label} href={t.href} className="block p-5 transition-colors hover:bg-[#FAFAFA]" style={{ background: 'var(--panel)' }}>
             <p className="muted text-[13px] font-medium flex items-center gap-2">
@@ -60,21 +74,48 @@ export default async function Overview() {
         <section className="panel p-5 mt-4">
           <div className="flex flex-wrap justify-between gap-2 text-[13px] mb-3">
             <span className="font-medium">Progress</span>
-            <span className="muted tabular-nums">{sent} of {invitations} sent · {opened} opened</span>
+            <span className="muted tabular-nums">{sent} of {invitations} sent · {viewed} viewed · {downloaded} downloaded the PDF</span>
           </div>
-          <div className="h-2 rounded-full overflow-hidden flex" style={{ background: 'var(--active)' }} role="img" aria-label={`${pct(opened)}% opened, ${pct(sentNotOpened)}% sent but not opened`}>
-            <div style={{ width: `${pct(opened)}%`, background: 'var(--info)' }} />
-            <div style={{ width: `${pct(sentNotOpened)}%`, background: 'var(--warn)' }} />
+          <div className="h-2 rounded-full overflow-hidden flex" style={{ background: 'var(--active)' }} role="img" aria-label={`${pct(viewed)}% viewed, ${pct(sentNotViewed)}% sent but not viewed`}>
+            <div style={{ width: `${pct(viewed)}%`, background: 'var(--info)' }} />
+            <div style={{ width: `${pct(sentNotViewed)}%`, background: 'var(--warn)' }} />
           </div>
           <div className="flex gap-4 text-xs muted mt-3">
-            <span className="flex items-center gap-1.5"><span className="dot" style={{ color: 'var(--info)' }} />Opened</span>
-            <span className="flex items-center gap-1.5"><span className="dot" style={{ color: 'var(--warn)' }} />Sent, not opened</span>
+            <span className="flex items-center gap-1.5"><span className="dot" style={{ color: 'var(--info)' }} />Viewed</span>
+            <span className="flex items-center gap-1.5"><span className="dot" style={{ color: 'var(--warn)' }} />Sent, not viewed</span>
           </div>
         </section>
       )}
 
       <section className="mt-10">
-        <h2 className="text-base font-semibold mb-3">Recent activity</h2>
+        <h2 className="text-base font-semibold mb-3">Recent guest activity</h2>
+        {recent.length === 0 ? (
+          <p className="muted panel p-5">No views or downloads yet.</p>
+        ) : (
+          <div className="panel overflow-x-auto">
+            <table className="table">
+              <thead>
+                <tr><th>Guest</th><th>What</th><th>Device</th><th style={{ textAlign: 'right' }}>When</th></tr>
+              </thead>
+              <tbody>
+                {recent.map((e) => (
+                  <tr key={e._id!.toHexString()}>
+                    <td className="font-medium">
+                      <Link className="hover:underline" href={`/dashboard/guests/${e.guestId.toHexString()}/history`}>{recentGuests.get(e.guestId.toHexString()) ?? 'Deleted guest'}</Link>
+                    </td>
+                    <td className="muted whitespace-nowrap">{e.type === 'pdf' ? 'Downloaded the PDF' : 'Viewed the invitation'}</td>
+                    <td className="muted whitespace-nowrap">{e.device}</td>
+                    <td className="subtle tabular-nums whitespace-nowrap text-right">{when(e.at)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-base font-semibold mb-3">Recent admin activity</h2>
         {activity.length === 0 ? (
           <p className="muted panel p-5">Nothing yet.</p>
         ) : (

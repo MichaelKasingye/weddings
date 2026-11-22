@@ -63,7 +63,10 @@ export type GuestRow = {
   smsText: string;
   whatsapp: { at: string; byName: string } | null;
   sms: { at: string; byName: string; status: string; error?: string | null } | null;
+  /** viewed: the invitation loaded on the guest's screen */
   opens: { count: number; firstAt: string; lastAt: string } | null;
+  /** downloaded as a PDF */
+  pdf: { count: number; firstAt: string; lastAt: string } | null;
   createdAt: string;
 };
 
@@ -81,6 +84,7 @@ export function toGuestRow(g: GuestDoc, templates: { whatsapp: string; sms: stri
     whatsapp: g.whatsapp ? { at: g.whatsapp.at.toISOString(), byName: g.whatsapp.byName } : null,
     sms: g.sms ? { at: g.sms.at.toISOString(), byName: g.sms.byName, status: g.sms.status, error: g.sms.error ?? null } : null,
     opens: g.opens ? { count: g.opens.count, firstAt: g.opens.firstAt.toISOString(), lastAt: g.opens.lastAt.toISOString() } : null,
+    pdf: g.pdf ? { count: g.pdf.count, firstAt: g.pdf.firstAt.toISOString(), lastAt: g.pdf.lastAt.toISOString() } : null,
     createdAt: g.createdAt.toISOString(),
   };
 }

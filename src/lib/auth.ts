@@ -7,6 +7,9 @@ import { col, type Role, type UserDoc } from './db';
 import { newToken, sha256 } from './crypto';
 
 export const SESSION_COOKIE = 'aj_session';
+
+/** How many super admins there can be at the same time. */
+export const MAX_SUPER_ADMINS = 3;
 const SESSION_DAYS = 30;
 
 export type CurrentUser = { id: string; _id: ObjectId; username: string; role: Role };

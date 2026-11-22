@@ -63,7 +63,7 @@ export default async function GuestInvite({ params }: Props) {
   const [settings, admin] = await Promise.all([getSettings(), getCurrentUser()]);
   return (
     <Poster
-      guest={{ name: guest.name, seats: guest.seats, code: guest.code }}
+      guest={{ name: guest.name, seats: guest.seats, code: guest.code, pdfUrl: `${guestPath(guest)}/pdf` }}
       rsvpContacts={settings.rsvpContacts}
       track={!admin /* admins previewing an invite don't count as the guest opening it */}
     />

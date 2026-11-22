@@ -7,7 +7,7 @@ import { WEDDING as C, mapsOpenUrl, type Place } from '@/lib/wedding';
   Everything the poster does in the browser, ported from the old js/main.js:
   fitting long text, the venue map window, background music, the welcome banner,
   fireworks + confetti (public/js/fireworks.js, public/js/confetti.js, unchanged)
-  and telling the server the guest opened their invitation.
+  and telling the server the guest viewed their invitation.
 */
 
 type FireworksApi = { start(): void; launchAt(x: number, y: number): void };
@@ -166,6 +166,17 @@ function hideWelcome() {
   setTimeout(() => { w.hidden = true; w.classList.remove('is-leaving'); }, 450);
 }
 
+/* ---------- download as PDF: the server makes it, which takes a moment ---------- */
+function wirePdf() {
+  const btn = $<HTMLAnchorElement>('#pdfDownload'), toast = $('#toast');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    btn.classList.add('is-busy');
+    if (toast) { toast.textContent = 'Preparing your invitation PDF…'; toast.hidden = false; }
+    setTimeout(() => { btn.classList.remove('is-busy'); if (toast) toast.hidden = true; }, 3500);
+  });
+}
+
 /* ---------- fireworks + confetti (unless the visitor prefers reduced motion) ---------- */
 async function startEffects(): Promise<{ cfOn: boolean }> {
   const motionOk = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -203,13 +214,14 @@ export default function PosterClient({ code, track }: { code: string; track: boo
     const ro = new ResizeObserver(() => { fitText(); fitGuestName(); });
     ro.observe(poster);
     wireMap();
+    wirePdf();
     startMusic();
     startEffects().then((state) => {
       showWelcome();
       if (state.cfOn) window.Celebration?.welcome();
     });
 
-    // "opened": counted from the browser, so WhatsApp's link-preview robot doesn't count as the guest
+    // "viewed": counted from the browser, so WhatsApp's link-preview robot doesn't count as the guest
     if (track) {
       fetch('/api/open', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }), keepalive: true }).catch(() => {});
     }

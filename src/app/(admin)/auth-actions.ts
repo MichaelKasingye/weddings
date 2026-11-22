@@ -111,8 +111,11 @@ export async function recoverAction(_: FormState, form: FormData): Promise<FormS
   if (weak) return { error: weak };
 
   const users = await col('users');
-  const user = await users.findOne({ role: 'super', active: true }, { sort: { createdAt: 1 } });
-  if (!user) return { error: 'There is no super admin yet. Open /setup instead.' };
+  const username = String(form.get('username') || '').trim().toLowerCase();
+  const user = username
+    ? await users.findOne({ usernameLower: username, role: 'super', active: true })
+    : await users.findOne({ role: 'super', active: true }, { sort: { createdAt: 1 } });
+  if (!user) return { error: username ? 'That isn’t a super admin.' : 'There is no super admin yet. Open /setup instead.' };
 
   await users.updateOne({ _id: user._id }, { $set: { passwordHash: await hashPassword(password) } });
   await endAllSessions(user._id); // log out every device that was still logged in

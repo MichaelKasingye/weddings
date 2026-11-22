@@ -9,7 +9,10 @@ import { queryKeys } from '@/lib/query-keys';
 import { getSettings } from '@/lib/settings';
 import { smsConfig } from '@/lib/sms';
 
-const FILTERS: Filter[] = ['all', 'unsent', 'sent', 'opened', 'unopened'];
+// a list from a client component can't be used here (it would be a client reference), so it's repeated
+const FILTER_KEYS: Filter[] = ['all', 'unsent', 'sent', 'viewed', 'unviewed', 'pdf'];
+// old addresses (from before "opened" became "viewed") still work
+const RENAMED: Record<string, Filter> = { opened: 'viewed', unopened: 'unviewed' };
 
 export default async function GuestsPage({ searchParams }: { searchParams: Promise<{ filter?: string }> }) {
   const user = await requireUser();
@@ -38,7 +41,7 @@ export default async function GuestsPage({ searchParams }: { searchParams: Promi
           isSuper={user.role === 'super'}
           smsReady={smsConfig().configured && settings.smsEnabled}
           me={user.username}
-          initialFilter={FILTERS.includes(filter as Filter) ? (filter as Filter) : 'all'}
+          initialFilter={FILTER_KEYS.includes(filter as Filter) ? (filter as Filter) : RENAMED[filter ?? ''] ?? 'all'}
         />
       </HydrationBoundary>
     </>

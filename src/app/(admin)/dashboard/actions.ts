@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { ObjectId } from 'mongodb';
 import { col, type GuestDoc } from '@/lib/db';
-import { assertUser, checkUsername, endAllSessions, logActivity, type CurrentUser } from '@/lib/auth';
+import { assertUser, checkUsername, endAllSessions, logActivity, MAX_SUPER_ADMINS, type CurrentUser } from '@/lib/auth';
 import { checkPasswordStrength, hashPassword, newToken, sha256, verifyPassword } from '@/lib/crypto';
 import { checkGuestName, checkSeats, fillMessage, slugify, uniqueGuestCode } from '@/lib/guests';
 import { normalizePhone } from '@/lib/phone';
@@ -262,6 +262,39 @@ export async function revokeInviteAction(inviteId: string): Promise<Result> {
   }
 }
 
+/** Makes an admin a super admin (at most MAX_SUPER_ADMINS), or a super admin a regular admin (never the last one). */
+export async function setAdminRoleAction(userId: string, role: 'super' | 'admin'): Promise<Result> {
+  try {
+    const user = await assertUser('super');
+    const _id = oid(userId);
+    const users = await col('users');
+    const target = _id ? await users.findOne({ _id, active: true }) : null;
+    if (!target) return { ok: false, error: 'Admin not found.' };
+    if (target.role === role) return { ok: true };
+
+    const supers = await users.countDocuments({ role: 'super', active: true });
+    if (role === 'super' && supers >= MAX_SUPER_ADMINS) {
+      return { ok: false, error: `There can be at most ${MAX_SUPER_ADMINS} super admins. Make one of them a regular admin first.` };
+    }
+    if (role === 'admin' && supers <= 1) return { ok: false, error: 'There must always be at least one super admin.' };
+
+    // the count is checked again in the update, so two clicks at once can't go past the limits
+    const changed = await users.updateOne({ _id: target._id, role: target.role }, { $set: { role } });
+    if (!changed.modifiedCount) return { ok: false, error: 'Their role was just changed by someone else. Reload the page.' };
+    const after = await users.countDocuments({ role: 'super', active: true });
+    if (after > MAX_SUPER_ADMINS || after < 1) {
+      await users.updateOne({ _id: target._id }, { $set: { role: target.role } });
+      return { ok: false, error: 'Someone else changed the super admins at the same time. Please try again.' };
+    }
+
+    await logActivity(user, role === 'super' ? 'Made a super admin' : 'Made a regular admin', { admin: target.username });
+    refresh();
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: errMsg(e) };
+  }
+}
+
 export async function removeAdminAction(userId: string): Promise<Result> {
   try {
     const user = await assertUser('super');
@@ -270,7 +303,7 @@ export async function removeAdminAction(userId: string): Promise<Result> {
     const users = await col('users');
     const target = await users.findOne({ _id });
     if (!target) return { ok: false, error: 'Admin not found.' };
-    if (target.role === 'super') return { ok: false, error: 'The super admin can’t be removed.' };
+    if (target.role === 'super') return { ok: false, error: `${target.username} is a super admin. Make them a regular admin first, then remove them.` };
     await users.deleteOne({ _id });
     await endAllSessions(_id);
     await (await col('invites')).updateMany({ userId: _id, usedAt: null }, { $set: { revokedAt: new Date() } });

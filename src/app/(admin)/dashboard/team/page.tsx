@@ -1,5 +1,5 @@
 import TeamManager from '@/components/admin/TeamManager';
-import { requireUser } from '@/lib/auth';
+import { MAX_SUPER_ADMINS, requireUser } from '@/lib/auth';
 import { col } from '@/lib/db';
 
 export default async function TeamPage() {
@@ -13,10 +13,14 @@ export default async function TeamPage() {
     <div className="max-w-3xl space-y-4">
       <div>
         <h1>Team</h1>
-        <p className="muted text-sm">Admins can see the guest list and send invitations. Only you can add, edit or delete guests and change settings.</p>
+        <p className="muted text-sm">
+          Admins can see the guest list and send invitations. Super admins (up to {MAX_SUPER_ADMINS}) can also add, edit or delete guests,
+          change settings and manage the team.
+        </p>
       </div>
       <TeamManager
         meId={me.id}
+        maxSupers={MAX_SUPER_ADMINS}
         users={users.map((u) => ({ id: u._id.toHexString(), username: u.username, role: u.role, lastLoginAt: u.lastLoginAt?.toISOString() ?? null, createdAt: u.createdAt.toISOString() }))}
         pending={invites.map((i) => ({
           id: i._id.toHexString(),

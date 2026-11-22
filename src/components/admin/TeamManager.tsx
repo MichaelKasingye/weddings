@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { when } from '@/lib/format';
-import { createInviteLinkAction, createResetLinkAction, removeAdminAction, revokeInviteAction } from '@/app/(admin)/dashboard/actions';
+import { createInviteLinkAction, createResetLinkAction, removeAdminAction, revokeInviteAction, setAdminRoleAction } from '@/app/(admin)/dashboard/actions';
 
 type U = { id: string; username: string; role: 'super' | 'admin'; lastLoginAt: string | null; createdAt: string };
 type P = { id: string; purpose: 'join' | 'reset'; forUser: string | null; createdAt: string; expiresAt: string };
@@ -26,7 +26,7 @@ function NewLink({ link, title, message, onClose }: { link: string; title: strin
   );
 }
 
-export default function TeamManager({ meId, users, pending }: { meId: string; users: U[]; pending: P[] }) {
+export default function TeamManager({ meId, maxSupers, users, pending }: { meId: string; maxSupers: number; users: U[]; pending: P[] }) {
   const [link, setLink] = useState<{ link: string; title: string; message: string } | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -44,6 +44,20 @@ export default function TeamManager({ meId, users, pending }: { meId: string; us
     const r = await createResetLinkAction(u.id);
     if (r.ok) setLink({ link: r.link, title: `Password reset link for ${r.username}`, message: `${r.username}, open this link to set a new password for the wedding invitations dashboard:` });
     else setError(r.error);
+  }
+  const supers = users.filter((u) => u.role === 'super').length;
+  async function setRole(u: U, role: 'super' | 'admin') {
+    const question =
+      role === 'super'
+        ? `Make ${u.username} a super admin? They will be able to add, edit and delete guests, change settings and manage the team.`
+        : u.id === meId
+          ? 'Make yourself a regular admin? You will no longer be able to manage guests, settings or the team.'
+          : `Make ${u.username} a regular admin? They will no longer be able to manage guests, settings or the team.`;
+    if (!confirm(question)) return;
+    setError('');
+    const r = await setAdminRoleAction(u.id, role);
+    if (!r.ok) setError(r.error);
+    else if (u.id === meId) window.location.href = '/dashboard';
   }
   async function remove(u: U) {
     if (!confirm(`Remove ${u.username}? They are logged out and can no longer log in.`)) return;
@@ -72,7 +86,7 @@ export default function TeamManager({ meId, users, pending }: { meId: string; us
       </section>
 
       <section className="panel">
-        <h2 className="font-semibold px-5 pt-4 pb-2">Members ({users.length})</h2>
+        <h2 className="font-semibold px-5 pt-4 pb-2">Members ({users.length}) <span className="muted text-sm font-normal">· {supers} of {maxSupers} super admins</span></h2>
         <ul>
           {users.map((u) => (
             <li key={u.id} className="flex flex-wrap items-center gap-3 px-5 py-3 border-t" style={{ borderColor: 'var(--line)' }}>
@@ -83,12 +97,29 @@ export default function TeamManager({ meId, users, pending }: { meId: string; us
                 </p>
                 <p className="muted text-xs">{u.lastLoginAt ? `Last login ${when(u.lastLoginAt)}` : 'Never logged in'} · joined {when(u.createdAt)}</p>
               </div>
-              {u.role !== 'super' && (
-                <div className="flex gap-2">
-                  <button className="btn btn-sm" onClick={() => reset(u)}>Reset password</button>
-                  <button className="btn btn-sm btn-danger" onClick={() => remove(u)}>Remove</button>
-                </div>
-              )}
+              <div className="flex flex-wrap gap-2">
+                {u.role === 'admin' ? (
+                  <button
+                    className="btn btn-sm"
+                    onClick={() => setRole(u, 'super')}
+                    disabled={supers >= maxSupers}
+                    title={supers >= maxSupers ? `There are already ${maxSupers} super admins` : undefined}
+                  >
+                    Make super admin
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-sm"
+                    onClick={() => setRole(u, 'admin')}
+                    disabled={supers <= 1}
+                    title={supers <= 1 ? 'There must always be at least one super admin' : undefined}
+                  >
+                    {u.id === meId ? 'Make me a regular admin' : 'Make regular admin'}
+                  </button>
+                )}
+                {u.id !== meId && <button className="btn btn-sm" onClick={() => reset(u)}>Reset password</button>}
+                {u.role === 'admin' && <button className="btn btn-sm btn-danger" onClick={() => remove(u)}>Remove</button>}
+              </div>
             </li>
           ))}
         </ul>

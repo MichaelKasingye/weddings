@@ -8,18 +8,20 @@ import { when } from '@/lib/format';
 import { clearSentAction, deleteGuestsAction, markWhatsappSentAction, sendSmsAction } from '@/app/(admin)/dashboard/actions';
 import { useGuestMutation, useGuests, useSetGuests } from '@/lib/queries';
 
-export type Filter = 'all' | 'unsent' | 'sent' | 'opened' | 'unopened';
+export type Filter = 'all' | 'unsent' | 'sent' | 'viewed' | 'unviewed' | 'pdf';
 const FILTERS: { key: Filter; label: string }[] = [
   { key: 'all', label: 'All' },
   { key: 'unsent', label: 'Not sent' },
   { key: 'sent', label: 'Sent' },
-  { key: 'opened', label: 'Opened' },
-  { key: 'unopened', label: 'Sent, not opened' },
+  { key: 'viewed', label: 'Viewed' },
+  { key: 'unviewed', label: 'Sent, not viewed' },
+  { key: 'pdf', label: 'Downloaded PDF' },
 ];
 
 const isSent = (g: GuestRow) => !!g.whatsapp || g.sms?.status === 'sent' || g.sms?.status === 'delivered';
 const matches = (g: GuestRow, f: Filter) =>
-  f === 'all' ? true : f === 'unsent' ? !isSent(g) : f === 'sent' ? isSent(g) : f === 'opened' ? !!g.opens : isSent(g) && !g.opens;
+  f === 'all' ? true : f === 'unsent' ? !isSent(g) : f === 'sent' ? isSent(g) : f === 'viewed' ? !!g.opens : f === 'pdf' ? !!g.pdf : isSent(g) && !g.opens;
+const times = (n: number) => `${n}×`;
 
 const waUrl = (g: GuestRow) => `https://wa.me/${g.phone.replace(/\D/g, '')}?text=${encodeURIComponent(g.whatsappText)}`;
 
@@ -157,8 +159,11 @@ export default function GuestTable({
   function downloadCsv() {
     const list = selectedRows.length ? selectedRows : visible;
     const esc = (s: string | number) => `"${String(s).replace(/"/g, '""')}"`;
-    const lines = [['Name', 'Phone', 'Seats', 'Link', 'WhatsApp sent', 'SMS', 'Opened'].map(esc).join(',')]
-      .concat(list.map((g) => [g.name, g.phoneDisplay, g.seats, g.url, g.whatsapp ? when(g.whatsapp.at) : '', g.sms ? g.sms.status : '', g.opens ? `${g.opens.count}x` : ''].map(esc).join(',')));
+    const lines = [['Name', 'Phone', 'Seats', 'Link', 'WhatsApp sent', 'SMS', 'Views', 'Last viewed', 'PDF downloads', 'Last download'].map(esc).join(',')]
+      .concat(list.map((g) => [
+        g.name, g.phoneDisplay, g.seats, g.url, g.whatsapp ? when(g.whatsapp.at) : '', g.sms ? g.sms.status : '',
+        g.opens?.count ?? 0, g.opens ? when(g.opens.lastAt) : '', g.pdf?.count ?? 0, g.pdf ? when(g.pdf.lastAt) : '',
+      ].map(esc).join(',')));
     const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -249,12 +254,17 @@ export default function GuestTable({
                     )}
                     {!g.whatsapp && !g.sms && <span className="chip chip-muted"><span className="dot" />Not sent</span>}
                     {g.opens ? (
-                      <span className="chip chip-info" title={`First opened ${when(g.opens.firstAt)}, last ${when(g.opens.lastAt)}`}>
-                        <span className="dot" />Opened {g.opens.count}× · {when(g.opens.lastAt)}
-                      </span>
+                      <Link href={`/dashboard/guests/${g.id}/history`} className="chip chip-info" title={`First viewed ${when(g.opens.firstAt)}, last ${when(g.opens.lastAt)}. Click for the full history.`}>
+                        <span className="dot" />Viewed {times(g.opens.count)} · {when(g.opens.lastAt)}
+                      </Link>
                     ) : isSent(g) ? (
-                      <span className="chip chip-warn"><span className="dot" />Not opened yet</span>
+                      <span className="chip chip-warn"><span className="dot" />Not viewed yet</span>
                     ) : null}
+                    {g.pdf && (
+                      <Link href={`/dashboard/guests/${g.id}/history`} className="chip chip-info" title={`First downloaded ${when(g.pdf.firstAt)}, last ${when(g.pdf.lastAt)}. Click for the full history.`}>
+                        <Icon name="download" size={12} />PDF {times(g.pdf.count)} · {when(g.pdf.lastAt)}
+                      </Link>
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-1.5">
@@ -264,6 +274,7 @@ export default function GuestTable({
                   {smsReady && <button className="btn btn-sm" disabled={!!smsBusy} onClick={() => sendSms([g])}><Icon name="message" /> SMS</button>}
                   <button className="btn btn-sm" onClick={() => copy(g.url)} title={g.url}><Icon name="copy" /> Copy link</button>
                   <a className="btn btn-sm px-2" href={g.path} target="_blank" rel="noopener" title="View invitation" aria-label={`View the invitation for ${g.name}`}><Icon name="external" /></a>
+                  <Link className="btn btn-sm px-2" href={`/dashboard/guests/${g.id}/history`} title="History: views and PDF downloads" aria-label={`History for ${g.name}`}><Icon name="eye" /></Link>
                   {isSuper && <Link className="btn btn-sm px-2" href={`/dashboard/guests/${g.id}`} title="Edit" aria-label={`Edit ${g.name}`}><Icon name="pencil" /></Link>}
                 </div>
               </li>

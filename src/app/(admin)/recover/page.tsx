@@ -11,8 +11,8 @@ export const dynamic = 'force-dynamic';
 
 /** The super admin forgot their password: a new one with the SETUP_CODE from the environment variables. */
 export default async function RecoverPage() {
-  const superAdmin = await (await col('users')).findOne({ role: 'super', active: true }, { sort: { createdAt: 1 }, projection: { username: 1 } });
-  if (!superAdmin) redirect('/setup');
+  const supers = await (await col('users')).find({ role: 'super', active: true }, { sort: { createdAt: 1 }, projection: { username: 1 } }).toArray();
+  if (!supers.length) redirect('/setup');
 
   if (!process.env.SETUP_CODE) {
     return (
@@ -37,8 +37,15 @@ export default async function RecoverPage() {
     >
       <ActionForm action={recoverAction}>
         <div>
-          <label className="label" htmlFor="username">Username</label>
-          <input className="input" id="username" name="username" defaultValue={superAdmin.username} readOnly autoComplete="username" />
+          <label className="label" htmlFor="username">{supers.length > 1 ? 'Which super admin?' : 'Username'}</label>
+          {supers.length > 1 ? (
+            <select className="input" id="username" name="username" required defaultValue="">
+              <option value="" disabled>Choose…</option>
+              {supers.map((u) => <option key={u._id.toHexString()} value={u.username}>{u.username}</option>)}
+            </select>
+          ) : (
+            <input className="input" id="username" name="username" defaultValue={supers[0].username} readOnly autoComplete="username" />
+          )}
         </div>
         <div>
           <label className="label" htmlFor="setupCode">Setup code</label>
@@ -53,7 +60,7 @@ export default async function RecoverPage() {
           <PasswordInput id="confirm" name="confirm" minLength={8} required autoComplete="new-password" />
         </div>
         <SubmitButton className="btn btn-primary btn-lg w-full" pendingText="Saving…">Save new password and log in</SubmitButton>
-        <p className="muted text-xs text-center">This logs the super admin out on every other device. <a className="underline" href="/login">Back to log in</a></p>
+        <p className="muted text-xs text-center">This logs that super admin out on every other device. <a className="underline" href="/login">Back to log in</a></p>
       </ActionForm>
     </AuthCard>
   );

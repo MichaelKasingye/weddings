@@ -25,7 +25,7 @@ const v = (o: V): CSSProperties => {
   return s as CSSProperties;
 };
 
-export type PosterGuest = { name: string; seats: number; code: string };
+export type PosterGuest = { name: string; seats: number; code: string; pdfUrl: string };
 
 export default function Poster({ guest, rsvpContacts, track }: { guest: PosterGuest; rsvpContacts: RsvpContact[]; track: boolean }) {
   const box = C.images.coupleBox;
@@ -153,6 +153,10 @@ export default function Poster({ guest, rsvpContacts, track }: { guest: PosterGu
         <svg className="music-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>
         <svg className="music-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /><path d="M3 3l18 18" /></svg>
       </button>
+      {/* Download as PDF (bottom right, above the music button; outside the poster) */}
+      <a className="pdf-btn" id="pdfDownload" href={guest.pdfUrl} download aria-label="Download the invitation as a PDF" title="Download as PDF">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12" /><path d="m7 10 5 5 5-5" /><path d="M5 21h14" /></svg>
+      </a>
       <div className="toast" id="toast" role="status" aria-live="polite" hidden />
 
       <PosterClient code={guest.code} track={track} />

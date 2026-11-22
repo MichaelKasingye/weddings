@@ -321,6 +321,18 @@
   .music-btn.is-playing { animation: musicPulse 2.4s ease-in-out infinite; }
   .music-btn:hover { background: rgba(31, 63, 138, .9); }
 
+  /* Download as PDF: the same round button, just above the music button (or in its place if there's no music) */
+  .pdf-btn {
+    position: fixed; z-index: 85; right: calc(14px + env(safe-area-inset-right, 0px)); bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+    width: 44px; height: 44px; border-radius: 999px; display: grid; place-items: center; cursor: pointer; text-decoration: none;
+    color: var(--gold-light); background: rgba(11, 27, 69, .85); border: 1px solid rgba(212, 175, 55, .7);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .45); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  }
+  .music-btn[hidden] ~ .pdf-btn { bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
+  .pdf-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .pdf-btn:hover { background: rgba(31, 63, 138, .9); }
+  .pdf-btn.is-busy { opacity: .6; pointer-events: none; }
+
   .toast {
     position: fixed; z-index: 90; left: 50%; transform: translateX(-50%);
     bottom: calc(24px + env(safe-area-inset-bottom, 0px));

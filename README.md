@@ -23,19 +23,22 @@ The first time, open **http://localhost:3000/setup** and choose the super admin'
 
 | | Super admin | Admin |
 |---|---|---|
-| See the dashboard and guest list | ✅ | ✅ |
+| See the dashboard, guest list, views and PDF downloads | ✅ | ✅ |
 | Send on WhatsApp / SMS, copy links, download CSV | ✅ | ✅ |
 | Change own username and password (My account) | ✅ | ✅ |
 | Upload the list; add, edit, delete guests | ✅ | — |
 | Invite admins, reset their passwords, remove them (Team) | ✅ | — |
+| Make an admin a super admin, or a super admin a regular admin (Team) | ✅ | — |
 | RSVP contacts, message wording, SMS on/off (Settings) | ✅ | — |
+
+**Super admins:** there can be up to **3**. On the Team page, a super admin presses *Make super admin* next to an admin, or *Make regular admin* to undo it (also for themselves). There is always at least one super admin. A super admin is removed by making them a regular admin first. Every change goes into the activity log.
 
 **Adding an admin:** Team → *Create invite link*. Send the link any way you like (WhatsApp, SMS, email). It works **once** and expires after **24 hours**. The person opens it and chooses a username and password.
 
 **Forgotten password (admin):** Team → *Reset password* gives a new one-time 24-hour link for that admin. There's no email reset.
 
-**Forgotten password (super admin):** there are two ways:
-- **On the website:** on the login page, click *Reset it with the setup code* (`/recover`). Enter the `SETUP_CODE` from the environment variables and a new password. After 5 wrong codes, that address has to wait an hour.
+**Forgotten password (super admin):** another super admin can make a reset link for them on the Team page. Otherwise there are two ways:
+- **On the website:** on the login page, click *Reset it with the setup code* (`/recover`). If there are several super admins, choose which one. Enter the `SETUP_CODE` from the environment variables and a new password. After 5 wrong codes, that address has to wait an hour.
 - **From a computer with the project:** run `npm run reset-password` (or `npm run reset-password -- <username>` for any admin). It asks for the new password twice. It uses `MONGODB_URI` from `.env.local`, so for the live site, put the Vercel value in `.env.local` or in front of the command (`MONGODB_URI="…" npm run reset-password`). This works even when the website is down.
 
 Both log that admin out on every device and record the reset in the activity log.
@@ -64,7 +67,23 @@ Before anything is saved, you see a preview with bad numbers and duplicates mark
   3. For delivery reports, set the callback in Africa's Talking to `https://<site>/api/sms?key=<AT_CALLBACK_KEY>`.
 
   With `AT_USERNAME=sandbox`, messages go to their simulator instead of real phones.
-- **Opened:** counted when the invite loads in a real browser. WhatsApp's link-preview robot doesn't count, and neither do logged-in admins previewing an invite.
+- **Viewed:** counted each time the invite loads in a real browser. WhatsApp's link-preview robot doesn't count, and neither do logged-in admins previewing an invite.
+
+## Views and PDF downloads
+
+- **Download as PDF:** the round download button at the bottom right of the invitation (above the music button, outside the poster). The guest gets a one-page PDF of the finished poster with their name and seats, to keep on their phone.
+- **What admins see:** Overview has *Viewed*, *Sent, not viewed*, *Downloaded PDF* and *Views in total*, plus *Recent guest activity*. In the guest list, each guest shows "Viewed 3× · last time" and "PDF 1× · last time", and there are *Viewed* and *Downloaded PDF* filters. The CSV has the counts. The eye button (or a chip) opens the guest's **history**: every view and download with the time and the kind of device (e.g. "iPhone", "Android phone").
+- Downloads by a logged-in admin don't count.
+- Everything on a personal link counts for that guest, including anyone they forwarded it to.
+
+**How the PDF is made:** `src/og/poster-pdf.jpg` is a photo of the real poster with the guest's name and seats and the RSVP names and numbers left blank. For each download, `src/lib/invite-pdf.tsx` draws those back in, with the poster's fonts and layout, so a change to the RSVP contacts in Settings shows in the PDF at once. **If the poster's artwork or wording changes, take the photo again:**
+
+```bash
+npm run dev                                              # in another terminal
+CHROME=/usr/bin/google-chrome npm run pdf-snapshot -- http://localhost:3000/i/<any-guest-link>
+```
+
+(It needs Playwright or Chrome. That visit isn't counted as a view.)
 
 The message wording (with `{name}` and `{link}`) is edited in Settings.
 
@@ -110,7 +129,7 @@ Fireworks and confetti are `public/js/fireworks.js` and `public/js/confetti.js` 
 The dashboard's guest list uses [TanStack React Query](https://tanstack.com/query):
 
 - The Guests page is rendered on the server, and that list is handed to React Query (`HydrationBoundary`), so the first load doesn't fetch it a second time.
-- After that, the list refreshes itself from `GET /api/admin/guests` every minute and whenever you come back to the tab (e.g. from WhatsApp). New "Opened" counts and SMS delivery reports appear without reloading.
+- After that, the list refreshes itself from `GET /api/admin/guests` every minute and whenever you come back to the tab (e.g. from WhatsApp). New views, PDF downloads and SMS delivery reports appear without reloading.
 - *WhatsApp sent*, *undo* and *Delete* change the list at once (optimistic updates). If the server refuses, the change is undone and the error is shown.
 - In `npm run dev`, a React Query Devtools button (bottom left) shows what's cached.
 
@@ -122,7 +141,7 @@ Files: `src/lib/query-client.ts` (defaults: data is fresh for 30 s, one retry), 
 src/app/(invite)/          guest side: / (private notice), /i/[slug] (the invitation + its preview image)
 src/app/(admin)/           /login, /setup, /join/[token], /dashboard/*
 src/app/(admin)/dashboard/actions.ts   every dashboard change (each checks the role on the server)
-src/app/api/open           records "opened";  src/app/api/sms: SMS delivery reports;  src/app/api/health: database health check
+src/app/api/open           records "viewed";  /i/<link>/pdf: the PDF download;  src/app/api/sms: SMS delivery reports;  src/app/api/health: database health check
 src/components/poster/     the poster (markup + browser behaviour)
 src/components/admin/      dashboard pieces (guest list, uploader, team…)
 src/lib/                   database, login/sessions, guests, phone numbers, SMS, wedding details
