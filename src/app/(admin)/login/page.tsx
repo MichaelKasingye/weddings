@@ -25,7 +25,11 @@ export default async function LoginPage() {
           <PasswordInput id="password" name="password" autoComplete="current-password" required />
         </div>
         <SubmitButton className="btn btn-primary btn-lg w-full" pendingText="Logging in…">Log in</SubmitButton>
-        <p className="muted text-xs text-center">Forgot your password? Ask the super admin for a reset link.</p>
+        <p className="muted text-xs text-center">
+          Forgot your password? Ask the super admin for a reset link.
+          <br />
+          Super admin? <a className="underline" href="/recover">Reset it with the setup code</a>.
+        </p>
       </ActionForm>
     </AuthCard>
   );

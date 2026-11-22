@@ -32,7 +32,13 @@ The first time, open **http://localhost:3000/setup** and choose the super admin'
 
 **Adding an admin:** Team → *Create invite link*. Send the link any way you like (WhatsApp, SMS, email). It works **once** and expires after **24 hours**. The person opens it and chooses a username and password.
 
-**Forgotten password:** Team → *Reset password* gives a new one-time 24-hour link for that admin. There's no email reset.
+**Forgotten password (admin):** Team → *Reset password* gives a new one-time 24-hour link for that admin. There's no email reset.
+
+**Forgotten password (super admin):** there are two ways:
+- **On the website:** on the login page, click *Reset it with the setup code* (`/recover`). Enter the `SETUP_CODE` from the environment variables and a new password. After 5 wrong codes, that address has to wait an hour.
+- **From a computer with the project:** run `npm run reset-password` (or `npm run reset-password -- <username>` for any admin). It asks for the new password twice. It uses `MONGODB_URI` from `.env.local`, so for the live site, put the Vercel value in `.env.local` or in front of the command (`MONGODB_URI="…" npm run reset-password`). This works even when the website is down.
+
+Both log that admin out on every device and record the reset in the activity log.
 
 ## The guest list
 
