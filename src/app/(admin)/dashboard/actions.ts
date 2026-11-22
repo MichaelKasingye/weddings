@@ -11,13 +11,15 @@ import { appUrl, getSettings } from '@/lib/settings';
 import { sendSms, smsConfig } from '@/lib/sms';
 import { INVITE_HOURS } from '@/lib/invites';
 import { defaultSeats, MAX_RSVP_CONTACTS } from '@/lib/wedding';
+import { classifyDbError } from '@/lib/db-errors';
 
 type FormState = { error?: string; ok?: string } | undefined;
 type Result<T = object> = ({ ok: true } & T) | { ok: false; error: string };
 
 const refresh = () => revalidatePath('/dashboard', 'layout');
 const oid = (id: string) => (ObjectId.isValid(id) ? new ObjectId(id) : null);
-const errMsg = (e: unknown) => (e instanceof Error ? e.message : 'Something went wrong.');
+// a database failure shows its plain explanation, not the driver's raw message
+const errMsg = (e: unknown) => { const db = classifyDbError(e); return db ? `${db.title}. ${db.message}` : e instanceof Error ? e.message : 'Something went wrong.'; };
 
 /* =====================================================================
    Guests (super admin)

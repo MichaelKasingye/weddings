@@ -82,6 +82,10 @@ The message wording (with `{name}` and `{link}`) is edited in Settings.
 {"status":"ok","totalMs":784,"database":{"name":"wedding_invites","ping":{"ok":1,"ms":362},"heartbeat":{"count":2,"lastAt":"…","firstAt":"…","ms":420}}}
 ```
 
+When it fails, `database.error` says why: `not_configured` (no `MONGODB_URI`), `bad_uri`, `auth_failed` (wrong username/password), `ip_blocked` (Atlas Network Access), `host_not_found`, `refused` (database not running) or `unreachable` (down or paused). Each comes with a plain explanation and how to fix it.
+
+If a page can't reach the database, it shows that reason instead of crashing. The dashboard and login pages show the full explanation and how to fix it. Guests see a short "can't open the invitation right now" message with a *Try again* button and the RSVP contacts. The error pages are `src/app/(admin)/error.tsx`, `src/app/(invite)/error.tsx` and `src/app/global-error.tsx`, and the explanations are in `src/lib/db-errors.ts`. Requests to the database give up after 7 seconds instead of the driver's 30.
+
 Vercel Cron calls it every day at 06:00 UTC (`vercel.json`), so the Atlas cluster always has activity and isn't paused. To check more often and get an alert when it's down, point a free uptime monitor (e.g. UptimeRobot) at `https://<site>/api/health`.
 
 ## Changing the invitation

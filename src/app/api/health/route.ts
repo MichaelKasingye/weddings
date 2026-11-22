@@ -1,12 +1,19 @@
 import { NextResponse } from 'next/server';
-import { getDb, type HealthDoc } from '@/lib/db';
+import { getDb, lastDbFailure, type HealthDoc } from '@/lib/db';
+import { classifyDbError, dbErrorInfo } from '@/lib/db-errors';
 
 /**
  * Health check: goes through the API to MongoDB and back.
  *   1. `ping` command: the server answers { ok: 1 }
  *   2. write + read of a heartbeat document: proves the database really accepts and returns data
  *
- * 200 + JSON when the database answered, 503 when it didn't (or took longer than TIMEOUT_MS).
+ * 200 + JSON when the database answered. 503 + JSON when it didn't (or took longer than TIMEOUT_MS),
+ * with `database.error` saying why (not_configured, auth_failed, ip_blocked, unreachable, …), a plain
+ * explanation and how to fix it. The error pages call this to show the reason.
+ *
+ * ?quick=1: if this server failed to connect in the last 30 s, answer with that failure straight away
+ * instead of waiting for the database again (used by the error pages).
+ *
  * Called once a day by Vercel Cron (vercel.json) so the Atlas cluster always sees activity;
  * an uptime monitor can also call GET /api/health as often as you like.
  */
@@ -14,10 +21,11 @@ import { getDb, type HealthDoc } from '@/lib/db';
 const TIMEOUT_MS = 8000;
 
 function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
   return Promise.race([
     p,
-    new Promise<never>((_, reject) => setTimeout(() => reject(new Error(`database did not answer within ${ms} ms`)), ms)),
-  ]);
+    new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error(`database did not answer within ${ms} ms`)), ms); }),
+  ]).finally(() => clearTimeout(timer));
 }
 
 async function checkDatabase() {
@@ -38,14 +46,32 @@ async function checkDatabase() {
 
   if (ping?.ok !== 1 || !heartbeat) throw new Error('unexpected database response');
   return {
+    ok: 1,
     name: db.databaseName,
     ping: { ok: ping.ok, ms: pingMs },
     heartbeat: { count: heartbeat.count, lastAt: heartbeat.lastAt, firstAt: heartbeat.firstAt, ms: writeReadMs },
   };
 }
 
-export async function GET() {
+function failure(e: unknown, started: number) {
+  const info = classifyDbError(e) ?? dbErrorInfo('db_error');
+  return NextResponse.json(
+    {
+      status: 'error',
+      time: new Date().toISOString(),
+      totalMs: Math.round(performance.now() - started),
+      database: { ok: 0, error: info.code, title: info.title, message: info.message, fix: info.fix },
+    },
+    { status: 503, headers: { 'Cache-Control': 'no-store' } },
+  );
+}
+
+export async function GET(req: Request) {
   const started = performance.now();
+  if (new URL(req.url).searchParams.has('quick')) {
+    const recent = lastDbFailure(30_000);
+    if (recent) return failure(recent, started);
+  }
   try {
     const database = await withTimeout(checkDatabase(), TIMEOUT_MS);
     return NextResponse.json(
@@ -54,9 +80,6 @@ export async function GET() {
     );
   } catch (e) {
     console.error('[health] database check failed:', e);
-    return NextResponse.json(
-      { status: 'error', time: new Date().toISOString(), totalMs: Math.round(performance.now() - started), database: { ok: 0, error: 'database unreachable' } },
-      { status: 503, headers: { 'Cache-Control': 'no-store' } },
-    );
+    return failure(e, started);
   }
 }

@@ -90,14 +90,37 @@ export type HealthDoc = { _id: 'heartbeat'; count: number; lastAt: Date; firstAt
 
 /* ---------- connection (one client per server process) ---------- */
 
-const g = globalThis as unknown as { _mongo?: Promise<MongoClient>; _indexes?: Promise<void> };
+const g = globalThis as unknown as { _mongo?: Promise<MongoClient>; _indexes?: Promise<void>; _dbFailure?: { at: number; error: unknown } };
+
+/** How long to wait for the database before giving up (the driver's default is 30 s). */
+const DB_TIMEOUT_MS = 7000;
+
+/** The last time this server failed to connect, so /api/health can explain it at once. */
+export function lastDbFailure(maxAgeMs: number): unknown {
+  const f = g._dbFailure;
+  return f && Date.now() - f.at < maxAgeMs ? f.error : null;
+}
 
 function client(): Promise<MongoClient> {
   const uri = process.env.MONGODB_URI;
-  if (!uri) throw new Error('MONGODB_URI is not set (see .env.example)');
+  if (!uri) {
+    const error = new Error('MONGODB_URI is not set (see .env.example)');
+    g._dbFailure = { at: Date.now(), error };
+    return Promise.reject(error);
+  }
   if (!g._mongo) {
+    let mongo: MongoClient;
+    try {
+      mongo = new MongoClient(uri, { maxPoolSize: 10, serverSelectionTimeoutMS: DB_TIMEOUT_MS, connectTimeoutMS: DB_TIMEOUT_MS });
+    } catch (error) {
+      g._dbFailure = { at: Date.now(), error }; // e.g. a malformed MONGODB_URI
+      return Promise.reject(error);
+    }
     // forget a failed connection so the next request tries again instead of failing forever
-    g._mongo = new MongoClient(uri, { maxPoolSize: 10 }).connect().catch((e) => { g._mongo = undefined; throw e; });
+    g._mongo = mongo.connect().then(
+      (c) => { g._dbFailure = undefined; return c; },
+      (error) => { g._mongo = undefined; g._dbFailure = { at: Date.now(), error }; void mongo.close().catch(() => {}); throw error; },
+    );
   }
   return g._mongo;
 }
