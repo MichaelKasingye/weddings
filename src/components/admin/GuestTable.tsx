@@ -6,6 +6,7 @@ import type { GuestRow } from '@/lib/guests';
 import Icon from './Icon';
 import { when } from '@/lib/format';
 import { clearSentAction, deleteGuestsAction, markWhatsappSentAction, sendSmsAction } from '@/app/(admin)/dashboard/actions';
+import { useGuestMutation, useGuests, useSetGuests } from '@/lib/queries';
 
 export type Filter = 'all' | 'unsent' | 'sent' | 'opened' | 'unopened';
 const FILTERS: { key: Filter; label: string }[] = [
@@ -31,20 +32,20 @@ function WhatsAppIcon() {
 }
 
 export default function GuestTable({
-  initialRows,
   isSuper,
   smsReady,
   me,
   initialFilter,
 }: {
-  initialRows: GuestRow[];
   isSuper: boolean;
   smsReady: boolean;
   me: string;
   initialFilter: Filter;
 }) {
-  const [rows, setRows] = useState(initialRows);
-  useEffect(() => setRows(initialRows), [initialRows]);
+  // the list lives in the React Query cache: filled by the server render, refreshed in the background
+  const guests = useGuests();
+  const rows = useMemo(() => guests.data ?? [], [guests.data]);
+  const setRows = useSetGuests();
   const [filter, setFilter] = useState<Filter>(initialFilter);
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -87,6 +88,25 @@ export default function GuestTable({
   };
   const selectedRows = rows.filter((g) => selected.has(g.id));
   const patch = (id: string, p: Partial<GuestRow>) => setRows((rs) => rs.map((g) => (g.id === id ? { ...g, ...p } : g)));
+  const patchRows = (rs: GuestRow[], id: string, p: Partial<GuestRow>) => rs.map((g) => (g.id === id ? { ...g, ...p } : g));
+
+  /* ---------- changes (shown at once, undone if the server refuses) ---------- */
+  const markWhatsapp = useGuestMutation({
+    action: (g: GuestRow) => markWhatsappSentAction(g.id),
+    update: (rs, g) => patchRows(rs, g.id, { whatsapp: { at: new Date().toISOString(), byName: me } }),
+    onError: setToast,
+  });
+  const clearSent = useGuestMutation({
+    action: ({ g, channel }: { g: GuestRow; channel: 'whatsapp' | 'sms' }) => clearSentAction(g.id, channel),
+    update: (rs, { g, channel }) => patchRows(rs, g.id, { [channel]: null }),
+    onError: setToast,
+  });
+  const deleteGuests = useGuestMutation({
+    action: (ids: string[]) => deleteGuestsAction(ids),
+    update: (rs, ids) => rs.filter((g) => !ids.includes(g.id)),
+    onSuccess: (r) => setToast(`${r.deleted} guest(s) deleted`),
+    onError: setToast,
+  });
 
   /* ---------- actions ---------- */
   async function copy(text: string, what = 'Link copied') {
@@ -96,16 +116,12 @@ export default function GuestTable({
 
   async function openWhatsApp(g: GuestRow) {
     window.open(waUrl(g), '_blank', 'noopener');
-    patch(g.id, { whatsapp: { at: new Date().toISOString(), byName: me } });
-    const r = await markWhatsappSentAction(g.id);
-    if (!r.ok) setToast(r.error);
+    markWhatsapp.mutate(g);
   }
 
   async function undo(g: GuestRow, channel: 'whatsapp' | 'sms') {
     if (!confirm(`Mark ${channel === 'sms' ? 'the SMS' : 'WhatsApp'} for ${g.name} as not sent?`)) return;
-    patch(g.id, { [channel]: null } as Partial<GuestRow>);
-    const r = await clearSentAction(g.id, channel);
-    if (!r.ok) setToast(r.error);
+    clearSent.mutate({ g, channel });
   }
 
   async function sendSms(list: GuestRow[]) {
@@ -126,6 +142,7 @@ export default function GuestTable({
       setSmsBusy({ done: Math.min(i + 20, list.length), total: list.length });
     }
     setSmsBusy(null);
+    void guests.refetch();
     setToast(failed ? `${ok} SMS sent, ${failed} failed${lastError ? ': ' + lastError : ''}` : `${ok} SMS sent`);
   }
 
@@ -133,11 +150,8 @@ export default function GuestTable({
     const list = selectedRows;
     if (!list.length) return;
     if (!confirm(`Delete ${list.length} guest(s)? Their invitation links will stop working.`)) return;
-    const r = await deleteGuestsAction(list.map((g) => g.id));
-    if (!r.ok) { setToast(r.error); return; }
-    setRows((rs) => rs.filter((g) => !selected.has(g.id)));
+    deleteGuests.mutate(list.map((g) => g.id));
     setSelected(new Set());
-    setToast(`${r.deleted} guest(s) deleted`);
   }
 
   function downloadCsv() {
@@ -173,6 +187,10 @@ export default function GuestTable({
           ))}
         </div>
       </div>
+
+      {guests.isError && rows.length > 0 && (
+        <p className="alert alert-warn" role="status">Couldn’t refresh the list ({guests.error.message}). Showing the last copy; it will try again.</p>
+      )}
 
       {/* the list */}
       <div className="panel">

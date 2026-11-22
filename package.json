@@ -13,6 +13,8 @@
     "node": ">=20"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.108.2",
+    "@tanstack/react-query-devtools": "^5.108.2",
     "libphonenumber-js": "^1.13.17",
     "mongodb": "^7.9.1",
     "next": "^16.4.6",

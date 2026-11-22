@@ -2,8 +2,10 @@ import Link from 'next/link';
 import GuestTable, { type Filter } from '@/components/admin/GuestTable';
 import Icon from '@/components/admin/Icon';
 import { requireUser } from '@/lib/auth';
-import { col } from '@/lib/db';
-import { toGuestRow } from '@/lib/guests';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { listGuestRows } from '@/lib/guests';
+import { makeQueryClient } from '@/lib/query-client';
+import { queryKeys } from '@/lib/query-keys';
 import { getSettings } from '@/lib/settings';
 import { smsConfig } from '@/lib/sms';
 
@@ -12,13 +14,11 @@ const FILTERS: Filter[] = ['all', 'unsent', 'sent', 'opened', 'unopened'];
 export default async function GuestsPage({ searchParams }: { searchParams: Promise<{ filter?: string }> }) {
   const user = await requireUser();
   const { filter } = await searchParams;
-  const [settings, docs] = await Promise.all([
-    getSettings(),
-    (await col('guests')).find({}).collation({ locale: 'en', strength: 2 }).sort({ name: 1 }).toArray(),
-  ]);
-  const templates = { whatsapp: settings.whatsappMessage, sms: settings.smsMessage };
-  const rows = docs.map((g) => toGuestRow(g, templates));
-  const people = docs.reduce((n, g) => n + g.seats, 0);
+  const [settings, rows] = await Promise.all([getSettings(), listGuestRows()]);
+  const people = rows.reduce((n, g) => n + g.seats, 0);
+  // hand the list to React Query in the browser, so it starts with this data instead of fetching it again
+  const queryClient = makeQueryClient();
+  queryClient.setQueryData(queryKeys.guests, rows);
   return (
     <>
       <div className="page-head">
@@ -33,13 +33,14 @@ export default async function GuestsPage({ searchParams }: { searchParams: Promi
           </div>
         )}
       </div>
-      <GuestTable
-        initialRows={rows}
-        isSuper={user.role === 'super'}
-        smsReady={smsConfig().configured && settings.smsEnabled}
-        me={user.username}
-        initialFilter={FILTERS.includes(filter as Filter) ? (filter as Filter) : 'all'}
-      />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <GuestTable
+          isSuper={user.role === 'super'}
+          smsReady={smsConfig().configured && settings.smsEnabled}
+          me={user.username}
+          initialFilter={FILTERS.includes(filter as Filter) ? (filter as Filter) : 'all'}
+        />
+      </HydrationBoundary>
     </>
   );
 }

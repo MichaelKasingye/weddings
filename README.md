@@ -105,6 +105,17 @@ Vercel Cron calls it every day at 06:00 UTC (`vercel.json`), so the Atlas cluste
 
 Fireworks and confetti are `public/js/fireworks.js` and `public/js/confetti.js` (settings in `src/lib/wedding.ts`).
 
+## React Query (dashboard data)
+
+The dashboard's guest list uses [TanStack React Query](https://tanstack.com/query):
+
+- The Guests page is rendered on the server, and that list is handed to React Query (`HydrationBoundary`), so the first load doesn't fetch it a second time.
+- After that, the list refreshes itself from `GET /api/admin/guests` every minute and whenever you come back to the tab (e.g. from WhatsApp). New "Opened" counts and SMS delivery reports appear without reloading.
+- *WhatsApp sent*, *undo* and *Delete* change the list at once (optimistic updates). If the server refuses, the change is undone and the error is shown.
+- In `npm run dev`, a React Query Devtools button (bottom left) shows what's cached.
+
+Files: `src/lib/query-client.ts` (defaults: data is fresh for 30 s, one retry), `src/lib/queries.ts` (the hooks), `src/lib/query-keys.ts`, `src/components/QueryProvider.tsx`.
+
 ## Files
 
 ```

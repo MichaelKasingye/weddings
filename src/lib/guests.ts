@@ -1,7 +1,7 @@
 import 'server-only';
 import { col, type GuestDoc } from './db';
 import { CODE_LENGTH, isGuestCode, newGuestCode } from './crypto';
-import { appUrl } from './settings';
+import { appUrl, getSettings } from './settings';
 import { formatPhone } from './phone';
 
 /** "Mr. & Mrs. John Doe" → "mr-mrs-john-doe" (the readable part of the link). */
@@ -83,6 +83,16 @@ export function toGuestRow(g: GuestDoc, templates: { whatsapp: string; sms: stri
     opens: g.opens ? { count: g.opens.count, firstAt: g.opens.firstAt.toISOString(), lastAt: g.opens.lastAt.toISOString() } : null,
     createdAt: g.createdAt.toISOString(),
   };
+}
+
+/** Every guest as a row for the dashboard list, sorted by name (used by the Guests page and GET /api/admin/guests). */
+export async function listGuestRows(): Promise<GuestRow[]> {
+  const [settings, docs] = await Promise.all([
+    getSettings(),
+    (await col('guests')).find({}).collation({ locale: 'en', strength: 2 }).sort({ name: 1 }).toArray(),
+  ]);
+  const templates = { whatsapp: settings.whatsappMessage, sms: settings.smsMessage };
+  return docs.map((g) => toGuestRow(g, templates));
 }
 
 export const NAME_MAX = 80;
