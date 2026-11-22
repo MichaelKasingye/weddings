@@ -7,7 +7,7 @@ import { classifyDbError, dbErrorInfo } from '@/lib/db-errors';
  *   1. `ping` command: the server answers { ok: 1 }
  *   2. write + read of a heartbeat document: proves the database really accepts and returns data
  *
- * 200 + JSON when the database answered. 503 + JSON when it didn't (or took longer than TIMEOUT_MS),
+ * 200 + JSON when the database answered. 503 + JSON when it didn't (or took longer than 10 s),
  * with `database.error` saying why (not_configured, auth_failed, ip_blocked, unreachable, …), a plain
  * explanation and how to fix it. The error pages call this to show the reason.
  *
@@ -18,7 +18,8 @@ import { classifyDbError, dbErrorInfo } from '@/lib/db-errors';
  * an uptime monitor can also call GET /api/health as often as you like.
  */
 
-const TIMEOUT_MS = 8000;
+// a cold start to Atlas (DNS + TLS) takes ~3 s from here; the driver itself gives up after 7 s
+const TIMEOUT_MS = 10_000;
 
 function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | undefined;

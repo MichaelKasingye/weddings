@@ -76,7 +76,7 @@ The message wording (with `{name}` and `{link}`) is edited in Settings.
 
 ## Health check
 
-`GET /api/health` goes through the API to MongoDB and back. It sends a `ping` and writes and reads a heartbeat document (`health` collection). It returns **200** with the database's answer and timings, or **503** if the database didn't answer within 8 seconds:
+`GET /api/health` goes through the API to MongoDB and back. It sends a `ping` and writes and reads a heartbeat document (`health` collection). It returns **200** with the database's answer and timings, or **503** if the database didn't answer within 10 seconds:
 
 ```json
 {"status":"ok","totalMs":784,"database":{"name":"wedding_invites","ping":{"ok":1,"ms":362},"heartbeat":{"count":2,"lastAt":"…","firstAt":"…","ms":420}}}

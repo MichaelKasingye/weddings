@@ -1,4 +1,5 @@
 import 'server-only';
+import { after } from 'next/server';
 import { MongoClient, type Db, type Collection, type ObjectId } from 'mongodb';
 import type { RsvpContact } from './wedding';
 
@@ -125,7 +126,13 @@ function client(): Promise<MongoClient> {
   return g._mongo;
 }
 
+/** Bump this after changing the list below, so every server creates the new indexes once. */
+const INDEXES_VERSION = 1;
+
 async function ensureIndexes(db: Db) {
+  // one quick read instead of 8 createIndex calls on every cold start
+  const meta = db.collection<{ _id: string; version: number; at: Date }>('meta');
+  if ((await meta.findOne({ _id: 'indexes' }))?.version === INDEXES_VERSION) return;
   await Promise.all([
     db.collection('users').createIndex({ usernameLower: 1 }, { unique: true }),
     db.collection('sessions').createIndex({ tokenHash: 1 }, { unique: true }),
@@ -136,12 +143,20 @@ async function ensureIndexes(db: Db) {
     db.collection('activity').createIndex({ at: -1 }),
     db.collection('rate_limits').createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
   ]);
+  await meta.updateOne({ _id: 'indexes' }, { $set: { version: INDEXES_VERSION, at: new Date() } }, { upsert: true });
 }
 
 export async function getDb(): Promise<Db> {
   const db = (await client()).db();
-  if (!g._indexes) g._indexes = ensureIndexes(db).catch((e) => { g._indexes = undefined; throw e; });
-  await g._indexes;
+  // Indexes are created after the response has been sent: they already exist after the first run, and
+  // creating them up front added 3–4 s to every cold start (and made /api/health time out).
+  // On failure, the next request tries again.
+  if (!g._indexes) {
+    const run = () => ensureIndexes(db).catch((e) => { g._indexes = undefined; console.error('[db] creating indexes failed:', e); });
+    g._indexes = new Promise<void>((resolve) => {
+      try { after(() => run().then(resolve)); } catch { void run().then(resolve); } // outside a request: run now
+    });
+  }
   return db;
 }
 
