@@ -3,6 +3,7 @@ import AuthCard from '@/components/admin/AuthCard';
 import ActionForm, { SubmitButton } from '@/components/admin/ActionForm';
 import { findValidInvite } from '@/lib/invites';
 import { joinAction } from '../../auth-actions';
+import PasswordInput from '@/components/admin/PasswordInput';
 
 export const metadata: Metadata = { title: 'Join · Invitations', robots: { index: false } };
 export const dynamic = 'force-dynamic';
@@ -35,11 +36,11 @@ export default async function JoinPage({ params }: { params: Promise<{ token: st
         )}
         <div>
           <label className="label" htmlFor="password">Password (at least 8 characters)</label>
-          <input className="input" id="password" name="password" type="password" minLength={8} required autoComplete="new-password" />
+          <PasswordInput id="password" name="password" minLength={8} required autoComplete="new-password" />
         </div>
         <div>
           <label className="label" htmlFor="confirm">Repeat password</label>
-          <input className="input" id="confirm" name="confirm" type="password" minLength={8} required autoComplete="new-password" />
+          <PasswordInput id="confirm" name="confirm" minLength={8} required autoComplete="new-password" />
         </div>
         <SubmitButton className="btn btn-primary btn-lg w-full">{reset ? 'Save new password' : 'Create my account'}</SubmitButton>
       </ActionForm>

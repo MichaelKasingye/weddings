@@ -74,6 +74,16 @@ The message wording (with `{name}` and `{link}`) is edited in Settings.
    - the `AT_*` values for SMS
 4. Deploy, then open `/setup` and enter the setup code and your password.
 
+## Health check
+
+`GET /api/health` goes through the API to MongoDB and back. It sends a `ping` and writes and reads a heartbeat document (`health` collection). It returns **200** with the database's answer and timings, or **503** if the database didn't answer within 8 seconds:
+
+```json
+{"status":"ok","totalMs":784,"database":{"name":"wedding_invites","ping":{"ok":1,"ms":362},"heartbeat":{"count":2,"lastAt":"…","firstAt":"…","ms":420}}}
+```
+
+Vercel Cron calls it every day at 06:00 UTC (`vercel.json`), so the Atlas cluster always has activity and isn't paused. To check more often and get an alert when it's down, point a free uptime monitor (e.g. UptimeRobot) at `https://<site>/api/health`.
+
 ## Changing the invitation
 
 - **Wording, date, venues, families:** `src/lib/wedding.ts`.
@@ -91,7 +101,7 @@ Fireworks and confetti are `public/js/fireworks.js` and `public/js/confetti.js` 
 src/app/(invite)/          guest side: / (private notice), /i/[slug] (the invitation + its preview image)
 src/app/(admin)/           /login, /setup, /join/[token], /dashboard/*
 src/app/(admin)/dashboard/actions.ts   every dashboard change (each checks the role on the server)
-src/app/api/open           records "opened";  src/app/api/sms: SMS delivery reports
+src/app/api/open           records "opened";  src/app/api/sms: SMS delivery reports;  src/app/api/health: database health check
 src/components/poster/     the poster (markup + browser behaviour)
 src/components/admin/      dashboard pieces (guest list, uploader, team…)
 src/lib/                   database, login/sessions, guests, phone numbers, SMS, wedding details

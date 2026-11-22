@@ -85,6 +85,9 @@ export type ActivityDoc = {
 
 export type RateDoc = { _id: string; count: number; expiresAt: Date };
 
+/** One document, rewritten by every /api/health call, so the check is a real write + read. */
+export type HealthDoc = { _id: 'heartbeat'; count: number; lastAt: Date; firstAt: Date };
+
 /* ---------- connection (one client per server process) ---------- */
 
 const g = globalThis as unknown as { _mongo?: Promise<MongoClient>; _indexes?: Promise<void> };
@@ -92,7 +95,10 @@ const g = globalThis as unknown as { _mongo?: Promise<MongoClient>; _indexes?: P
 function client(): Promise<MongoClient> {
   const uri = process.env.MONGODB_URI;
   if (!uri) throw new Error('MONGODB_URI is not set (see .env.example)');
-  if (!g._mongo) g._mongo = new MongoClient(uri, { maxPoolSize: 10 }).connect();
+  if (!g._mongo) {
+    // forget a failed connection so the next request tries again instead of failing forever
+    g._mongo = new MongoClient(uri, { maxPoolSize: 10 }).connect().catch((e) => { g._mongo = undefined; throw e; });
+  }
   return g._mongo;
 }
 
@@ -128,4 +134,5 @@ type Collections = {
   settings: SettingsDoc;
   activity: ActivityDoc;
   rate_limits: RateDoc;
+  health: HealthDoc;
 };

@@ -5,6 +5,7 @@ import ActionForm, { SubmitButton } from '@/components/admin/ActionForm';
 import { getCurrentUser } from '@/lib/auth';
 import { col } from '@/lib/db';
 import { loginAction } from '../auth-actions';
+import PasswordInput from '@/components/admin/PasswordInput';
 
 export const metadata: Metadata = { title: 'Log in · Invitations', robots: { index: false } };
 export const dynamic = 'force-dynamic';
@@ -21,7 +22,7 @@ export default async function LoginPage() {
         </div>
         <div>
           <label className="label" htmlFor="password">Password</label>
-          <input className="input" id="password" name="password" type="password" autoComplete="current-password" required />
+          <PasswordInput id="password" name="password" autoComplete="current-password" required />
         </div>
         <SubmitButton className="btn btn-primary btn-lg w-full" pendingText="Logging in…">Log in</SubmitButton>
         <p className="muted text-xs text-center">Forgot your password? Ask the super admin for a reset link.</p>
